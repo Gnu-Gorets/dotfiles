@@ -1,0 +1,14 @@
+configuration {
+  show-icons: true;
+  icon-theme: "Qogir-dark";
+  font: "Droid Sans Mono 10";
+  terminal: "urxvt";
+  modi: "drun,run";
+  ssh-client: "ssh";
+  ssh-command: "{terminal} -e {ssh-client} {host} [-p {port}]";
+  run-command: "{cmd}";
+  run-shell-command: "{terminal} -e {cmd}";
+  window-command: "wmctrl -i -R {window}";
+  sidebar-mode: true;
+}
+@theme "default.rasi"

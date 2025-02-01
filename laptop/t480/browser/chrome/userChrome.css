@@ -1,0 +1,11 @@
+/* Main */
+@import url("css/main.css");
+
+/* Main toolbar */
+@import url("css/main_toolbar_disabled_style_without_hover.css");
+
+/* Compact addons */
+@import url("css/compact.css");
+
+/* Sidebar */
+@import url("css/sidebar.css");
