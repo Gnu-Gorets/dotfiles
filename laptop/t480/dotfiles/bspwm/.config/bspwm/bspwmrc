@@ -74,7 +74,7 @@ bspc rule -a 'Wpspdf' desktop='^7'
 bspc rule -a XPipe desktop='^8' follow=off
 bspc rule -a "VirtualBox Manager" desktop='^9' follow=off
 bspc rule -a Bitwarden desktop='^10' follow=off
-bspc rule -a Otpclient desktop='^10' follow=off
+bspc rule -a KeePassXC desktop='^10' follow=off
 # bspc rule -a Steam desktop='^10'
 
 bspc rule -a Gpick state=floating
