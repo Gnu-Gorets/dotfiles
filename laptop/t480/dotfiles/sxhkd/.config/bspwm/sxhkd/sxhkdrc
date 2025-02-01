@@ -31,9 +31,9 @@ alt + e
 alt + b
   bitwarden-desktop
 
-# otpclient
-alt + o
-  otpclient
+# keepassxc
+alt + p
+  keepassxc
 
 # thunar
 alt + f
