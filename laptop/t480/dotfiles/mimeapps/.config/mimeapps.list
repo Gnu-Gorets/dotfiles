@@ -1,0 +1,17 @@
+[Added Associations]
+text/plain=codium.desktop;
+application/x-shellscript=codium.desktop;
+text/markdown=codium.desktop;
+text/css=codium.desktop;
+x-scheme-handler/tonsite=org.telegram.desktop.desktop;
+application/json=codium.desktop;
+application/vnd.ms-publisher=codium.desktop;
+application/x-zerosize=codium.desktop;
+application/xml=codium.desktop;
+
+[Default Applications]
+inode/directory=spacefm.desktop
+x-scheme-handler/tonsite=org.telegram.desktop.desktop
+application/vnd.ms-publisher=codium.desktop
+application/x-zerosize=codium.desktop
+x-scheme-handler/postman=Postman.desktop

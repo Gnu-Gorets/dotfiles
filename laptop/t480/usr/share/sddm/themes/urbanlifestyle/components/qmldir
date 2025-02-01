@@ -1,0 +1,11 @@
+##
+# Urban LifeStyle SDDM Theme
+#
+# @author Alfredo Ramos <alfredo.ramos@yandex.com>
+# @copyright 2017 Alfredo Ramos
+# @license GPL-3.0-or-later
+#
+
+module UrbanLifeStyleComponents
+
+CustomClock 1.0 CustomClock.qml
