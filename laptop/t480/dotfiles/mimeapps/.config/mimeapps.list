@@ -8,6 +8,7 @@ application/json=codium.desktop;
 application/vnd.ms-publisher=codium.desktop;
 application/x-zerosize=codium.desktop;
 application/xml=codium.desktop;
+application/pdf=xpdf.desktop;
 
 [Default Applications]
 inode/directory=spacefm.desktop
@@ -15,3 +16,4 @@ x-scheme-handler/tonsite=org.telegram.desktop.desktop
 application/vnd.ms-publisher=codium.desktop
 application/x-zerosize=codium.desktop
 x-scheme-handler/postman=Postman.desktop
+application/pdf=xpdf.desktop
