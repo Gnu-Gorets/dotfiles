@@ -58,6 +58,7 @@ bspc rule -a Spacefm desktop='^4' follow=off
 bspc rule -a Peazip desktop='^4' follow=off
 bspc rule -a TelegramDesktop desktop='^5' follow=off
 bspc rule -a discord desktop='^5' follow=off
+bspc rule -a Ripcord desktop='^5' follow=off
 bspc rule -a Viewnior desktop='^6' follow=on
 bspc rule -a XpdfReader desktop='^6' follow=off
 bspc rule -a vlc desktop='^6' follow=off

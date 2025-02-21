@@ -11,9 +11,12 @@ super + F1
 
 ## Programs
 
-# terminal emulator Tiled
+# zellij
 super + Return
   alacritty -e $HOME/.bin/tmrun.sh
+
+super + alt + z
+  zsh -i -c "zellij-clean"
 
 # program launcher rofi
 alt + d
@@ -41,11 +44,11 @@ alt + f
 
 # telegram
 alt + m
-  telegram-desktop
+  forkgram
 
 # discord
 alt + v
-  discord
+  ripcord
 
 # ranger
 alt + r
