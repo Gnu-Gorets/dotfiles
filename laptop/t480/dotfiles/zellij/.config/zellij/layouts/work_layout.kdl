@@ -16,9 +16,9 @@ layout {
             command "nvim"
         }
     }
-    tab name="ranger" {
+    tab name="yazi" {
         pane {
-            command "ranger"
+            command "yazi"
         }
     }
     tab name="proc" {
