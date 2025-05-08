@@ -22,13 +22,16 @@ chrpath
 containerd
 cronie
 direnv
+discord
 docker
+docker-buildx
 docker-compose
 dosfstools
 downgrade
 dunst
 edk2-shell
 efibootmgr
+electron34
 exfat-utils
 exodus
 expac
@@ -138,7 +141,6 @@ qt6-5compat
 qt6ct
 qt6-serialport
 reflector
-ripcord
 rofi
 runc
 sddm
