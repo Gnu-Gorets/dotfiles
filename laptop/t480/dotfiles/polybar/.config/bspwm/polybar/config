@@ -64,7 +64,7 @@ label = %percentage%%
 
 [module/memory]
 type = internal/memory
-interval = 5
+interval = 10
 format-prefix = " "
 format-prefix-foreground = ${colors.accent}
 
@@ -204,9 +204,6 @@ blacklist-0 = num lock
 # blacklist-1 = caps lock
 
 format-prefix = " "
-format-foreground = ${colors.xkeyboard}
-format-underline = ${colors.xkeyboard}
-
 label-layout = %layout%
 
 label-indicator-padding = 2
@@ -214,7 +211,7 @@ label-indicator-margin = 1
 
 [module/power]
 type = custom/text
-content = 
+format = 
 content-foreground = ${colors.accent}
 content-background = ${xrdb:color0}
 content-padding = 1

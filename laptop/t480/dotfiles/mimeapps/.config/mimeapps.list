@@ -1,19 +1,35 @@
 [Added Associations]
 text/plain=codium.desktop;
 application/x-shellscript=codium.desktop;
+image/png=viewnior.desktop;
+application/xml=codium.desktop;
+application/vnd.apple.keynote=codium.desktop;
 text/markdown=codium.desktop;
 text/css=codium.desktop;
 x-scheme-handler/tonsite=org.telegram.desktop.desktop;
 application/json=codium.desktop;
 application/vnd.ms-publisher=codium.desktop;
 application/x-zerosize=codium.desktop;
+text/html=codium.desktop;
 application/xml=codium.desktop;
 application/pdf=xpdf.desktop;
+application/octet-stream=codium.desktop;
+image/jpeg=viewnior.desktop;
 
 [Default Applications]
 inode/directory=spacefm.desktop
+image/png=viewnior.desktop
+x-scheme-handler/postman=Postman.desktop
+text/html=librewolf.desktop
+x-scheme-handler/http=librewolf.desktop
+x-scheme-handler/https=librewolf.desktop
+x-scheme-handler/about=librewolf.desktop
+x-scheme-handler/unknown=librewolf.desktop
+application/vnd.ms-publisher=codium.desktop
 x-scheme-handler/tonsite=org.telegram.desktop.desktop
 application/vnd.ms-publisher=codium.desktop
 application/x-zerosize=codium.desktop
+application/octet-stream=codium.desktop
 x-scheme-handler/postman=Postman.desktop
 application/pdf=xpdf.desktop
+x-scheme-handler/freelens=Freelens.desktop
