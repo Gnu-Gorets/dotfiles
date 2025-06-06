@@ -18,6 +18,7 @@ bspwm
 btrfs-progs
 capitaine-cursors
 c-ares
+chromium
 chrpath
 containerd
 cronie
@@ -146,6 +147,7 @@ runc
 sddm
 sdparm
 sg3_utils
+slack-desktop
 slop
 smartmontools
 socat

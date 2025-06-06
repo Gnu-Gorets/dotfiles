@@ -35,3 +35,10 @@ mods = "Control"
 
 [window]
 opacity = 0.9
+startup_mode = "Windowed"
+decorations = "Full"
+dynamic_title = true
+
+[cursor.style]
+shape = "Beam"
+blinking = "Always"

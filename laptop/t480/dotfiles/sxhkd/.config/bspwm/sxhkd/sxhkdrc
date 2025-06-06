@@ -50,6 +50,10 @@ alt + m
 alt + v
   discord
 
+# slack
+alt + s
+  slack
+
 # ranger
 alt + r
   alacritty -T Ranger -e ranger
