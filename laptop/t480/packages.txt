@@ -85,6 +85,7 @@ libxpresent
 linux-firmware
 linux-zen
 linux-zen-headers
+lm_sensors
 logrotate
 lsb-release
 lsscsi
@@ -179,7 +180,6 @@ tumbler
 uchardet
 udiskie
 ueberzug
-unclutter
 unibilium
 unrar
 unzip
@@ -203,6 +203,7 @@ xf86-video-sisusb
 xf86-video-vesa
 xfce4-power-manager
 xfsprogs
+xkb-switch
 xorg-bdftopcf
 xorg-font-util
 xorg-iceauth
@@ -245,7 +246,6 @@ xorg-xwud
 xpdf
 xpipe
 xsel
-xsettingsd
 yay
 yazi
 yt-dlp
