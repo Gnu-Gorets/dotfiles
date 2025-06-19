@@ -1,38 +1,39 @@
-#! /bin/sh
+#!/bin/sh
 
-run() { ! pgrep -x "$1" >/dev/null && "$@"; }
+run() { ! pgrep -x "$1" >/dev/null && "$@" & }
 
+# Cursor and keyboard layout
 xsetroot -cursor_name left_ptr &
 setxkbmap -layout us,ru -option "grp:alt_shift_toggle,grp_led:scroll" &
-picom -b --config $HOME/.config/picom.conf &
-# hsetroot -fill /usr/share/wall/ctld.png &
-run nitrogen --restore &
+xmodmap -e "keycode 164 = NoSymbol" &
+
+# Disable screen blanking and power saving
+xset s off -dpms &
+
+# Background and compositor
+nitrogen --restore &
+picom -b --config "$HOME/.config/picom.conf" &
 run sxhkd -c $HOME/.config/bspwm/sxhkd/sxhkdrc &
 if [ "$(which polybar)" != "polybar not found" ]; then
   $HOME/.config/bspwm/polybar/launch.sh &
-  # (sleep 2; sh ~/.bin/phide.sh) &
 fi
-run tint2 -c $HOME/.config/tint2/tray.tint2rc &
-run dunst &
-if [ "$(which thunar)" != "thunar not found" ]; then
-  thunar --daemon &
-fi
-# numlockx &
-xsettingsd &
+
+# Apply Xresources (replaces xsettingsd)
+xrdb -merge "$HOME/.Xresources" &
+
+# Daemons and services
+run dunst
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 gnome-keyring-daemon --start --components=pkcs11 &
-#xset s off -dpms
 
-# greenclip daemon &
+# Tray applets
+run nm-applet
+run xfce4-power-manager
+run udiskie -t
+run parcellite
 
-run nm-applet &
-# run redshift-gtk &
-run xfce4-power-manager &
-# run caffeine &
-run udiskie -t &
-# run clipit &
-run parcellite &
-xset s off -dpms &
-xmodmap -e "keycode 164 = NoSymbol" &
-# run unclutter &
-# run telegram-desktop &
+# Tint2 tray (ONLY system tray)
+if command -v tint2 >/dev/null 2>&1; then
+    sleep 2
+    tint2 -c "$HOME/.config/tint2/tray.tint2rc" &
+fi
