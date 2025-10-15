@@ -3,12 +3,7 @@
 INTERNAL_MONITOR_NAME="eDP-1"
 EXTERNAL_MONITOR_NAME="HDMI-2"
 
-if xrandr | grep "$EXTERNAL_MONITOR_NAME" | grep -q "connected"; then
-    bspc monitor "$INTERNAL_MONITOR_NAME" -d I II III IV V
-    bspc monitor "$EXTERNAL_MONITOR_NAME" -d VI VII VIII IX X
-else
-    bspc monitor -d I II III IV V VI VII VIII IX X
-fi
+bspc monitor -d I II III IV V VI VII VIII IX X
 
 . "${HOME}/.config/bspwm/color"
 

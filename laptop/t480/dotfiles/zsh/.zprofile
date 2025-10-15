@@ -2,6 +2,7 @@ export PATH=$HOME/.bin:$HOME/.config/rofi/scripts:$HOME/.local/bin:/usr/local/bi
 export TERM="xterm-256color"
 export XDG_CONFIG_HOME="$HOME/.config"
 export _JAVA_AWT_WM_NONREPARENTING=1
+export CHROMIUM_FLAGS="--use-gl=desktop"
 
 export EDITOR=nvim
 export BROWSER="librewolf"
@@ -11,3 +12,6 @@ export DIRENV_LOG_FORMAT=""
 
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 export SUDOBIN=sudo
+
+export TG_TF_FORWARD_STDOUT=true
+export TG_LOG_LEVEL=WARN
