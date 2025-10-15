@@ -31,6 +31,8 @@ run nm-applet
 run xfce4-power-manager
 run udiskie -t
 run parcellite
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' &
+
 
 # Tint2 tray (ONLY system tray)
 if command -v tint2 >/dev/null 2>&1; then

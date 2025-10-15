@@ -32,12 +32,12 @@ downgrade
 dunst
 edk2-shell
 efibootmgr
-electron34
 exfat-utils
 exodus
 expac
 f2fs-tools
 fastfetch
+ffmpeg4.4
 ffmpegthumbnailer
 flameshot
 forkgram-bin
@@ -64,6 +64,7 @@ gvfs-smb
 haveged
 hdparm
 htop
+intel-media-driver
 intel-ucode
 intltool
 iw
@@ -80,6 +81,7 @@ libtorrent-rasterbar
 libutf8proc
 libva
 libva-intel-driver
+libva-utils
 libvterm
 libxpresent
 linux-firmware
@@ -96,7 +98,7 @@ lxrandr
 mailcap
 mdadm
 memtest86+
-mesa-amber
+mesa
 minizip
 modemmanager
 mpv
@@ -132,6 +134,7 @@ protobuf
 protobuf-c
 pv
 python-cairo
+python-pip
 python-pipx
 qbittorrent
 qflipper
@@ -154,6 +157,8 @@ smartmontools
 socat
 spacefm
 stow
+streamlink
+streamlink-twitch-gui
 sudo
 sxhkd
 syncthing
@@ -198,7 +203,6 @@ xdotool
 xf86-input-evdev
 xf86-input-void
 xf86-video-fbdev
-xf86-video-intel
 xf86-video-sisusb
 xf86-video-vesa
 xfce4-power-manager
