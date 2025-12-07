@@ -33,3 +33,4 @@ application/octet-stream=codium.desktop
 x-scheme-handler/postman=Postman.desktop
 application/pdf=xpdf.desktop
 x-scheme-handler/freelens=Freelens.desktop
+x-scheme-handler/discord=vesktop.desktop
