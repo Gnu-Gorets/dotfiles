@@ -48,7 +48,7 @@ alt + m
 
 # discord
 alt + v
-  discord
+  vesktop
 
 # slack
 alt + s
@@ -250,5 +250,4 @@ XF86AudioMute
 
 # Brightness control
 {XF86MonBrightnessUp,XF86MonBrightnessDown}
-    xbacklight {-inc,-dec} 20
-
+    brightnessctl set 10%{+,-}

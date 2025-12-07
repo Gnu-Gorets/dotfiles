@@ -14,7 +14,9 @@ bluez
 bluez-utils
 boost-libs
 bridge-utils
+brightnessctl
 bspwm
+btop
 btrfs-progs
 capitaine-cursors
 c-ares
@@ -23,7 +25,6 @@ chrpath
 containerd
 cronie
 direnv
-discord
 docker
 docker-buildx
 docker-compose
@@ -63,7 +64,6 @@ gvfs-nfs
 gvfs-smb
 haveged
 hdparm
-htop
 intel-media-driver
 intel-ucode
 intltool
@@ -157,8 +157,6 @@ smartmontools
 socat
 spacefm
 stow
-streamlink
-streamlink-twitch-gui
 sudo
 sxhkd
 syncthing
@@ -190,6 +188,7 @@ unrar
 unzip
 usb_modeswitch
 usbutils
+vesktop
 viewnior
 virtualbox
 virtualbox-ext-oracle
@@ -252,7 +251,6 @@ xpipe
 xsel
 yay
 yazi
-yt-dlp
 yyjson
 zellij
 zip

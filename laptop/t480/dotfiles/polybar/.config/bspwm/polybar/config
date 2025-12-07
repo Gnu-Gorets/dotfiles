@@ -8,6 +8,8 @@ accent = #798BC7
 text = #9baec8
 light = #d5d6d7
 suffix = #ff0404
+battery = #9baec8
+date = #88c0d0
 
 [settings]
 screenchange-reload = true
@@ -117,7 +119,7 @@ format = <label-state>
 
 label-focused = %icon%
 label-focused-background = ${colors.accent}
-label-focused-foreground = ${xrdb:color7}
+label-focused-foreground = ${colors.foreground}
 label-focused-padding = 2
 
 label-occupied = %icon%
@@ -125,7 +127,7 @@ label-occupied-foreground = ${colors.accent}
 label-occupied-padding = 1
 
 label-urgent = %icon%
-label-urgent-foreground = ${xrdb:color5}
+label-urgent-foreground = ${colors.suffix}
 label-urgent-padding = 1
 
 label-empty = %icon%
@@ -137,7 +139,7 @@ type = custom/script
 exec = ~/.config/bspwm/status tor
 interval = 6
 format = <label>
-format-prefix = " "
+format-prefix = " "
 format-prefix-foreground = ${colors.accent}
 format-padding = 0
 click-left = "systemctl restart tor &"
@@ -150,11 +152,14 @@ interval = 2
 click-left = ~/.config/bspwm/polybar/rofi_bluetooth/rofi-bluetooth
 
 [module/brightness]
-type = custom/script
-exec = xbacklight -get | awk '{printf "%.0f%%\n", $1}'
-interval = 1.5
+type = internal/backlight
+card = intel_backlight
+use-actual-brightness = true
+poll-interval = 2
+format = <label>
 format-prefix = " "
 format-prefix-foreground = ${colors.accent}
+label = %percentage%%
 
 [module/pipewire]
 type = internal/pulseaudio
