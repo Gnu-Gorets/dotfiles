@@ -15,7 +15,6 @@ bluez-utils
 boost-libs
 bridge-utils
 brightnessctl
-bspwm
 btop
 btrfs-progs
 capitaine-cursors
@@ -128,7 +127,6 @@ perl-file-desktopentry
 picom
 pipewire-pulse
 polkit-gnome
-polybar
 postman-bin
 protobuf
 protobuf-c
@@ -136,6 +134,7 @@ pv
 python-cairo
 python-pip
 python-pipx
+python-psutil
 qbittorrent
 qflipper
 qt5ct
@@ -145,6 +144,7 @@ qt5-quickcontrols2
 qt6-5compat
 qt6ct
 qt6-serialport
+qtile
 reflector
 rofi
 runc
@@ -158,7 +158,6 @@ socat
 spacefm
 stow
 sudo
-sxhkd
 syncthing
 syntax-highlighting
 syntax-highlighting5

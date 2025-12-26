@@ -13,10 +13,6 @@ xset s off -dpms &
 # Background and compositor
 nitrogen --restore &
 picom -b --config "$HOME/.config/picom.conf" &
-run sxhkd -c $HOME/.config/bspwm/sxhkd/sxhkdrc &
-if [ "$(which polybar)" != "polybar not found" ]; then
-  $HOME/.config/bspwm/polybar/launch.sh &
-fi
 
 # Apply Xresources (replaces xsettingsd)
 xrdb -merge "$HOME/.Xresources" &
