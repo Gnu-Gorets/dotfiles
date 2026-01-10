@@ -3,17 +3,17 @@ import subprocess
 
 from libqtile import widget
 
-from .constants import ACCENT, BAR_BG, BAR_FG, BAR_FONT, LIGHT
+from .constants import ACCENT, BAR_BG, BAR_FG, LIGHT
 from .utils import (
-    cpu_load_percent,
-    mem_usage,
-    uparch_status,
-    tor_status,
-    bluetooth_status,
-    volume_status,
-    brightness_level,
     battery_status,
+    bluetooth_status,
+    brightness_level,
+    cpu_load_percent,
     keyboard_layout,
+    mem_usage,
+    tor_status,
+    uparch_status,
+    volume_status,
 )
 
 bar_widgets = [
@@ -101,7 +101,7 @@ bar_widgets = [
     ),
     widget.GenPollText(
         func=battery_status,
-        update_interval=10,
+        update_interval=0.5,
         foreground=BAR_FG,
         markup=True,
     ),
@@ -130,6 +130,6 @@ bar_settings = {
     "size": 24,
     "background": BAR_BG,
     "opacity": 0.95,
-    "font": BAR_FONT,
+    "font": "BAR_FONT",
     "fontsize": 14,
 }

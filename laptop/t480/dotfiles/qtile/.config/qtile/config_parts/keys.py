@@ -3,13 +3,14 @@ from libqtile.lazy import lazy
 
 from .constants import ALT, BRIGHTNESS_DEVICE, MOD, TERMINAL
 from .utils import (
-    safe_kill,
-    pin_floating_to_current_group,
     custom_toggle_floating,
     drag_floating_only,
     drag_start_if_floating,
-    volume_up_capped,
+    pin_floating_to_current_group,
+    safe_kill,
+    toggle_minimize_single,
     toggle_mute_restore_volume,
+    volume_up_capped,
 )
 
 KEYCODES = {
@@ -69,7 +70,7 @@ APP_LAUNCHERS = [
 ]
 
 LAYOUT_KEYS = [
-    ([MOD], "minus", lazy.window.toggle_minimize(), "Minimize/restore window"),
+    ([MOD], "minus", lazy.function(toggle_minimize_single), "Minimize/restore window"),
     (
         [MOD],
         kc("g"),
@@ -95,7 +96,18 @@ keys += [app_key(letter, command, desc) for letter, command, desc in APP_LAUNCHE
 
 SYSTEM_KEYS = [
     ([MOD, ALT], "Delete", lazy.spawn("sh -c ~/.config/qtile/power.sh"), "Open power menu"),
-    ([], "Print", lazy.spawn('flameshot full -c -p "$(xdg-user-dir PICTURES)"'), "Screenshot full screen"),
+    (
+        [MOD, ALT],
+        kc("r"),
+        lazy.spawn("qtile cmd-obj -o cmd -f reload_config"),
+        "Reload qtile config",
+    ),
+    (
+        [],
+        "Print",
+        lazy.spawn('flameshot full -c -p "$(xdg-user-dir PICTURES)"'),
+        "Screenshot full screen",
+    ),
     ([MOD], "Print", lazy.spawn("flameshot gui"), "Screenshot GUI"),
     (
         [MOD, ALT],
