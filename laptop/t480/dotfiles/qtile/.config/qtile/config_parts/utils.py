@@ -1,12 +1,13 @@
-import re
+import contextlib
 import os
+import re
 import subprocess
 
 import psutil
 from libqtile import qtile
 from libqtile.lazy import lazy
 
-from .constants import ACCENT, BRIGHTNESS_DEVICE
+from .constants import BRIGHTNESS_DEVICE, WHITE
 
 FLOAT_CENTER_RULES = {
     "mpv": (500, 280),
@@ -16,6 +17,8 @@ FLOAT_CENTER_RULES = {
 pinned_windows = set()
 _last_volume_before_mute = None
 _float_states = {}
+_last_minimized_by_group = {}
+
 
 def run_cmd(cmd):
     try:
@@ -31,6 +34,9 @@ def run_cmd(cmd):
 def forget_window_state(wid):
     pinned_windows.discard(wid)
     _float_states.pop(wid, None)
+    for group_name, stored_wid in list(_last_minimized_by_group.items()):
+        if stored_wid == wid:
+            _last_minimized_by_group.pop(group_name, None)
 
 
 def cpu_load_percent():
@@ -82,7 +88,7 @@ def volume_status():
     return f"{icon} {volume}%"
 
 
-def volume_up_capped(_qtile, step=5, max_percent=150):
+def volume_up_capped(_qtile, step=5, max_percent=250):
     try:
         output = subprocess.check_output(
             ["pactl", "get-sink-volume", "@DEFAULT_SINK@"],
@@ -155,9 +161,7 @@ def _brightness_sysfs(device):
         if os.path.isdir(path):
             return path
     try:
-        entries = [
-            d for d in os.listdir(base) if os.path.isdir(os.path.join(base, d))
-        ]
+        entries = [d for d in os.listdir(base) if os.path.isdir(os.path.join(base, d))]
     except Exception:
         return None
     return os.path.join(base, entries[0]) if entries else None
@@ -191,17 +195,17 @@ def brightness_level():
     try:
         sysfs_path = _brightness_sysfs(BRIGHTNESS_DEVICE)
         if not sysfs_path:
-            return " ?"
+            return "  ?"
         with open(os.path.join(sysfs_path, "brightness")) as f:
             current = int(f.read().strip())
         with open(os.path.join(sysfs_path, "max_brightness")) as f:
             max_value = int(f.read().strip())
         if max_value > 0:
             percent = round(current / max_value * 100)
-            return f" {percent}%"
+            return f"  {percent}%"
     except Exception:
-        return " ?"
-    return " ?"
+        return "  ?"
+    return "  ?"
 
 
 def battery_status():
@@ -211,8 +215,8 @@ def battery_status():
         with open("/sys/class/power_supply/BAT0/status") as f:
             status = f.read().strip()
 
-        if status == "Charging":
-            return f'<span color="{ACCENT}">󰁹</span> {percent}%'
+        if status in {"Charging", "Full"}:
+            return f'<span foreground="{WHITE}">󰁹 {percent}%</span>'
         else:
             return f"󰁹 {percent}%"
     except Exception:
@@ -221,12 +225,72 @@ def battery_status():
 
 def keyboard_layout():
     output = run_cmd(["xkb-switch"])
-    return f"  {output}" if output else "  ?"
+    return f"   {output}" if output else "  ?"
 
 
 def safe_kill(qtile):
     if qtile.current_window is not None:
         qtile.current_window.kill()
+
+
+def _window_wid(win):
+    if getattr(win, "window", None) is not None:
+        return win.window.wid
+    return getattr(win, "wid", None)
+
+
+def _is_minimized(win):
+    return bool(getattr(win, "minimized", False))
+
+
+def _restore_window(group, win):
+    if win and _is_minimized(win):
+        win.toggle_minimize()
+    if win:
+        with contextlib.suppress(Exception):
+            group.focus(win, True)
+
+
+def toggle_minimize_single(qtile):
+    group = qtile.current_group
+    if not group:
+        return
+
+    current = qtile.current_window
+    if current and _is_minimized(current):
+        wid = _window_wid(current)
+        if wid is not None:
+            _last_minimized_by_group[group.name] = wid
+        _restore_window(group, current)
+        return
+
+    minimized_windows = [w for w in group.windows if _is_minimized(w)]
+
+    tracked = None
+    tracked_wid = _last_minimized_by_group.get(group.name)
+    if tracked_wid is not None:
+        for w in minimized_windows:
+            if _window_wid(w) == tracked_wid:
+                tracked = w
+                break
+        if tracked is None:
+            _last_minimized_by_group.pop(group.name, None)
+
+    if minimized_windows:
+        win = tracked or minimized_windows[-1]
+        _restore_window(group, win)
+        for other in minimized_windows:
+            if other is win:
+                continue
+            with contextlib.suppress(Exception):
+                other.toggle_minimize()
+        return
+
+    if current:
+        current.toggle_minimize()
+        wid = _window_wid(current)
+        if wid is not None:
+            _last_minimized_by_group[group.name] = wid
 
 
 def pin_floating_to_current_group(qtile):

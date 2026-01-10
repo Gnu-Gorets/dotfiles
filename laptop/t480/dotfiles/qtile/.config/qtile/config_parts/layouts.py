@@ -2,6 +2,7 @@ from libqtile import layout
 from libqtile.config import Match
 
 from .constants import BORDER_FOCUS, BORDER_NORMAL
+
 BORDER_WIDTH = 0
 LAYOUT_MARGIN = 0
 

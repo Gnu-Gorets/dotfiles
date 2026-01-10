@@ -1,12 +1,11 @@
+import config_parts.hooks
+
+from config_parts.groups import generate_group_keys, groups
+from config_parts.keys import keys, mouse
+from config_parts.layouts import floating_layout, layouts
+from config_parts.widgets import bar_settings, bar_widgets
 from libqtile import bar
 from libqtile.config import Screen
-
-from config_parts.keys import keys, mouse
-from config_parts.groups import groups, generate_group_keys
-from config_parts.layouts import layouts, floating_layout
-from config_parts.widgets import bar_widgets, bar_settings
-
-import config_parts.hooks
 
 GROUP_KEYS = generate_group_keys()
 keys += GROUP_KEYS

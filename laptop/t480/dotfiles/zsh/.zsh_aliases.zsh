@@ -4,6 +4,7 @@ alias duh="du -d 1 -h | sort -h"
 alias srm="sudo rm -rfv"
 alias rm="rm -rfv"
 alias mk="mkdir"
+alias free='free -h'
 
 alias sz="source $HOME/.zshrc"
 alias saz="source $HOME/.zsh_aliases.zsh"
