@@ -74,18 +74,18 @@ def bluetooth_status():
 def volume_status():
     output = run_cmd(["pactl", "get-sink-volume", "@DEFAULT_SINK@"])
     if not output:
-        return " ?%"
+        return "  ?%"
     match = re.search(r"(\d+)%", output)
     if not match:
-        return " ?%"
+        return "  ?%"
     volume = int(match.group(1))
     if volume == 0:
-        icon = " "
+        icon = "  "
     elif volume < 50:
-        icon = " "
+        icon = "  "
     else:
-        icon = " "
-    return f"{icon} {volume}%"
+        icon = "  "
+    return f"{icon}  {volume}%"
 
 
 def volume_up_capped(_qtile, step=5, max_percent=250):

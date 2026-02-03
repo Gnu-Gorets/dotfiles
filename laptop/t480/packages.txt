@@ -5,8 +5,6 @@ alsa-plugins
 alsa-utils
 android-tools
 ansible
-aws-cli-v2
-aws-session-manager-plugin
 base
 base-devel
 betterlockscreen
@@ -21,7 +19,6 @@ btop
 btrfs-progs
 capitaine-cursors
 c-ares
-chromium
 chrpath
 containerd
 cronie
@@ -41,15 +38,12 @@ f2fs-tools
 fastfetch
 ffmpeg4.4
 ffmpegthumbnailer
-flameshot
 forkgram-bin
 freetube-bin
 fsarchiver
 geoip
-github-cli
 gnome-keyring
 gnu-netcat
-go
 gotop-bin
 gperf
 gpm
@@ -67,7 +61,6 @@ gvfs-nfs
 gvfs-smb
 haveged
 hdparm
-helm
 intel-media-driver
 intel-ucode
 intltool
@@ -75,7 +68,6 @@ iw
 jfsutils
 jq
 keepassxc
-kubectl
 kustomize
 kvantum
 kvantum-qt5
@@ -117,7 +109,6 @@ network-manager-applet
 networkmanager-openvpn
 nfs-utils
 nitrogen
-nmap
 noto-fonts
 noto-fonts-cjk
 noto-fonts-emoji
@@ -125,7 +116,6 @@ ntfs-3g
 numlockx
 oh-my-zsh-git
 onetbb
-openssl-1.1
 os-prober
 otf-droid-nerd
 pacman-contrib
@@ -142,6 +132,7 @@ protobuf
 protobuf-c
 pv
 python-cairo
+python-pipx
 python-psutil
 qbittorrent
 qflipper
@@ -156,6 +147,7 @@ qtile
 reflector
 rofi
 runc
+satty
 sddm
 sdparm
 sg3_utils
@@ -170,10 +162,6 @@ syncthing
 syntax-highlighting
 syntax-highlighting5
 systemd-resolvconf
-terraform
-terraform-docs
-terragrunt
-tflint
 tint2
 tlp
 tlp-rdw
@@ -210,6 +198,7 @@ vulkan-intel
 vulkan-tools
 wmctrl
 wmname
+xclip
 xdg-user-dirs-gtk
 xdotool
 xf86-input-evdev
