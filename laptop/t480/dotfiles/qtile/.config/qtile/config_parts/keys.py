@@ -103,17 +103,10 @@ SYSTEM_KEYS = [
         "Reload qtile config",
     ),
     (
-        [],
+        [MOD],
         "Print",
-        lazy.spawn('flameshot full -c -p "$(xdg-user-dir PICTURES)"'),
-        "Screenshot full screen",
-    ),
-    ([MOD], "Print", lazy.spawn("flameshot gui"), "Screenshot GUI"),
-    (
-        [MOD, ALT],
-        "Print",
-        lazy.spawn('flameshot full -c -d 5000 -p "$(xdg-user-dir PICTURES)"'),
-        "Delayed screenshot",
+        lazy.spawn('sh -c "import png:- | satty --filename -"'),
+        "Screenshot GUI",
     ),
     ([], "XF86AudioRaiseVolume", lazy.function(volume_up_capped), "Volume up"),
     (

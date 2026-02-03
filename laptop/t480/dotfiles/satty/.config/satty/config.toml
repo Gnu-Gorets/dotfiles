@@ -1,0 +1,24 @@
+[general]
+fullscreen = true
+annotation-size-factor = 0.6
+early-exit = true
+initial-tool = "rectangle"
+# Save on Enter -> clipboard + file, then exit
+actions-on-enter = ["save-to-clipboard", "save-to-file", "exit"]
+actions-on-escape = ["exit"]
+# UI preferences
+disable-notifications = true
+default-hide-toolbars = false
+default-fill-shapes = false
+primary-highlighter = "block"
+# Clipboard helper for X11
+copy-command = "xclip -selection clipboard -t image/png -i"
+# File name pattern (strftime)
+output-filename = "~/Documents/screenshots/screenshot_%Y-%m-%d_%H-%M-%S.png"
+
+[font]
+family = "Noto Sans"
+style = "Regular"
+
+[color-palette]
+palette = ["#ff6b6b", "#8a6ede", "#34b45a", "#e7bc63", "#000000", "#25b8a4"]

@@ -165,6 +165,7 @@ def float_windows_follow_group():
         if (
             isinstance(win, Window)
             and win.floating
+            and not win.fullscreen
             and not win.minimized
             and win.window.wid not in pinned_windows
         ):
