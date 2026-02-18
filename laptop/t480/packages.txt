@@ -4,7 +4,6 @@ alsa-firmware
 alsa-plugins
 alsa-utils
 android-tools
-ansible
 base
 base-devel
 betterlockscreen
@@ -151,7 +150,6 @@ satty
 sddm
 sdparm
 sg3_utils
-slack-desktop
 slop
 smartmontools
 socat

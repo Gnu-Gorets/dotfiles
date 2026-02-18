@@ -5,340 +5,292 @@
 # | | | (_) |  _| |_____| |_) | | |_| |  __/ || (_) | (_) | |_| | | |
 # |_|  \___/|_| |_|     |_.__/|_|\__,_|\___|\__\___/ \___/ \__|_| |_|
 #
-# Author: Nick Clyde (clydedroid)
-#
-# A script that generates a rofi menu that uses bluetoothctl to
-# connect to bluetooth devices and display status info.
-#
-# Inspired by networkmanager-dmenu (https://github.com/firecat53/networkmanager-dmenu)
-# Thanks to x70b1 (https://github.com/polybar/polybar-scripts/tree/master/polybar-scripts/system-bluetooth-bluetoothctl)
-#
-# Depends on:
-#   Arch repositories: rofi, bluez-utils (contains bluetoothctl)
 
-# Constants
 divider="---------"
 goback="Back"
 
-# Checks if bluetooth controller is powered on
-power_on() {
-    if bluetoothctl show | grep -q "Powered: yes"; then
+bt_query() {
+    {
+        printf '%s\n' "$*"
+        printf 'exit\n'
+    } | command bluetoothctl 2>/dev/null | tr -d '\r' | sed -E 's/\x1B\[[0-9;?]*[ -/]*[@-~]//g'
+}
+
+bt_exec_quiet() {
+    bt_query "$*" >/dev/null
+}
+
+info_value() {
+    local info_text="$1"
+    local key="$2"
+    echo "$info_text" | sed -n -E "s/^[[:space:]]*${key}:[[:space:]]*([^[:space:]]+).*/\\1/p" | head -n1
+}
+
+device_info() { bt_query info "$1"; }
+device_flag() { info_value "$(device_info "$1")" "$2"; }
+controller_flag() { info_value "$(bt_query show)" "$1"; }
+
+controller_status() {
+    local key="$1"
+    local label="$2"
+    if [ "$(controller_flag "$key")" = "yes" ]; then
+        echo "$label: on"
         return 0
+    fi
+    echo "$label: off"
+    return 1
+}
+
+device_line_by_mac() {
+    local mac="$1"
+    bt_query devices | awk -v mac="$mac" '$1=="Device" && $2==mac{print; exit}'
+}
+
+open_device_menu_by_mac() {
+    local mac="$1"
+    local line
+    line=$(device_line_by_mac "$mac")
+    if [ -n "$line" ]; then
+        device_menu "$line"
     else
-        return 1
+        show_menu
     fi
 }
 
-# Toggles power state
+wait_for_device_state() {
+    local mac="$1"
+    local key="$2"
+    local expected="$3"
+    local timeout="${4:-10}"
+    local waited=0
+    local current
+
+    while [ "$waited" -lt "$timeout" ]; do
+        current=$(device_flag "$mac" "$key")
+        if [ "$current" = "$expected" ]; then
+            return 0
+        fi
+        sleep 1
+        waited=$((waited + 1))
+    done
+    return 1
+}
+
+power_on() { [ "$(controller_flag Powered)" = "yes" ]; }
+scan_on() { controller_status Discovering "Scan"; }
+pairable_on() { controller_status Pairable "Pairable"; }
+discoverable_on() { controller_status Discoverable "Discoverable"; }
+
 toggle_power() {
     if power_on; then
-        bluetoothctl power off
-        show_menu
+        bt_exec_quiet power off
     else
         if rfkill list bluetooth | grep -q 'blocked: yes'; then
             rfkill unblock bluetooth && sleep 3
         fi
-        bluetoothctl power on
-        show_menu
+        bt_exec_quiet power on
     fi
+    show_menu
 }
 
-# Checks if controller is scanning for new devices
-scan_on() {
-    if bluetoothctl show | grep -q "Discovering: yes"; then
-        echo "Scan: on"
-        return 0
-    else
-        echo "Scan: off"
-        return 1
-    fi
-}
-
-# Toggles scanning state
 toggle_scan() {
-    if scan_on; then
-        kill $(pgrep -f "bluetoothctl scan on")
-        bluetoothctl scan off
-        show_menu
+    if scan_on >/dev/null; then
+        bt_exec_quiet scan off
     else
-        bluetoothctl scan on &
-        echo "Scanning..."
+        bt_exec_quiet scan on
         sleep 5
-        show_menu
     fi
+    show_menu
 }
 
-# Checks if controller is able to pair to devices
-pairable_on() {
-    if bluetoothctl show | grep -q "Pairable: yes"; then
-        echo "Pairable: on"
-        return 0
-    else
-        echo "Pairable: off"
-        return 1
-    fi
-}
-
-# Toggles pairable state
 toggle_pairable() {
-    if pairable_on; then
-        bluetoothctl pairable off
-        show_menu
+    if pairable_on >/dev/null; then
+        bt_exec_quiet pairable off
     else
-        bluetoothctl pairable on
-        show_menu
+        bt_exec_quiet pairable on
     fi
+    show_menu
 }
 
-# Checks if controller is discoverable by other devices
-discoverable_on() {
-    if bluetoothctl show | grep -q "Discoverable: yes"; then
-        echo "Discoverable: on"
-        return 0
-    else
-        echo "Discoverable: off"
-        return 1
-    fi
-}
-
-# Toggles discoverable state
 toggle_discoverable() {
-    if discoverable_on; then
-        bluetoothctl discoverable off
-        show_menu
+    if discoverable_on >/dev/null; then
+        bt_exec_quiet discoverable off
     else
-        bluetoothctl discoverable on
-        show_menu
+        bt_exec_quiet discoverable on
     fi
+    show_menu
 }
 
-# Checks if a device is connected
-device_connected() {
-    device_info=$(bluetoothctl info "$1")
-    if echo "$device_info" | grep -q "Connected: yes"; then
-        return 0
-    else
-        return 1
-    fi
-}
+device_connected() { [ "$(device_flag "$1" Connected)" = "yes" ]; }
 
-# Toggles device connection
 toggle_connection() {
     if device_connected "$1"; then
-        bluetoothctl disconnect "$1"
-        device_menu "$device"
+        bt_exec_quiet disconnect "$1"
+        wait_for_device_state "$1" Connected no 10 || sleep 1
     else
-        bluetoothctl connect "$1"
-        device_menu "$device"
+        bt_exec_quiet connect "$1"
+        wait_for_device_state "$1" Connected yes 12 || sleep 1
     fi
+    open_device_menu_by_mac "$1"
 }
 
-# Checks if a device is paired
-device_paired() {
-    device_info=$(bluetoothctl info "$1")
-    if echo "$device_info" | grep -q "Paired: yes"; then
-        echo "Paired: yes"
-        return 0
-    else
-        echo "Paired: no"
-        return 1
-    fi
-}
-
-# Toggles device paired state
 toggle_paired() {
-    if device_paired "$1"; then
-        bluetoothctl remove "$1"
-        device_menu "$device"
+    if [ "$(device_flag "$1" Paired)" = "yes" ]; then
+        bt_exec_quiet remove "$1"
     else
-        bluetoothctl pair "$1"
-        device_menu "$device"
+        bt_exec_quiet pair "$1"
     fi
+    sleep 1
+    open_device_menu_by_mac "$1"
 }
 
-# Checks if a device is trusted
-device_trusted() {
-    device_info=$(bluetoothctl info "$1")
-    if echo "$device_info" | grep -q "Trusted: yes"; then
-        echo "Trusted: yes"
-        return 0
-    else
-        echo "Trusted: no"
-        return 1
-    fi
-}
-
-# Toggles device connection
 toggle_trust() {
-    if device_trusted "$1"; then
-        bluetoothctl untrust "$1"
-        device_menu "$device"
+    if [ "$(device_flag "$1" Trusted)" = "yes" ]; then
+        bt_exec_quiet untrust "$1"
     else
-        bluetoothctl trust "$1"
-        device_menu "$device"
+        bt_exec_quiet trust "$1"
     fi
+    sleep 1
+    open_device_menu_by_mac "$1"
 }
 
-get_battery_level() {
-    device_battery=$(upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep "percentage" | awk '{print $2}')
-    echo "$device_battery"
-}
-
-get_battery_level() {
-    device_info=$(bluetoothctl info "$1")
-    battery=$(echo "$device_info" | grep "Battery Percentage" | awk '{print $3}')
-    if [[ $battery =~ 0x[0-9A-Fa-f]+ ]]; then
-        battery_decimal=$((16#${battery:2}))
-        echo "$battery_decimal%"
-    elif [ -n "$battery" ]; then
-        echo "$battery%"
+battery_from_info() {
+    local info="$1"
+    local value decimal
+    value=$(echo "$info" | awk '/Battery Percentage/ {print $3; exit}')
+    if [[ $value =~ 0x[0-9A-Fa-f]+ ]]; then
+        decimal=$((16#${value:2}))
+        echo "$decimal%"
+    elif [ -n "$value" ]; then
+        echo "$value%"
     else
         echo "N/A"
     fi
 }
 
-# Prints a short string with the current bluetooth status
-# Useful for status bars like polybar, etc.
-print_status() {
-    if power_on; then
-        printf ''
+alias_from_info() { echo "$1" | sed -n -E 's/^[[:space:]]*Alias:[[:space:]]*(.*)$/\1/p' | head -n1; }
 
-        paired_devices_cmd="devices Paired"
-        # Check if an outdated version of bluetoothctl is used to preserve backwards compatibility
-        if (( $(echo "$(bluetoothctl version | head -n 1 | awk '{print $2}') < 5.65" | bc -l) )); then
-            paired_devices_cmd="paired-devices"
-        fi
-
-        mapfile -t paired_devices < <(bluetoothctl $paired_devices_cmd | grep Device | cut -d ' ' -f 2)
-        counter=0
-
-        for device in "${paired_devices[@]}"; do
-            if device_connected "$device"; then
-                device_alias=$(bluetoothctl info "$device" | grep "Alias" | cut -d ' ' -f 2-)
-                battery=$(get_battery_level "$device")
-
-                if [ "$battery" != "N/A" ]; then
-                    if [ $counter -gt 0 ]; then
-                        printf ", %s (%s)" "$device_alias" "$battery"
-                    else
-                        printf " %s (%s)" "$device_alias" "$battery"
-                    fi
-                else
-                    if [ $counter -gt 0 ]; then
-                        printf ", %s" "$device_alias"
-                    else
-                        printf " %s" "$device_alias"
-                    fi
-                fi
-
-                ((counter++))
-            fi
-        done
-        printf "\n"
-    else
-        echo ""
-    fi
+paired_devices_cmd() {
+    if (( $(echo "$(bluetoothctl --version | awk '{print $2}') < 5.65" | bc -l) )); then echo "paired-devices"; else echo "devices Paired"; fi
 }
 
-# A submenu for a specific device that allows connecting, pairing, and trusting
-device_menu() {
-    device=$1
+print_status() {
+    local cmd counter=0 mac info alias battery sep
+    local -a paired
 
-    # Get device name and mac address
-    device_name=$(echo "$device" | cut -d ' ' -f 3-)
-    mac=$(echo "$device" | cut -d ' ' -f 2)
-
-    # Build options
-    if device_connected "$mac"; then
-        connected="Connected: yes"
-    else
-        connected="Connected: no"
+    if ! power_on; then
+        echo ""
+        return
     fi
-    paired=$(device_paired "$mac")
-    trusted=$(device_trusted "$mac")
+
+    printf ''
+    cmd=$(paired_devices_cmd)
+    mapfile -t paired < <(bt_query "$cmd" | grep "^Device " | cut -d ' ' -f 2)
+
+    for mac in "${paired[@]}"; do
+        info=$(device_info "$mac")
+        [ "$(info_value "$info" Connected)" = "yes" ] || continue
+        alias=$(alias_from_info "$info")
+        battery=$(battery_from_info "$info")
+        if [ "$counter" -gt 0 ]; then
+            sep=", "
+        else
+            sep=" "
+        fi
+        if [ "$battery" = "N/A" ]; then
+            printf "%s%s" "$sep" "$alias"
+        else
+            printf "%s%s (%s)" "$sep" "$alias" "$battery"
+        fi
+        counter=$((counter + 1))
+    done
+    printf '\n'
+}
+
+select_device_line() {
+    local name="$1"
+    local candidate mac
+    local -a matches
+
+    mapfile -t matches < <(
+        bt_query devices | awk -v chosen="$name" '
+            $1=="Device" {
+                mac=$2
+                $1=""
+                $2=""
+                sub(/^  */, "", $0)
+                if ($0 == chosen) print "Device " mac " " $0
+            }
+        '
+    )
+
+    [ "${#matches[@]}" -gt 0 ] || return 1
+    for candidate in "${matches[@]}"; do
+        mac=$(echo "$candidate" | cut -d ' ' -f 2)
+        [ "$(device_flag "$mac" Connected)" = "yes" ] && { echo "$candidate"; return 0; }
+    done
+    for candidate in "${matches[@]}"; do
+        mac=$(echo "$candidate" | cut -d ' ' -f 2)
+        [ "$(device_flag "$mac" Paired)" = "yes" ] && { echo "$candidate"; return 0; }
+    done
+    echo "${matches[0]}"
+}
+
+device_menu() {
+    local line="$1"
+    local name mac info connected paired trusted options chosen
+
+    mac=$(echo "$line" | cut -d ' ' -f 2)
+    name=$(echo "$line" | cut -d ' ' -f 3-)
+
+    info=$(device_info "$mac")
+    connected="Connected: $(info_value "$info" Connected)"
+    paired="Paired: $(info_value "$info" Paired)"
+    trusted="Trusted: $(info_value "$info" Trusted)"
+    connected=${connected/%: /: no}
+    paired=${paired/%: /: no}
+    trusted=${trusted/%: /: no}
     options="$connected\n$paired\n$trusted\n$divider\n$goback\nExit"
+    chosen="$(echo -e "$options" | $rofi_command "$name")"
 
-    # Open rofi menu, read chosen option
-    chosen="$(echo -e "$options" | $rofi_command "$device_name")"
-
-    # Match chosen option to command
     case "$chosen" in
-        "" | "$divider")
-            echo "No option chosen."
-            ;;
-        "$connected")
-            toggle_connection "$mac"
-            ;;
-        "$paired")
-            toggle_paired "$mac"
-            ;;
-        "$trusted")
-            toggle_trust "$mac"
-            ;;
-        "$goback")
-            show_menu
-            ;;
+        "" | "$divider") ;;
+        "$connected") toggle_connection "$mac" ;;
+        "$paired") toggle_paired "$mac" ;;
+        "$trusted") toggle_trust "$mac" ;;
+        "$goback") show_menu ;;
     esac
 }
 
-# Opens a rofi menu with current bluetooth status and options to connect
 show_menu() {
-    # Get menu options
+    local power devices scan pairable discoverable options chosen device
+
     if power_on; then
         power="Power: on"
-
-        # Human-readable names of devices, one per line
-        # If scan is off, will only list paired devices
-        devices=$(bluetoothctl devices | grep Device | cut -d ' ' -f 3-)
-
-        # Get controller flags
+        devices=$(bt_query devices | grep "^Device " | cut -d ' ' -f 3-)
         scan=$(scan_on)
         pairable=$(pairable_on)
         discoverable=$(discoverable_on)
-
-        # Options passed to rofi
         options="$devices\n$divider\n$power\n$scan\n$pairable\n$discoverable\nExit"
     else
         power="Power: off"
         options="$power\nExit"
     fi
 
-    # Open rofi menu, read chosen option
     chosen="$(echo -e "$options" | $rofi_command "Bluetooth")"
-
-    # Match chosen option to command
     case "$chosen" in
-        "" | "$divider")
-            echo "No option chosen."
-            ;;
-        "$power")
-            toggle_power
-            ;;
-        "$scan")
-            toggle_scan
-            ;;
-        "$discoverable")
-            toggle_discoverable
-            ;;
-        "$pairable")
-            toggle_pairable
-            ;;
-        *)
-            device=$(bluetoothctl devices | grep "$chosen")
-            # Open a submenu if a device is selected
-            if [[ $device ]]; then device_menu "$device"; fi
-            ;;
+        "" | "$divider") ;;
+        "$power") toggle_power ;;
+        "$scan") toggle_scan ;;
+        "$discoverable") toggle_discoverable ;;
+        "$pairable") toggle_pairable ;;
+        *) device=$(select_device_line "$chosen") && device_menu "$device" ;;
     esac
 }
 
-# Rofi command to pipe into, can add any options here
 rofi_command="rofi -dmenu $* -p"
 
 case "$1" in
-    --status)
-        print_status
-        ;;
-    *)
-        show_menu
-        ;;
+    --status) print_status ;;
+    *) show_menu ;;
 esac
