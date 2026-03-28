@@ -37,74 +37,114 @@
    ```json
    {
      // =========================
-     // UI / Workbench
+     // Accessibility
      // =========================
-     "workbench.activityBar.location": "bottom",
-     "workbench.startupEditor": "none",
-     "workbench.colorTheme": "Godot 4",
-     "workbench.iconTheme": "material-icon-theme",
-     "workbench.editor.enablePreview": false,
-     "workbench.editor.pinnedTabSizing": "compact",
-     "workbench.editor.pinnedTabsOnSeparateRow": true,
-     "workbench.secondarySideBar.showLabels": false,
-     "window.commandCenter": false,
-     "chat.commandCenter.enabled": false,
+     "accessibility.verbosity.inlineChat": false,
+     "accessibility.verbosity.panelChat": false,
 
      // =========================
-     // Telemetry
+     // AI / Chat
      // =========================
-     "redhat.telemetry.enabled": false,
+     "chat.editor.fontSize": 12,
+     "chat.mcp.access": "none",
+     "chat.tools.terminal.preventShellHistory": false,
+     "chat.useAgentSkills": true,
+     "chat.viewSessions.orientation": "auto",
+     "claudeCode.initialPermissionMode": "acceptEdits",
+     "claudeCode.selectedModel": "default",
+     "inlineChat.holdToSpeech": false,
 
      // =========================
-     // Editor: common behavior
+     // Ansible
      // =========================
-     "editor.minimap.enabled": false,
-     "editor.wordWrap": "on",
-     "editor.rulers": [80, 95, 110],
-
-     "editor.tabSize": 2,
-     "editor.insertSpaces": true,
-
-     "editor.fontLigatures": false,
-     "editor.fontSize": 13,
-
-     // Keep VS Code responsive on huge files
-     "editor.largeFileOptimizations": true,
+     "ansible.validation.lint.enabled": true,
+     "ansible.validation.lint.path": "ansible-lint",
 
      // =========================
      // Diff editor
      // =========================
-     "diffEditor.ignoreTrimWhitespace": true,
+     "diffEditor.ignoreTrimWhitespace": false,
      "diffEditor.maxComputationTime": 5000,
 
      // =========================
-     // Formatting (global)
+     // Editor: common behavior + formatting
      // =========================
+     "editor.codeActionsOnSave": {
+       "source.fixAll": "explicit",
+       "source.organizeImports": "explicit"
+     },
+     "editor.defaultFormatter": "esbenp.prettier-vscode",
+     "editor.detectIndentation": false,
+     "editor.fontLigatures": false,
+     "editor.fontSize": 13,
      "editor.formatOnSave": true,
      "editor.formatOnSaveMode": "file",
-
-     // Default formatter for languages without explicit overrides
-     "editor.defaultFormatter": "esbenp.prettier-vscode",
+     "editor.insertSpaces": true,
+     "editor.largeFileOptimizations": true,
+     "editor.minimap.enabled": false,
+     "editor.rulers": [80, 95, 110],
+     "editor.tabSize": 2,
+     "editor.wordWrap": "on",
 
      // =========================
-     // Files: whitespace / EOL hygiene
+     // Files
      // =========================
-     "files.trimTrailingWhitespace": true,
+     "files.associations": {
+       "**/*.gotmpl": "helm",
+       "**/*.tpl": "helm",
+       "**/templates/*.yaml": "helm",
+       "**/templates/*.yml": "helm"
+     },
+     "files.eol": "\n",
      "files.insertFinalNewline": true,
      "files.trimFinalNewlines": true,
-     "files.eol": "\n",
+     "files.trimTrailingWhitespace": true,
 
      // =========================
-     // JSON / YAML / Markdown: Prettier
+     // Git / SCM
      // =========================
+     "git.autofetch": "all",
+     "git.confirmSync": false,
+     "git.ignoreRebaseWarning": true,
+     "git.repositoryScanMaxDepth": 6,
+     "git.replaceTagsWhenPull": true,
+     "git-graph.commitDetailsView.fileView.type": "File List",
+     "git-graph.contextMenuActionsVisibility": {},
+     "git-graph.date.format": "ISO Date & Time",
+     "scm.alwaysShowRepositories": true,
+     "scm.defaultViewSortKey": "name",
+     "scm.inputFontSize": 12,
+     "scm.repositories.explorer": true,
+     "scm.repositories.selectionMode": "single",
+
+     // =========================
+     // Language overrides
+     // =========================
+     "[dockercompose]": {
+       "editor.autoIndent": "advanced",
+       "editor.defaultFormatter": "esbenp.prettier-vscode",
+       "editor.insertSpaces": true,
+       "editor.quickSuggestions": {
+         "comments": false,
+         "other": true,
+         "strings": true
+       },
+       "editor.tabSize": 2
+     },
+     "[helm]": { "editor.formatOnSave": false },
      "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
      "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-     "[yaml]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
      "[markdown]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-
-     // =========================
-     // Terraform: terraform fmt
-     // =========================
+     "[python]": {
+       "editor.codeActionsOnSave": {
+         "source.fixAll.ruff": "explicit",
+         "source.organizeImports.ruff": "explicit"
+       },
+       "editor.defaultFormatter": "charliermarsh.ruff",
+       "editor.formatOnSave": true,
+       "editor.insertSpaces": true,
+       "editor.tabSize": 4
+     },
      "[terraform]": {
        "editor.defaultFormatter": "hashicorp.terraform",
        "editor.formatOnSave": true
@@ -113,6 +153,66 @@
        "editor.defaultFormatter": "hashicorp.terraform",
        "editor.formatOnSave": true
      },
+     "[yaml]": {
+       "editor.defaultFormatter": "esbenp.prettier-vscode",
+       "editor.insertSpaces": true,
+       "editor.tabSize": 2
+     },
+
+     // =========================
+     // Project Manager
+     // =========================
+     "projectManager.any.maxDepthRecursion": 6,
+     "projectManager.git.baseFolders": ["/home/$USER/Documents/Projects/"],
+     "projectManager.git.maxDepthRecursion": 6,
+     "projectManager.hg.maxDepthRecursion": 6,
+     "projectManager.supportSymlinksOnBaseFolders": true,
+     "projectManager.svn.maxDepthRecursion": 6,
+     "projectManager.tags": [
+       "Local",
+       "Github",
+       "Gitlab",
+       "Poliglotus",
+       "Pepperstone"
+     ],
+     "projectManager.vscode.maxDepthRecursion": 6,
+
+     // =========================
+     // Python
+     // =========================
+     "python.analysis.diagnosticMode": "openFilesOnly",
+     "python.analysis.typeCheckingMode": "basic",
+     "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+     "python.terminal.activateEnvironment": true,
+
+     // =========================
+     // Ruff
+     // =========================
+     "ruff.configurationPreference": "editorFirst",
+     "ruff.exclude": [
+       "/home/$USER/Documents/Projects/gitlab/GnuGorets/dotfiles/laptop/t480/dotfiles/qtile/.config/qtile/config.py",
+       "/home/$USER/dotfiles/qtile/.config/qtile/config.py"
+     ],
+     "ruff.importStrategy": "fromEnvironment",
+     "ruff.lineLength": 95,
+     "ruff.lint.enable": true,
+     "ruff.lint.select": ["E", "F", "I", "UP", "B", "SIM", "RUF"],
+     "ruff.nativeServer": "auto",
+
+     // =========================
+     // Telemetry
+     // =========================
+     "redhat.telemetry.enabled": false,
+
+     // =========================
+     // Terminal / Output font sizes
+     // =========================
+     "debug.console.fontSize": 12,
+     "markdown.preview.fontSize": 12,
+     "terminal.integrated.env.linux": {},
+     "terminal.integrated.fontSize": 12,
+     "terminal.integrated.initialHint": false,
+     "terminal.integrated.scrollback": 30000,
 
      // =========================
      // Terragrunt: hclfmt on save (only terragrunt.hcl)
@@ -127,152 +227,18 @@
      },
 
      // =========================
-     // Helm templates: treat as Helm (avoid formatting templates)
+     // UI / Workbench
      // =========================
-     "files.associations": {
-       "**/templates/*.yml": "helm",
-       "**/templates/*.yaml": "helm",
-       "**/*.tpl": "helm",
-       "**/*.gotmpl": "helm"
-     },
-     "[helm]": { "editor.formatOnSave": false },
-
-     // =========================
-     // Python: Ruff format + fixes + imports
-     // =========================
-     "[python]": {
-       "editor.tabSize": 4,
-       "editor.insertSpaces": true,
-       "editor.defaultFormatter": "charliermarsh.ruff",
-       "editor.formatOnSave": true,
-       "editor.codeActionsOnSave": {
-         "source.fixAll.ruff": "explicit",
-         "source.organizeImports.ruff": "explicit"
-       }
-     },
-
-     // Python analysis: useful signal without scanning the entire repo
-     "python.analysis.typeCheckingMode": "basic",
-     "python.analysis.diagnosticMode": "openFilesOnly",
-
-     // Default interpreter for repos that keep venv in .venv/
-     "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
-     "python.terminal.activateEnvironment": true,
-
-     // =========================
-     // Ruff: global policy (editor-level)
-     // =========================
-     "ruff.importStrategy": "fromEnvironment",
-     "ruff.lint.enable": true,
-     "ruff.nativeServer": "auto",
-     "ruff.lineLength": 95,
-     "ruff.lint.select": ["E", "F", "I", "UP", "B", "SIM", "RUF"],
-     "ruff.exclude": ["/home/$USER$/dotfiles/qtile/.config/qtile/config.py"],
-     "ruff.configurationPreference": "editorFirst",
-
-     // =========================
-     // Global code actions on save (keep explicit to avoid surprise edits)
-     // =========================
-     "editor.codeActionsOnSave": {
-       "source.fixAll": "explicit",
-       "source.organizeImports": "explicit"
-     },
-
-     // =========================
-     // Ansible: lint integration (format handled by YAML/Prettier)
-     // =========================
-     "ansible.validation.lint.enabled": true,
-     "ansible.validation.lint.path": "ansible-lint",
-
-     // =========================
-     // Docker Compose (YAML-like): keep consistent with Prettier
-     // =========================
-     "[dockercompose]": {
-       "editor.tabSize": 2,
-       "editor.insertSpaces": true,
-       "editor.autoIndent": "advanced",
-       "editor.quickSuggestions": {
-         "other": true,
-         "comments": false,
-         "strings": true
-       },
-       "editor.defaultFormatter": "esbenp.prettier-vscode"
-     },
-
-     // =========================
-     // Git / SCM
-     // =========================
-     "git.autofetch": "all",
-     "git.confirmSync": false,
-     "git.replaceTagsWhenPull": true,
-     "git.repositoryScanMaxDepth": 6,
-     "git.ignoreRebaseWarning": true,
-     "scm.alwaysShowRepositories": true,
-     "scm.defaultViewSortKey": "name",
-     "scm.inputFontSize": 12,
-
-     // =========================
-     // Git Graph (if extension installed)
-     // =========================
-     "git-graph.date.format": "ISO Date & Time",
-     "git-graph.commitDetailsView.fileView.type": "File List",
-     "git-graph.contextMenuActionsVisibility": {},
-
-     // =========================
-     // GitHub / PRs / Copilot
-     // =========================
-     "githubPullRequests.pullBranch": "never",
-     "github.copilot.nextEditSuggestions.enabled": false,
-     "github.copilot.enable": {
-       "*": true,
-       "plaintext": false,
-       "markdown": true,
-       "yaml": true,
-       "json": true
-     },
-
-     // =========================
-     // Terminal
-     // =========================
-     "terminal.integrated.fontSize": 12,
-     "terminal.integrated.scrollback": 30000,
-     "terminal.integrated.env.linux": {},
-
-     // =========================
-     // Chat / Inline Chat
-     // =========================
-     "chat.disableAIFeatures": false,
-     "debug.console.fontSize": 12,
-     "chat.editor.fontSize": 12,
-     "markdown.preview.fontSize": 12,
-     "chat.mcp.access": "none",
-     "chat.viewSessions.orientation": "auto",
-     "chat.viewWelcome.enabled": false,
-     "inlineChat.holdToSpeech": false,
-
-     // =========================
-     // Accessibility
-     // =========================
-     "accessibility.verbosity.inlineChat": false,
-     "accessibility.verbosity.panelChat": false,
-
-     // =========================
-     // Project Manager
-     // =========================
-     "projectManager.git.baseFolders": ["/home/$USER/Documents/Projects/"],
-     "projectManager.supportSymlinksOnBaseFolders": true,
-     "projectManager.git.maxDepthRecursion": 6,
-     "projectManager.any.maxDepthRecursion": 6,
-     "projectManager.hg.maxDepthRecursion": 6,
-     "projectManager.svn.maxDepthRecursion": 6,
-     "projectManager.vscode.maxDepthRecursion": 6,
-     "projectManager.tags": [
-       "Local",
-       "Github",
-       "Gitlab",
-       "Poliglotus",
-       "Pepperstone"
-     ],
+     "window.commandCenter": false,
+     "workbench.activityBar.location": "bottom",
+     "workbench.colorTheme": "Godot 4",
+     "workbench.editor.enablePreview": false,
+     "workbench.editor.pinnedTabSizing": "compact",
+     "workbench.editor.pinnedTabsOnSeparateRow": true,
+     "workbench.iconTheme": "material-icon-theme",
+     "workbench.remoteIndicator.showExtensionRecommendations": false,
+     "workbench.secondarySideBar.showLabels": false,
+     "workbench.startupEditor": "none",
 
      // =========================
      // Spell checker
