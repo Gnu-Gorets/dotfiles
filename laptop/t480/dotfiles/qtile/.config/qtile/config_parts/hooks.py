@@ -18,6 +18,7 @@ APP_RULES = {
     "Spacefm": ("file", False),
     "Peazip": ("file", False),
     "TelegramDesktop": ("chat", False),
+    "forkgram": ("chat", False),
     "vesktop": ("chat", False),
     "Slack": ("chat", False),
     "Viewnior": ("media", True),

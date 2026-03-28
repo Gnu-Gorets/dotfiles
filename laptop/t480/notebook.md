@@ -6,7 +6,7 @@
 
 ### ADD/RESTORE:
 
-1. mesa-amber # for UHD 630
+1. mesa # for UHD 630
 2. take a look on [all packages](packages.txt)
 3. virtualbox: `sudo usermod -a -G vboxusers $USER`
 4. betterlockscreen and `systemctl enable betterlockscreen@$USER`
@@ -61,12 +61,10 @@
 2. `cargo install --git https://github.com/imf4ll/opio.git` # AUR helper to install specific version from AUR
 3. For translating - translate-shell, zenity, xclip and translate to RU - ctrl+super+t
 4. ttl
-
    1. `echo "net.ipv4.ip_default_ttl=65" | sudo tee -a /etc/sysctl.d/99-sysctl.conf`
    2. `sudo reboot`
 
 5) Permissions on mount hdd
-
    1. `/etc/fstab and add - UUID=value /path ext4 (or other fs) noatime,rw 0`
    2. `sudo chown -R user:group /path`
    3. `sudo chmod 775 /path`
