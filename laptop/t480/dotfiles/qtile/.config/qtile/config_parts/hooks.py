@@ -24,6 +24,7 @@ APP_RULES = {
     "Viewnior": ("media", True),
     "XpdfReader": ("media", True),
     "FreeTube": ("media", False),
+    "streamlink-twitch-gui": ("media", False),
     "qBittorrent": ("media", False),
     "Postman": ("office", False),
     "libreoffice": ("office", False),
@@ -115,6 +116,7 @@ def autostart():
 @hook.subscribe.client_new
 def assign_app_group(client):
     wm_classes = client.window.get_wm_class() or []
+
     if not wm_classes:
         return
 

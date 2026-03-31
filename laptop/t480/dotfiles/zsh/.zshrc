@@ -22,6 +22,3 @@ if [ -d /usr/share/fzf ]; then
 . /usr/share/fzf/key-bindings.zsh
 . /usr/share/fzf/completion.zsh
 fi
-
-autoload -Uz compinit
-compinit

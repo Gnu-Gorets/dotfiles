@@ -13,7 +13,7 @@ alias upgrub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
 
 alias iip="curl --max-time 10 -w '\n' http://ident.me"
 alias tb="nc termbin.com 9999"
-alias tbc="nc termbin.com 9999 | xsel -b -i"
+alias tbc="nc termbin.com 9999 | xclip -selection clipboard -i"
 alias speed="curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -"
 
 alias zellij-clean="zellij kill-all-sessions --yes && zellij delete-all-sessions --yes"

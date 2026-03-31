@@ -48,7 +48,7 @@ bar_widgets = [
                     "-T",
                     "UpArch",
                     "-e",
-                    os.path.expanduser("~/.bin/pacui"),
+                    os.path.expanduser("~/.bin/pacui.sh"),
                 ]
             )
         },

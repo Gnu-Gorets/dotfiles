@@ -1,6 +1,10 @@
 #!/bin/sh
 
-run() { ! pgrep -x "$1" >/dev/null && "$@" & }
+run() {
+    if ! pgrep -x "$1" >/dev/null; then
+        "$@" >/dev/null 2>&1 &
+    fi
+}
 
 # Cursor and keyboard layout
 xsetroot -cursor_name left_ptr &
@@ -10,8 +14,18 @@ xmodmap -e "keycode 164 = NoSymbol" &
 # Disable screen blanking and power saving
 xset s off -dpms &
 
+# Ensure preferred resolution for the currently connected display.
+PRIMARY_OUTPUT="$(xrandr --query | awk '/ connected primary/{print $1; exit}')"
+[ -z "$PRIMARY_OUTPUT" ] && PRIMARY_OUTPUT="$(xrandr --query | awk '/ connected/{print $1; exit}')"
+if [ -n "$PRIMARY_OUTPUT" ]; then
+    xrandr --output "$PRIMARY_OUTPUT" --auto &
+fi
+
 # Background and compositor
-nitrogen --restore &
+# Restore wallpaper from the last `feh --bg-*` call.
+if [ -x "$HOME/.fehbg" ]; then
+    "$HOME/.fehbg" &
+fi
 picom -b --config "$HOME/.config/picom.conf" &
 
 # Apply Xresources (replaces xsettingsd)

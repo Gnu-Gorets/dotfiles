@@ -1,7 +1,7 @@
 from libqtile.config import Drag, Key
 from libqtile.lazy import lazy
 
-from .constants import ALT, BRIGHTNESS_DEVICE, MOD, TERMINAL
+from .constants import ALT, BRIGHTNESS_DEVICE, MOD
 from .utils import (
     custom_toggle_floating,
     drag_floating_only,
@@ -64,6 +64,7 @@ APP_LAUNCHERS = [
     ("v", "vesktop", "Launch Vesktop"),
     ("s", "slack", "Launch Slack"),
     ("y", "freetube", "Launch FreeTube"),
+    ("t", "streamlink-twitch-gui", "Launch Streamlink Twitch GUI"),
     ("x", "xpipe open", "Launch xpipe open"),
     ("p", "keepassxc", "Launch KeePassXC"),
     ("b", "bitwarden-desktop", "Launch Bitwarden"),
@@ -86,7 +87,7 @@ LAYOUT_KEYS = [
 ]
 
 TOOL_KEYS = [
-    ([MOD], "Return", lazy.spawn(f"{TERMINAL} -e tmrun.sh"), "Open terminal with tmrun.sh"),
+    ([MOD], "Return", lazy.spawn("zellij-open.sh"), "Open or focus zellij terminal"),
     ([ALT, MOD], kc("z"), lazy.spawn('zsh -i -c "zellij-clean"'), "Run zellij-clean"),
 ]
 
