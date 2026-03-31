@@ -2,9 +2,6 @@
 
 DIALOG_RESULT=$(echo -e 'Lock\nQuit Qtile\nSuspend Lock\nHibernate\nReboot\nPoweroff\nExit' | rofi -dmenu -i -p "SYSTEM" -hide-scrollbar -tokenize -lines 7 -eh 1 -width 25 -location 0 -xoffset 0 -yoffset 0 -padding 20 -disable-history)
 
-echo "This result is : $DIALOG_RESULT"
-sleep 1;
-
 if [ "$DIALOG_RESULT" = "Lock" ]; then
     exec betterlockscreen -l dim
 elif [ "$DIALOG_RESULT" = "Quit Qtile" ]; then

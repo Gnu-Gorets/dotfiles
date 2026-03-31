@@ -1,16 +1,73 @@
 :root {
   --toolbar-field-focus-border-color: transparent !important;
+  --toolbar-field-focus-background-color: #201929 !important;
   --urlbar-background-color: #201929;
-
 }
 
 :root[privatebrowsingmode="temporary"] {
-  --urlbar-background-color: #25003E;
+  --urlbar-background-color: #25003e;
 }
 
-:root{ --toolbar-field-focus-border-color: transparent !important; }
+:root {
+  --toolbar-field-focus-border-color: transparent !important;
+}
 
 /* Clean Urlbar */
+
+/* Hide dropdown popup */
+.urlbarView {
+  display: none !important;
+}
+
+/* Hide go (→) button */
+#urlbar-go-button,
+.urlbar-go-button,
+#urlbar .urlbar-go-button,
+#urlbar-input-container #urlbar-go-button {
+  display: none !important;
+  visibility: collapse !important;
+}
+
+/* Compact megabar — MrOtherGuy/firefox-csshacks */
+#urlbar[breakout][breakout-extend] {
+  margin-left: 0 !important;
+  width: var(--urlbar-width) !important;
+  margin-top: calc(
+    (var(--urlbar-container-height) - var(--urlbar-height)) / 2
+  ) !important;
+}
+
+:where(#urlbar) > .urlbar-background,
+#urlbar-background {
+  animation: none !important;
+  transition: none !important;
+}
+
+:where(#urlbar) > .urlbar-input-container {
+  padding: var(--urlbar-container-padding, 0) 1px !important;
+  height: var(--urlbar-height) !important;
+}
+
+/* No visual changes on focus — same look as unfocused */
+#urlbar[focused] > #urlbar-background,
+#urlbar:focus-within > #urlbar-background {
+  background-color: var(--urlbar-background-color) !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+  outline: none !important;
+}
+
+/* Keep text selection visible in url/search bars */
+#urlbar-input::selection,
+#searchbar input::selection {
+  background-color: Highlight !important;
+  color: HighlightText !important;
+}
+
+#urlbar[breakout][breakout-extend] > #urlbar-background {
+  background-color: var(--urlbar-background-color) !important;
+  box-shadow: none !important;
+}
 
 #urlbar,
 #searchbar {
@@ -26,20 +83,20 @@
   box-shadow: none !important;
 }
 
-#urlbar[breakout][breakout-extend]>#urlbar-background {
+#urlbar[breakout][breakout-extend] > #urlbar-background {
   background-color: var(--urlbar-background-color) !important;
   background-image: var(--lwt-additional-images) !important;
   background-repeat: var(--lwt-background-tiling) !important;
   background-position: var(--lwt-background-alignment) !important;
 }
 
-#urlbar[open]>.urlbarView>.urlbarView-body-outer>.urlbarView-body-inner {
+#urlbar[open] > .urlbarView > .urlbarView-body-outer > .urlbarView-body-inner {
   border: none !important;
 }
 
-.urlbarView-row[selected]>.urlbarView-row-inner,
+.urlbarView-row[selected] > .urlbarView-row-inner,
 .urlbarView-row-inner[selected] {
-  background: #3A3941 !important;
+  background: #3a3941 !important;
 }
 
 #nav-bar:not([tabs-hidden="true"]) {
@@ -50,14 +107,17 @@
   border-bottom: none !important;
 }
 
-
-toolbar .toolbarbutton-1:not([disabled="true"], [checked], [open], :active)>.toolbarbutton-icon {
+toolbar
+  .toolbarbutton-1:not([disabled="true"], [checked], [open], :active)
+  > .toolbarbutton-icon {
   transition: background linear 0.5s;
 }
 
 /* Hiding Tabs Toolbar */
 
-#main-window[tabsintitlebar="true"]:not([extradragspace="true"]) #TabsToolbar>.toolbar-items {
+#main-window[tabsintitlebar="true"]:not([extradragspace="true"])
+  #TabsToolbar
+  > .toolbar-items {
   opacity: 0;
   pointer-events: none;
 }
@@ -66,7 +126,9 @@ toolbar .toolbarbutton-1:not([disabled="true"], [checked], [open], :active)>.too
   visibility: collapse !important;
 }
 
-#main-window[tabsintitlebar="true"]:not([extradragspace="true"]) #TabsToolbar .titlebar-spacer {
+#main-window[tabsintitlebar="true"]:not([extradragspace="true"])
+  #TabsToolbar
+  .titlebar-spacer {
   border-inline-end: none;
 }
 
@@ -76,7 +138,7 @@ toolbar .toolbarbutton-1:not([disabled="true"], [checked], [open], :active)>.too
   margin-left: 0px !important;
   border-top: 0px !important;
   margin-top: 0px;
-  padding-left: 0px !important
+  padding-left: 0px !important;
 }
 
 #titlebar {
@@ -84,17 +146,16 @@ toolbar .toolbarbutton-1:not([disabled="true"], [checked], [open], :active)>.too
   height: 0px;
 }
 
-
-#TabsToolbar>.titlebar-buttonbox-container {
+#TabsToolbar > .titlebar-buttonbox-container {
   display: block;
   position: absolute;
   top: 14px;
 }
 
 #TabsToolbar {
-  background: #2B2A34 !important;
-  background-color: #2B2A34 ! important;
-  color: #2B2A34 !important;
+  background: #2b2a34 !important;
+  background-color: #2b2a34 !important;
+  color: #2b2a34 !important;
 }
 
 /* Page Actions Hide and Show on Hover */
@@ -134,8 +195,6 @@ toolbar .toolbarbutton-1:not([disabled="true"], [checked], [open], :active)>.too
   transition: all 50ms ease-in-out;
 }
 
-
-
 #page-action-buttons:hover::after {
   display: none !important;
   width: 0px !important;
@@ -143,15 +202,14 @@ toolbar .toolbarbutton-1:not([disabled="true"], [checked], [open], :active)>.too
   transition: all 50ms ease-in-out;
 }
 
-
-
 /* Move findbar to top right */
-.browserContainer>findbar {
+.browserContainer > findbar {
   position: absolute;
   top: -1px;
   right: 0px;
   contain: content;
-  border-radius: 0 0 var(--toolbarbutton-border-radius) var(--toolbarbutton-border-radius);
+  border-radius: 0 0 var(--toolbarbutton-border-radius)
+    var(--toolbarbutton-border-radius);
 }
 
 /* Hide status */

@@ -15,6 +15,7 @@ application/xml=codium.desktop;
 application/pdf=xpdf.desktop;
 application/octet-stream=codium.desktop;
 image/jpeg=viewnior.desktop;
+inode/directory=spacefm.desktop;
 
 [Default Applications]
 inode/directory=spacefm.desktop
