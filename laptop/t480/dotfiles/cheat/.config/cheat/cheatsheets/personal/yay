@@ -1,0 +1,47 @@
+---
+tags: [ arch, pacman, aur ]
+syntax: bash
+---
+
+# Aliases:
+# y    = yay -S
+# yn   = yay -S --noconfirm
+# yrsn = yay -Rsn
+# yc   = yay -Sc
+# yu   = yay -Syyu
+
+# Install package
+y <package>
+
+# Install without confirmation
+yn <package>
+
+# Update all packages
+yu
+
+# Remove package and its deps (not needed elsewhere)
+yrsn <package>
+
+# Clean package cache
+yc
+
+# Remove orphaned packages
+yay -Qtdq | yay -Rns -
+
+# Remove orphaned packages (alternative)
+yay -Qqd | yay -Rsu -
+
+# List explicitly installed packages to file
+yay -Qeq | sort > packages.txt
+
+# List AUR packages only
+yay -Qm
+
+# Reinstall package (overwrite conflicts)
+yay -S --overwrite='*' <package>
+
+# Downgrade / reinstall specific package
+yay -S <package> --needed
+
+# Update mirrors (reflector or mirrors alias)
+mirrors

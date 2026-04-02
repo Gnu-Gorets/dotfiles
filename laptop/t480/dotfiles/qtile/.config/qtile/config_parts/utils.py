@@ -66,8 +66,8 @@ def bluetooth_status():
             "--status",
         ]
     )
-    if not output:
-        return "bluetooth: error"
+    if output is None:
+        return "bt: err"
     return re.sub(r"%\{.*?\}", "", output).strip()
 
 
@@ -216,16 +216,90 @@ def battery_status():
             status = f.read().strip()
 
         if status in {"Charging", "Full"}:
-            return f'<span foreground="{WHITE}">󰁹 {percent}%</span>'
+            return f'<span foreground="{WHITE}"> {percent}%</span>'
         else:
-            return f"󰁹 {percent}%"
+            return f" {percent}%"
     except Exception:
-        return "󰁹 ?%"
+        return " ?%"
 
 
 def keyboard_layout():
     output = run_cmd(["xkb-switch"])
     return f"   {output}" if output else "  ?"
+
+
+def cpu_temp():
+    try:
+        temps = psutil.sensors_temperatures() or {}
+        readings = []
+
+        # CPU representative value (package temp).
+        core_entries = temps.get("coretemp", [])
+        package_temp = None
+        for entry in core_entries:
+            if "package" in (entry.label or "").lower() and entry.current > 0:
+                package_temp = entry.current
+                break
+        if package_temp is None:
+            core_values = [e.current for e in core_entries if e.current > 0]
+            if core_values:
+                package_temp = sum(core_values) / len(core_values)
+        if package_temp is not None:
+            readings.append(package_temp)
+
+        # Additional laptop sensors: one representative value per source.
+        for sensor_name, entries in temps.items():
+            name = sensor_name.lower()
+            if name in {"coretemp", "thinkpad", "acpitz"}:
+                continue
+
+            value = None
+            if name.startswith("nvme"):
+                for entry in entries:
+                    if (entry.label or "").lower() == "composite" and entry.current > 0:
+                        value = entry.current
+                        break
+            if value is None:
+                for entry in entries:
+                    if entry.current > 0:
+                        value = entry.current
+                        break
+            if value is not None:
+                readings.append(value)
+
+        if not readings:
+            # Fallback for machines where only ThinkPad/ACPI sensors are exposed.
+            for source in ("thinkpad", "acpitz"):
+                for entry in temps.get(source, []):
+                    if entry.current > 0:
+                        readings.append(entry.current)
+                        break
+
+        if readings:
+            return f"\uf2c7 {round(sum(readings) / len(readings))}°C"
+    except Exception:
+        pass
+
+    # Last-resort fallback when sensor backends are unavailable.
+    zone_readings = []
+    for zone_path in (
+        "/sys/class/thermal/thermal_zone0/temp",
+        "/sys/class/thermal/thermal_zone1/temp",
+        "/sys/class/thermal/thermal_zone2/temp",
+        "/sys/class/thermal/thermal_zone3/temp",
+    ):
+        try:
+            with open(zone_path) as f:
+                value = int(f.read().strip())
+            if value > 0:
+                zone_readings.append(value / 1000)
+        except Exception:
+            continue
+
+    if zone_readings:
+        return f"\uf2c7 {round(sum(zone_readings) / len(zone_readings))}°C"
+
+    return "\uf2c7 --°C"
 
 
 def safe_kill(qtile):

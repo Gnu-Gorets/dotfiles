@@ -1,0 +1,15 @@
+---
+tags: [ stow, dotfiles ]
+syntax: bash
+---
+
+# Run from ~/dotfiles
+
+# Link package
+stow <package>
+
+# Unlink package
+stow -D <package>
+
+# Re-link (unlink + link)
+stow -R <package>

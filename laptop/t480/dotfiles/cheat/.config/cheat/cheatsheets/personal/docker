@@ -1,0 +1,28 @@
+---
+tags: [ docker, containers ]
+syntax: bash
+---
+
+# List running containers
+docker ps
+
+# List all containers (including stopped)
+docker ps -a
+
+# Build image from Dockerfile
+docker build . -f ./path/to/Dockerfile -t <image-name>
+
+# Run container with port mapping
+docker run -p 8080:8080 <image>
+
+# Stop container
+docker stop <container-id>
+
+# Remove image
+docker rmi <image-name>
+
+# Remove all stopped containers
+docker container prune
+
+# Remove dangling images
+docker image prune

@@ -1,0 +1,38 @@
+---
+tags: [ shell, zsh, utils ]
+syntax: bash
+---
+
+# Reload zshrc
+sz
+
+# Reload aliases only
+saz
+
+# Edit aliases file
+ea
+
+# Disk usage in current dir, sorted
+duh
+
+# Disk free (human-readable, no tmpfs/devtmpfs/efivarfs noise)
+df
+
+# Navigate up 1/2 levels
+..
+...
+
+# Extract any archive (auto-detects format)
+ex <file>
+
+# Get public IP
+iip
+
+# Paste to termbin (pipe output)
+<command> | tb
+
+# Paste to termbin and copy URL to clipboard
+<command> | tbc
+
+# Speedtest
+speed
