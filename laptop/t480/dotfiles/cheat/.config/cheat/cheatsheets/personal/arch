@@ -1,0 +1,17 @@
+---
+tags: [ arch, system, linux ]
+syntax: bash
+---
+
+# Rebuild GRUB config after kernel update
+upgrub
+
+# Show GPU info
+vga
+
+# Font cache refresh
+fc-cache -f
+
+# TLP battery status
+sudo tlp-stat -b | tail -15
+sudo tlp start

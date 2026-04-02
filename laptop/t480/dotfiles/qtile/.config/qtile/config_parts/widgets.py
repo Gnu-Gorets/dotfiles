@@ -9,6 +9,7 @@ from .utils import (
     bluetooth_status,
     brightness_level,
     cpu_load_percent,
+    cpu_temp,
     keyboard_layout,
     mem_usage,
     tor_status,
@@ -28,16 +29,14 @@ bar_widgets = [
         initial_text=" --%",
         foreground=ACCENT,
     ),
-    widget.ThermalSensor(
-        tag_sensor="Package id 0",
-        format=" {temp:.0f}°C",
-        threshold=85,
+    widget.GenPollText(
+        func=cpu_temp,
+        update_interval=5,
         foreground=ACCENT,
-        update_interval=10,
     ),
     widget.GenPollText(
         func=uparch_status,
-        update_interval=60,
+        update_interval=3600,
         initial_text="NoUp",
         foreground=ACCENT,
         name="uparch",

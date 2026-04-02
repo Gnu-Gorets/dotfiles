@@ -1,0 +1,30 @@
+---
+tags: [ uv, python ]
+syntax: bash
+---
+
+# Create venv (uses system Python)
+uv venv
+
+# Create venv with specific Python version
+uv venv --python 3.13
+
+# Install packages
+uv pip install <package>
+uv pip install -r requirements.txt
+
+# Install and upgrade all packages
+uv pip list --format=freeze | cut -d= -f1 | xargs -r uv pip install -U
+
+# List outdated packages
+uv pip list --outdated
+
+# Freeze installed packages
+uv pip freeze
+
+# Sync project dependencies (pyproject.toml)
+uv sync
+
+# Install global tool (e.g. ruff, black, pre-commit)
+uv tool install <tool>
+uv tool install --force <tool>
