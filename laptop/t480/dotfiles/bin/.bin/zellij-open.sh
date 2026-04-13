@@ -13,10 +13,10 @@ if [ "$1" = "--attach" ]; then
         zellij --session "$SESSION" --new-session-with-layout "$LAYOUT_PATH"
     fi
 else
-    WID=$(xdotool search --class "ZellijTerm" 2>/dev/null | head -1)
+    WID=$(xdotool search --classname "ZellijTerm" 2>/dev/null | head -1)
     if [ -n "$WID" ]; then
         xdotool windowactivate --sync "$WID"
     else
-        alacritty --class ZellijTerm,ZellijTerm -e "$0" --attach &
+        alacritty --class Alacritty,ZellijTerm -e "$0" --attach &
     fi
 fi

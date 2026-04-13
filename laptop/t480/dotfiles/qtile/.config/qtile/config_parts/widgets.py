@@ -36,7 +36,7 @@ bar_widgets = [
     ),
     widget.GenPollText(
         func=uparch_status,
-        update_interval=3600,
+        update_interval=300,
         initial_text="NoUp",
         foreground=ACCENT,
         name="uparch",
