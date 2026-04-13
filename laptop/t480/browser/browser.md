@@ -7,8 +7,9 @@
 5. Change $USER to your username in [user.js](user.js)
 
 ## Backup
-1) backup addons
-2) Addons: 
+
+1. backup addons
+2. Addons:
    1. Dark reader
    2. Decentraleyes
    3. NightTab
@@ -18,7 +19,9 @@
    7. Sidebery
    8. Violentmonkey
    9. Ublock
+   10. FrankerFaceZ
 
 ### Source:
+
 1. [stealthFox](https://github.com/vipintom/stealthFox/tree/master)
 2. [autohide_main_toolbar.css](https://github.com/MrOtherGuy/firefox-csshacks/blob/master/chrome/autohide_main_toolbar.css)
