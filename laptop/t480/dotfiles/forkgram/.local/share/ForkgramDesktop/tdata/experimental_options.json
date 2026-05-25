@@ -1,0 +1,8 @@
+{
+    "dialogs-mute-icon": true,
+    "forum-hide-chats-list": true,
+    "hide-ai-button": true,
+    "show-peer-id-below-about": true,
+    "use-opengl-renderer": true,
+    "use-small-msg-bubble-radius": true
+}
