@@ -1,6 +1,6 @@
 getantidote/use-omz        # handle OMZ dependencies
 ohmyzsh/ohmyzsh path:lib   # load OMZ's library
-https://gitlab.com/Gnu-Gorets/fox-theme-fixed # fox theme
+Gnu-Gorets/fox-theme-fixed # fox theme
 
 ohmyzsh/ohmyzsh path:plugins/adb kind:fpath # adb completion
 ohmyzsh/ohmyzsh path:plugins/colored-man-pages # adds colors to man pages
