@@ -1,0 +1,2 @@
+[includeIf "gitdir:/home/gorets/Documents/Projects/github/GnuGorets/"]
+	path = ~/.config/git/github.config
