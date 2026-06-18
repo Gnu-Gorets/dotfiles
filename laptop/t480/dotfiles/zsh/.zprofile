@@ -1,5 +1,8 @@
+# Go binaries installed by `go install`
+export GOPATH="${GOPATH:-$HOME/go}"
+
 # User/local bins + rofi scripts first
-export PATH=$HOME/.bin:$HOME/.config/rofi/scripts:$HOME/.local/bin:/usr/local/bin:$PATH
+export PATH="$HOME/.bin:$HOME/.config/rofi/scripts:$HOME/.local/bin:$GOPATH/bin:/usr/local/bin:$PATH"
 
 # Terminal + XDG base dirs
 export TERM="xterm-256color"
@@ -12,9 +15,9 @@ export CHROMIUM_FLAGS="--use-gl=desktop"
 # Default apps + locale
 export EDITOR=nvim
 export BROWSER="librewolf"
-export LANG=en_US.UTF-8
+export LANG="en_US.UTF-8"
 
-# direnv (quiet + allow home)
+# direnv quiet + allow home
 export DIRENV_ALLOW_HOME=true
 export DIRENV_LOG_FORMAT=""
 

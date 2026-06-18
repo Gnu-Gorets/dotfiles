@@ -20,6 +20,7 @@ btrfs-progs
 capitaine-cursors
 c-ares
 cheat
+chromium
 containerd
 cronie
 direnv
@@ -42,8 +43,10 @@ ffmpegthumbnailer
 forkgram-bin
 freetube-bin
 fsarchiver
+github-cli
 gnome-keyring
 gnu-netcat
+go
 gperf
 gpm
 gptfdisk
