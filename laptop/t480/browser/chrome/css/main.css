@@ -2,6 +2,9 @@
   --toolbar-field-focus-border-color: transparent !important;
   --toolbar-field-focus-background-color: #201929 !important;
   --urlbar-background-color: #201929;
+  --focus-outline-color: transparent !important;
+  --focus-outline-width: 0 !important;
+  --focus-outline-offset: 0 !important;
 }
 
 :root[privatebrowsingmode="temporary"] {
@@ -49,12 +52,26 @@
 }
 
 /* No visual changes on focus — same look as unfocused */
+#urlbar,
+#urlbar[focused],
+#urlbar:focus,
+#urlbar:focus-within,
+#urlbar-container,
+#urlbar-input-container,
+#urlbar-background,
 #urlbar[focused] > #urlbar-background,
-#urlbar:focus-within > #urlbar-background {
-  background-color: var(--urlbar-background-color) !important;
+#urlbar:focus-within > #urlbar-background,
+#urlbar[breakout][breakout-extend] > #urlbar-background {
+  outline: none !important;
+  outline-color: transparent !important;
   box-shadow: none !important;
   border-color: transparent !important;
-  outline: none !important;
+}
+
+#urlbar[focused] > #urlbar-background,
+#urlbar:focus-within > #urlbar-background,
+#urlbar[breakout][breakout-extend] > #urlbar-background {
+  background-color: var(--urlbar-background-color) !important;
 }
 
 /* Keep text selection visible in url/search bars */
