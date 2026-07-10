@@ -13,7 +13,7 @@ APP_RULES = {
     "Alacritty": ("term", False),
     "Chromium": ("term", False),
     "librewolf": ("web", False),
-    "VSCodium": ("code", False),
+    "codium": ("code", False),
     "Cursor": ("code", False),
     "Spacefm": ("file", False),
     "Peazip": ("file", False),

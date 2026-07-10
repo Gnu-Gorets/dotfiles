@@ -1,0 +1,11 @@
+{
+  "window.customTitleBarVisibility": "windowed",
+  "workbench.trustedDomains.promptInTrustedWorkspace": true,
+  "chat.editing.confirmEditRequestRemoval": false,
+  "chat.editing.confirmEditRequestRetry": false,
+  "window.menuBarVisibility": "classic",
+  "security.workspace.trust.untrustedFiles": "open",
+  "security.workspace.trust.enabled": false,
+  "window.restoreWindows": "preserve",
+  "window.newWindowProfile": "stable"
+}
