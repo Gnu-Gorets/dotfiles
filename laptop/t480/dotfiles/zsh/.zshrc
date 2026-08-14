@@ -27,5 +27,5 @@ if [ -d /usr/share/fzf ]; then
 fi
 
 # >>> agterm agent-status >>>
-source '/home/gorets/.config/agterm/agent-status/shell/integration.sh'
+source "$HOME/.config/agterm/agent-status/shell/integration.sh"
 # <<< agterm agent-status <<<

@@ -1,8 +1,9 @@
 import { mkdir, writeFile } from "node:fs/promises"
+import { homedir } from "node:os"
 import { join } from "node:path"
 import { tool, type Plugin } from "@opencode-ai/plugin"
 
-const configHome = process.env.XDG_CONFIG_HOME || join(process.env.HOME || "/home/gorets", ".config")
+const configHome = process.env.XDG_CONFIG_HOME || join(homedir(), ".config")
 const stateDir = join(configHome, "opencode", "pohuy", "sessions")
 
 const plugin: Plugin = async () => ({

@@ -1,4 +1,4 @@
-[includeIf "gitdir:/home/gorets/Documents/Projects/github/GnuGorets/"]
+[includeIf "gitdir:~/Documents/Projects/github/GnuGorets/"]
 	path = ~/.config/git/github.config
 [credential "https://github.com"]
 	helper = !/usr/bin/gh auth git-credential

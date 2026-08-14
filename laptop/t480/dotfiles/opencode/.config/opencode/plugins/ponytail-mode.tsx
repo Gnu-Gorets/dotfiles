@@ -9,7 +9,7 @@ const modeFile = join(configHome, "opencode", ".ponytail-active")
 const defaultFile = join(configHome, "ponytail", "config.json")
 const pohuyStateDir = join(configHome, "opencode", "pohuy", "sessions")
 const modes = new Set(["off", "lite", "full", "ultra"])
-const pohuySkill = "/home/gorets/.agents/skills/pohuy/SKILL.md"
+const pohuySkill = join(homedir(), ".agents", "skills", "pohuy", "SKILL.md")
 
 function currentMode() {
   try {
