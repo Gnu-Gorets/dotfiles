@@ -3,4 +3,4 @@ sponsorblock.txt
 *.bak
 node_modules/
 .ponytail-active
-pohuy/sessions/
+**/pohuy/sessions/
