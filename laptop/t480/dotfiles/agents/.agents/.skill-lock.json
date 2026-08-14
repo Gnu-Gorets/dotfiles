@@ -1,0 +1,35 @@
+{
+  "version": 3,
+  "skills": {
+    "pohuy": {
+      "source": "smixs/pohuy",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/smixs/pohuy.git",
+      "skillPath": "skills/pohuy/SKILL.md",
+      "skillFolderHash": "bd89b28c73b301e5ba25bf7262dfd5001d35a99d",
+      "installedAt": "2026-08-13T22:08:14.199Z",
+      "updatedAt": "2026-08-13T22:08:14.199Z"
+    },
+    "systematic-debugging": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/obra/superpowers.git",
+      "skillPath": "skills/systematic-debugging/SKILL.md",
+      "skillFolderHash": "ab83fc82f82582e047d96fc516bac9bc03095ee0",
+      "installedAt": "2026-08-13T23:22:22.840Z",
+      "updatedAt": "2026-08-13T23:22:22.840Z"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/skills.git",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "skillFolderHash": "76a98a285cb0434f3d39e1a873823556330e398b",
+      "installedAt": "2026-08-13T23:22:46.002Z",
+      "updatedAt": "2026-08-13T23:22:46.002Z"
+    }
+  },
+  "dismissed": {
+    "findSkillsPrompt": true
+  }
+}

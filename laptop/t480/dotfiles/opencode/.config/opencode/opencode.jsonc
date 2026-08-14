@@ -1,0 +1,25 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "/home/gorets/.agents/skills/pohuy/SKILL.md",
+    "/home/gorets/.config/opencode/AGENTS.md"
+  ],
+  "permission": {
+    "bash": {
+      "*": "ask",
+      "* /home/gorets/Documents/Projects*": "allow",
+      "/home/gorets/Documents/Projects*": "allow"
+    },
+    "edit": {
+      "*": "ask",
+      "/home/gorets/Documents/Projects/**": "allow"
+    },
+    "external_directory": {
+      "/home/gorets/Documents/Projects/**": "allow"
+    }
+  },
+  "plugin": [
+    "@dietrichgebert/ponytail",
+    "./plugins/pohuy-state.ts"
+  ]
+}
