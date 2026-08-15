@@ -7,5 +7,6 @@
   "security.workspace.trust.untrustedFiles": "open",
   "security.workspace.trust.enabled": false,
   "window.restoreWindows": "preserve",
-  "window.newWindowProfile": "stable"
+  "window.newWindowProfile": "stable",
+  "extensions.autoUpdate": "on",
 }

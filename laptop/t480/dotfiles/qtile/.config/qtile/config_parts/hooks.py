@@ -23,7 +23,7 @@ APP_RULES = {
     "Slack": ("chat", False),
     "Viewnior": ("media", True),
     "XpdfReader": ("media", True),
-    "FreeTube": ("media", False),
+    "freetube": ("media", False),
     "streamlink-twitch-gui": ("media", False),
     "qBittorrent": ("media", False),
     "Postman": ("office", False),
