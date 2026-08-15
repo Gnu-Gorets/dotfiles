@@ -1,5 +1,8 @@
 #!/usr/bin/sh
 
+# AppImage agterm exports bundled OpenSSL libraries to child shells.
+[[ ${APPDIR-} == /tmp/.mount_agterm* ]] && unset LD_LIBRARY_PATH
+
 zsh_plugins=~/.zsh_plugins.zsh
 zsh_plugins_src=~/.zsh_plugins.txt
 
@@ -22,3 +25,7 @@ if [ -d /usr/share/fzf ]; then
 . /usr/share/fzf/key-bindings.zsh
 . /usr/share/fzf/completion.zsh
 fi
+
+# >>> agterm agent-status >>>
+source "$HOME/.config/agterm/agent-status/shell/integration.sh"
+# <<< agterm agent-status <<<

@@ -1,0 +1,43 @@
+% agterm hotkeys
+
+## Sessions
+
+| Chord | Action |
+| --- | --- |
+| `Super+n` | New session with split: OpenCode left, shell right |
+| `Super+Shift+w` | New workspace with split: OpenCode left, shell right |
+| `Super+Shift+g` | Plain new session |
+| `Super+w` | Close session |
+| `Super+Shift+t` | Reopen recent session |
+| `Super+z` | Undo close |
+| `Super+Alt+up` / `Super+Alt+down` | Previous / next session |
+| `Ctrl+Alt+up` / `Ctrl+Alt+down` | Previous / next attention session |
+
+## View and panes
+
+| Chord | Action |
+| --- | --- |
+| `Super+d` | Toggle split |
+| `Super+Alt+left` / `Super+Alt+right` | Focus left / right pane |
+| `Super+Shift+j` | Toggle scratch |
+| `Super+Shift+d` | Dashboard |
+| `Super+-` / `Super+0` | Decrease / reset font size |
+| `Ctrl+Super+s` | Toggle sidebar |
+
+## Palettes
+
+| Chord | Action |
+| --- | --- |
+| `Ctrl+p` | Session palette |
+| `Ctrl+Shift+p` | Command palette |
+| `Ctrl+Shift+o` | Custom command palette |
+| `Ctrl+Shift+i` | Attention list |
+| `Ctrl+\`` | Quick terminal |
+
+## Overlays
+
+| Chord | Action |
+| --- | --- |
+| `Super+Shift+y` | Yazi |
+| `Super+Shift+r` | Revdiff |
+| `Super+Shift+h` | This cheat sheet |
