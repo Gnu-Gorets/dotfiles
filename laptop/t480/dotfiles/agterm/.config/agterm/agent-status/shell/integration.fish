@@ -6,7 +6,7 @@
 # Which commands count as agents is a regex, override before sourcing to taste:
 #   set -g AGTERM_AGENT_RE '^(gemini|cursor-agent|my-agent)([[:space:]]|$)'
 #
-# Claude Code, Codex, Pi, and OpenCode are intentionally NOT in the default list —
+# Claude Code, Codex, and Pi are intentionally NOT in the default list —
 # their own hooks/extensions/plugins drive finer per-turn state, which the coarse
 # process-level active/idle here would only fight. Add any of them here if you
 # rely on the shell integration alone for it.

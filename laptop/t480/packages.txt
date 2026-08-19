@@ -544,7 +544,6 @@ oniguruma
 openai-codex
 openal
 openbsd-netcat
-opencode
 opencore-amr
 openh264
 openjpeg2
