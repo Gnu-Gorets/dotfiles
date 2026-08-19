@@ -4,6 +4,8 @@
 
 | Chord | Action |
 | --- | --- |
+| `Super+n` | New session with split: codex left, shell right |
+| `Super+Shift+w` | New workspace with split: codex left, shell right |
 | `Super+Shift+g` | Plain new session |
 | `Super+w` | Close session |
 | `Super+Shift+t` | Reopen recent session |

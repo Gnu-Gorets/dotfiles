@@ -4,7 +4,6 @@ Arch Linux laptop setup, recovery and dotfiles notes.
 
 ## AI
 
-- `tui.json`: disables `internal:home-tips`.
 - **Agents:** `pohuy`, `systematic-debugging`, `find-skills` in `.agents/`.
 - **VSCodium:** OpenAI ChatGPT/Codex (`openai.chatgpt`), Copilot, Claude Code and agent skills; Ruff, Pylance, Prettier, Terraform, Helm and Ansible tooling.
 

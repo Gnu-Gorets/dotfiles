@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# >>> agterm agtermctl path (installer-baked) >>>
+[ -n "${AGTERMCTL:-}" ] || AGTERMCTL='/home/gorets/.local/opt/agterm-linux/bin/agtermctl'
 # Codex lifecycle hook installed by agterm's Help ▸ Install Agent Status Hooks command.
 #
 # Codex fires PermissionRequest before Auto Review decides whether a person must approve. Treating
