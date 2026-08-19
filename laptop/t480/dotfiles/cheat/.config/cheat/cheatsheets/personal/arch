@@ -13,5 +13,5 @@ vga
 fc-cache -f
 
 # TLP battery status
-sudo tlp-stat -b | tail -15
-sudo tlp start
+_ tlp-stat -b | tail -15
+_ tlp start

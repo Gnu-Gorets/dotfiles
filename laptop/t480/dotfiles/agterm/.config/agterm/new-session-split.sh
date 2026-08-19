@@ -26,10 +26,10 @@ select_args=--no-select
 [ -n "${AGT_SESSION_ID:-}" ] || select_args=
 id=$("$ctl" session new $workspace_args --window "$window" --cwd "$cwd" --name terminal $select_args --socket "$socket")
 "$ctl" session split on --target "$id" --window "$window" --socket "$socket"
-# Keep OpenCode as the left pane's command on every future agterm restart.
-"$ctl" session restore opencode --pane left --target "$id" --window "$window" --socket "$socket"
-# Start OpenCode, wait for the shell to hand over the pane, then redraw its old screen noise.
-printf 'opencode\n' | "$ctl" session type --stdin --select --pane left --target "$id" --window "$window" --socket "$socket"
-sleep 3
+# Keep Codex as the left pane's command on every future agterm restart.
+"$ctl" session restore codex --pane left --target "$id" --window "$window" --socket "$socket"
+# Start Codex, wait for the shell to hand over the pane, then send Ctrl+L.
+printf 'codex\n' | "$ctl" session type --stdin --select --pane left --target "$id" --window "$window" --socket "$socket"
+sleep 2.5
 printf '\014' | "$ctl" session type --stdin --select --pane left --target "$id" --window "$window" --socket "$socket"
 "$ctl" session select --target "$id" --window "$window" --socket "$socket"
