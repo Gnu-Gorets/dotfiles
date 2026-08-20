@@ -379,7 +379,7 @@ libqrtr-glib
 libquadmath
 libraqm
 libraw1394
-librewolf-bin
+librewolf
 librsvg
 libsamplerate
 libsasl
