@@ -28,8 +28,6 @@ id=$("$ctl" session new $workspace_args --window "$window" --cwd "$cwd" --name t
 "$ctl" session split on --target "$id" --window "$window" --socket "$socket"
 # Keep Codex as the left pane's command on every future agterm restart.
 "$ctl" session restore codex --pane left --target "$id" --window "$window" --socket "$socket"
-# Start Codex, wait for the shell to hand over the pane, then send Ctrl+L.
+# Start Codex; zsh compacts the startup screen once the idle prompt is stable.
 printf 'codex\n' | "$ctl" session type --stdin --select --pane left --target "$id" --window "$window" --socket "$socket"
-sleep 2.5
-printf '\014' | "$ctl" session type --stdin --select --pane left --target "$id" --window "$window" --socket "$socket"
 "$ctl" session select --target "$id" --window "$window" --socket "$socket"

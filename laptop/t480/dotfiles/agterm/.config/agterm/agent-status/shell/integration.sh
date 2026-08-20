@@ -30,7 +30,17 @@ fi
 
 if [ -n "${ZSH_VERSION:-}" ]; then
   autoload -Uz add-zsh-hook
-  _ags_preexec() { [[ "$1" =~ $AGTERM_AGENT_RE ]] && { "$AGTERM_AGENT_BIN" active --blink; _ags_active=1; }; }
+  _ags_preexec() {
+    if [[ "$1" == codex || "$1" == codex\ * ]]; then
+      (
+        sleep 2.5
+        printf '\014' | "${AGTERMCTL:-agtermctl}" session type --stdin \
+          --pane "${AGTERM_PANE:-left}" --target "$AGTERM_SESSION_ID" \
+          --socket "$AGTERM_SOCKET"
+      ) >/dev/null 2>&1 &!
+    fi
+    [[ "$1" =~ $AGTERM_AGENT_RE ]] && { "$AGTERM_AGENT_BIN" active --blink; _ags_active=1; }
+  }
   _ags_precmd()  { [[ -n "${_ags_active:-}" ]] && { "$AGTERM_AGENT_BIN" idle; unset _ags_active; }; }
   add-zsh-hook preexec _ags_preexec
   add-zsh-hook precmd  _ags_precmd
