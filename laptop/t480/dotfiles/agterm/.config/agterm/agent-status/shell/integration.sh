@@ -6,7 +6,7 @@
 # Which commands count as agents is a regex, override before sourcing to taste:
 #   export AGTERM_AGENT_RE='^(gemini|cursor-agent|my-agent)([[:space:]]|$)'
 #
-# Claude Code, Codex, and Pi are intentionally NOT in the default list —
+# Claude Code, Codex, Pi, and OpenCode are intentionally NOT in the default list —
 # their own hooks/extensions/plugins drive finer per-turn state, which the coarse
 # process-level active/idle here would only fight. Add any of them here if you
 # rely on the shell integration alone for it.
@@ -34,7 +34,7 @@ if [ -n "${ZSH_VERSION:-}" ]; then
     if [[ "$1" == codex || "$1" == codex\ * ]]; then
       (
         sleep 2.5
-        printf '\014' | "${AGTERMCTL:-agtermctl}" session type --stdin \
+        printf '\f' | "${AGTERMCTL:-agtermctl}" session type --stdin --select \
           --pane "${AGTERM_PANE:-left}" --target "$AGTERM_SESSION_ID" \
           --socket "$AGTERM_SOCKET"
       ) >/dev/null 2>&1 &!

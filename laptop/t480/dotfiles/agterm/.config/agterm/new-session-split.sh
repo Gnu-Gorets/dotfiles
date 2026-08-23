@@ -23,11 +23,13 @@ case "$mode" in
 esac
 
 select_args=--no-select
+[ "$mode" = workspace ] && select_args=
 [ -n "${AGT_SESSION_ID:-}" ] || select_args=
 id=$("$ctl" session new $workspace_args --window "$window" --cwd "$cwd" --name terminal $select_args --socket "$socket")
 "$ctl" session split on --target "$id" --window "$window" --socket "$socket"
-# Keep Codex as the left pane's command on every future agterm restart.
+"$ctl" session focus left --target "$id" --window "$window" --socket "$socket"
+# Keep restore identical to the normal shell launch; the zsh preexec hook
+# sends the delayed Ctrl+L for both paths.
 "$ctl" session restore codex --pane left --target "$id" --window "$window" --socket "$socket"
-# Start Codex; zsh compacts the startup screen once the idle prompt is stable.
 printf 'codex\n' | "$ctl" session type --stdin --select --pane left --target "$id" --window "$window" --socket "$socket"
 "$ctl" session select --target "$id" --window "$window" --socket "$socket"
