@@ -89,6 +89,7 @@ efibootmgr
 efivar
 electron39
 elfutils
+enchant
 exfat-utils
 exiv2
 exodus
@@ -182,7 +183,9 @@ gvfs-mtp
 gvfs-nfs
 gvfs-smb
 gzip
+handy-bin
 harfbuzz
+harfbuzz-icu
 haveged
 hdparm
 hicolor-icon-theme
@@ -190,6 +193,7 @@ hidapi
 highway
 hwdata
 hwloc
+hyphen
 i3lock-color
 iana-etc
 icu
@@ -328,6 +332,7 @@ liblqr
 liblsan
 libluv
 libmakepkg-dropins
+libmanette
 libmaxminddb
 libmbim
 libmd
@@ -541,8 +546,8 @@ numlockx
 ocl-icd
 onetbb
 oniguruma
-openai-codex
 openal
+openblas
 openbsd-netcat
 opencore-amr
 openh264
@@ -744,12 +749,14 @@ vulkan-intel
 vulkan-mesa-implicit-layers
 vulkan-tools
 wayland
+webkit2gtk-4.1
 webrtc-audio-processing-1
 which
 wireplumber
 wlroots0.19
 wmctrl
 wmname
+woff2
 wpa_supplicant
 x264
 x265
@@ -764,6 +771,7 @@ xcb-util-renderutil
 xcb-util-wm
 xcb-util-xrm
 xclip
+xdg-dbus-proxy
 xdg-desktop-portal
 xdg-desktop-portal-gtk
 xdg-user-dirs
