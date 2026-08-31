@@ -53,6 +53,7 @@ ca-certificates-utils
 cairo
 capitaine-cursors
 c-ares
+cfitsio
 cheat
 chromium
 cifs-utils
@@ -187,6 +188,7 @@ handy-bin
 harfbuzz
 harfbuzz-icu
 haveged
+hdf5
 hdparm
 hicolor-icon-theme
 hidapi
@@ -198,6 +200,7 @@ i3lock-color
 iana-etc
 icu
 imagemagick
+imath
 imlib2
 intel-gmmlib
 intel-media-driver
@@ -238,6 +241,7 @@ lcms2
 ldb
 leancrypto
 libadwaita
+libaec
 libappindicator
 libarchive
 libasan
@@ -269,6 +273,7 @@ libcap
 libcap-ng
 libcdio
 libcdio-paranoia
+libcgif
 libcloudproviders
 libcolord
 libconfig
@@ -333,6 +338,7 @@ liblsan
 libluv
 libmakepkg-dropins
 libmanette
+libmatio
 libmaxminddb
 libmbim
 libmd
@@ -383,6 +389,7 @@ libqmi
 libqrtr-glib
 libquadmath
 libraqm
+libraw
 libraw1394
 librewolf
 librsvg
@@ -426,6 +433,7 @@ libva-intel-driver
 libva-utils
 libvdpau
 libverto
+libvips
 libvorbis
 libvpl
 libvpx
@@ -550,8 +558,10 @@ openal
 openblas
 openbsd-netcat
 opencore-amr
+openexr
 openh264
 openjpeg2
+openjph
 openssh
 openssl
 openvpn
