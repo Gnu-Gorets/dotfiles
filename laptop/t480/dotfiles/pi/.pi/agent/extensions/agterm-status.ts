@@ -20,6 +20,22 @@ export default function (pi: ExtensionAPI) {
     }
   }
 
+  async function notify(): Promise<void> {
+    const target = process.env.AGTERM_SESSION_ID;
+    if (!target) return;
+    try {
+      await pi.exec(process.env.AGTERMCTL || "agtermctl", [
+        "notify",
+        "Pi agent completed",
+        "--target",
+        target,
+        ...(process.env.AGTERM_SOCKET ? ["--socket", process.env.AGTERM_SOCKET] : []),
+      ], { timeout: 1_000 });
+    } catch {
+      // Notifications are advisory and must never interrupt Pi's agent loop.
+    }
+  }
+
   pi.on("agent_start", async () => {
     await report(["active", "--blink"]);
   });
@@ -27,5 +43,6 @@ export default function (pi: ExtensionAPI) {
   // `agent_settled` waits for automatic retries, compaction retries, and queued continuations.
   pi.on("agent_settled", async () => {
     await report(["completed", "--auto-reset"]);
+    await notify();
   });
 }

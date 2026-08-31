@@ -1,11 +1,13 @@
 {
-  "lastChangelogVersion": "0.84.2",
+  "lastChangelogVersion": "0.84.4",
   "theme": "hackerman",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.6-luna",
   "defaultThinkingLevel": "medium",
   "collapseChangelog": true,
   "quietStartup": true,
+  "tuiMode": "fullscreen",
+  "fullscreenScrollbar": "always",
   "showCacheMissNotices": true,
   "packages": [
     "npm:@juanibiapina/pi-extension-settings",

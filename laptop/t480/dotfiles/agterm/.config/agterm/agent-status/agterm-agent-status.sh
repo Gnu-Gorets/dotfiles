@@ -51,4 +51,10 @@ else
   "${AGTERMCTL:-agtermctl}" session status "$state" \
     --target "$AGTERM_SESSION_ID" "${pane_args[@]+"${pane_args[@]}"}" "$@" >/dev/null 2>&1 || true
 fi
+
+if [ "$state" = blocked ]; then
+  notify_args=("notify" "Pi agent is waiting for input" --target "$AGTERM_SESSION_ID")
+  [ -n "${AGTERM_SOCKET:-}" ] && notify_args+=(--socket "$AGTERM_SOCKET")
+  "${AGTERMCTL:-agtermctl}" "${notify_args[@]}" >/dev/null 2>&1 || true
+fi
 exit 0
