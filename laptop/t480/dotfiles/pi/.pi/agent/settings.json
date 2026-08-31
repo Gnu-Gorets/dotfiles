@@ -1,0 +1,32 @@
+{
+  "lastChangelogVersion": "0.84.4",
+  "theme": "hackerman",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.6-luna",
+  "defaultThinkingLevel": "medium",
+  "collapseChangelog": true,
+  "quietStartup": true,
+  "tuiMode": "fullscreen",
+  "fullscreenScrollbar": "always",
+  "showCacheMissNotices": true,
+  "packages": [
+    "npm:@juanibiapina/pi-extension-settings",
+    "npm:pi-ask-user",
+    "npm:pi-web-access",
+    "npm:@devkade/pi-plan",
+    "npm:pi-simplify",
+    "npm:pi-add-dir",
+    "npm:pi-interactive-shell",
+    "npm:@plannotator/pi-extension",
+    "git:github.com/DietrichGebert/ponytail",
+    "git:github.com/smixs/pohuy",
+    "git:github.com/VandeeFeng/pi-memory-md",
+    "npm:@tmustier/pi-usage-extension",
+    "npm:@tmustier/pi-raw-paste",
+    "git:github.com/tintinweb/pi-manage-todo-list@b75c449aa85ce328e9a8b632f62bf642aed40359",
+    "git:github.com/javierportillo/pi-hackerman@63b0a3ef2c7b14985ffeb6cac44614ba59cd5693"
+  ],
+  "pohuy": {
+    "tier": "ultra"
+  }
+}

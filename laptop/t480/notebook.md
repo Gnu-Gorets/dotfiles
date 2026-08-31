@@ -4,15 +4,12 @@ Arch Linux laptop setup, recovery and dotfiles notes.
 
 ## AI
 
-- **OpenCode:** global `AGENTS.md`, shared skills, `pohuy-state`, agterm status and Ponytail TUI plugin.
-- `opencode.jsonc`: `{env:HOME}` paths; `bash`/`edit` ask by default; `~/Documents/Projects/**` allowed.
-- `tui.json`: disables `internal:home-tips`.
 - **Agents:** `pohuy`, `systematic-debugging`, `find-skills` in `.agents/`.
 - **VSCodium:** OpenAI ChatGPT/Codex (`openai.chatgpt`), Copilot, Claude Code and agent skills; Ruff, Pylance, Prettier, Terraform, Helm and Ansible tooling.
 
 ## Terminal / Workflow
 
-- **agterm:** Codex/OpenCode/Pi status; split, scratch, Yazi, revdiff and hotkey overlays.
+- **agterm:** Codex/Pi status; split, scratch, Yazi, revdiff and hotkey overlays.
 - **zsh:** main shell, aliases, plugins and portable `$HOME` paths.
 - **Zellij:** modal keybinds, pane/tab navigation, floating panes and work layout.
 - **Yazi, Alacritty, btop, cheat, direnv, fastfetch.**
@@ -129,7 +126,7 @@ Configured services: `ssh-agent.service` and `syncthing.service`.
 
 ```zsh
 cd ~/dotfiles/laptop/t480/dotfiles
-stow zsh opencode agterm agents zellij qtile git
+stow zsh agterm agents zellij qtile git
 ```
 
 Install other packages as needed. Remove links with `stow -D <package>`.

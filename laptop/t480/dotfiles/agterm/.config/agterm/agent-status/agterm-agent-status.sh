@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# >>> agterm agtermctl path (installer-baked) >>>
+[ -n "${AGTERMCTL:-}" ] || AGTERMCTL='/home/gorets/.local/opt/agterm-linux/bin/agtermctl'
 # agterm-agent-status — set the current agterm session's agent-status indicator.
 #
 #   agterm-agent-status.sh active            # agent is busy
@@ -15,7 +17,12 @@
 # (Claude Code injects a UserPromptSubmit/SessionStart hook's stdout into the
 # prompt context) and it always exits 0 (a non-zero exit can block the turn).
 #
-# Set AGTERMCTL explicitly when agtermctl is not on PATH.
+# agtermctl resolution order (the binary that talks to the control socket):
+#   1. $AGTERMCTL — an explicit override the caller set.
+#   2. the absolute bundled-binary path the installer bakes in: the installer
+#      rewrites the AGTERMCTL default below to agterm.app's Contents/MacOS/agtermctl,
+#      so the hook fires even when the CLI was never symlinked into PATH.
+#   3. `agtermctl` on PATH — the fallback when nothing above resolved.
 set -u
 
 [ -n "${AGTERM_SESSION_ID:-}" ] || exit 0   # not inside agterm: nothing to do
@@ -43,5 +50,11 @@ if [ -n "${AGTERM_SOCKET:-}" ]; then
 else
   "${AGTERMCTL:-agtermctl}" session status "$state" \
     --target "$AGTERM_SESSION_ID" "${pane_args[@]+"${pane_args[@]}"}" "$@" >/dev/null 2>&1 || true
+fi
+
+if [ "$state" = blocked ]; then
+  notify_args=("notify" "Pi agent is waiting for input" --target "$AGTERM_SESSION_ID")
+  [ -n "${AGTERM_SOCKET:-}" ] && notify_args+=(--socket "$AGTERM_SOCKET")
+  "${AGTERMCTL:-agtermctl}" "${notify_args[@]}" >/dev/null 2>&1 || true
 fi
 exit 0
