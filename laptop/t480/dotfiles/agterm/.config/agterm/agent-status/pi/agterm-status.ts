@@ -24,8 +24,18 @@ export default function (pi: ExtensionAPI) {
     await report(["active", "--blink"]);
   });
 
+  pi.on("ui_prompt_start", async () => {
+    await report(["blocked", "--blink"]);
+    await report(["notify", "Pi needs your input"]);
+  });
+
+  pi.on("ui_prompt_end", async () => {
+    await report(["active"]);
+  });
+
   // `agent_settled` waits for automatic retries, compaction retries, and queued continuations.
   pi.on("agent_settled", async () => {
     await report(["completed", "--auto-reset"]);
+    await report(["notify", "Pi finished"]);
   });
 }

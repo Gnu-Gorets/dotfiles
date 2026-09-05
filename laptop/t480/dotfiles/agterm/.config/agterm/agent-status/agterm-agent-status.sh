@@ -22,7 +22,9 @@
 #   2. the absolute bundled-binary path the installer bakes in: the installer
 #      rewrites the AGTERMCTL default below to agterm.app's Contents/MacOS/agtermctl,
 #      so the hook fires even when the CLI was never symlinked into PATH.
-#   3. `agtermctl` on PATH — the fallback when nothing above resolved.
+#   3. `agtermctl` on PATH — the fallback when no override was set and the baked
+#      path no longer exists, which is what a bundle moved since the install leaves
+#      behind (installing from the mounted DMG bakes a /Volumes path, dead on eject).
 set -u
 
 [ -n "${AGTERM_SESSION_ID:-}" ] || exit 0   # not inside agterm: nothing to do
@@ -31,6 +33,30 @@ set -u
 # it. Pass it only when AGTERM_SOCKET is set (the app injects it alongside the id).
 state=$1
 shift
+
+if [ "$state" = notify ]; then
+  body=${1:-Pi finished}
+  tree=''
+  if [ -n "${AGTERM_SOCKET:-}" ]; then
+    tree=$("${AGTERMCTL:-agtermctl}" tree --json --socket "$AGTERM_SOCKET" 2>/dev/null || true)
+  else
+    tree=$("${AGTERMCTL:-agtermctl}" tree --json 2>/dev/null || true)
+  fi
+  title=$(printf '%s' "$tree" | jq -r --arg sid "$AGTERM_SESSION_ID" '
+    .result.tree.workspaces[] as $workspace |
+    $workspace.sessions[] | select(.id == $sid) |
+    "\($workspace.name) / \(.name)"
+  ' 2>/dev/null | head -n 1)
+  [ -n "$title" ] || title=agterm
+  if [ -n "${AGTERM_SOCKET:-}" ]; then
+    "${AGTERMCTL:-agtermctl}" notify "$body" --title "$title" \
+      --target "$AGTERM_SESSION_ID" --socket "$AGTERM_SOCKET" >/dev/null 2>&1 || true
+  else
+    "${AGTERMCTL:-agtermctl}" notify "$body" --title "$title" \
+      --target "$AGTERM_SESSION_ID" >/dev/null 2>&1 || true
+  fi
+  exit 0
+fi
 
 # forward the pane discriminators when the app injected them: each session surface
 # (main/split/scratch) sets its own AGTERM_PANE (the role) plus AGTERM_PANE_ID (a stable
@@ -50,11 +76,5 @@ if [ -n "${AGTERM_SOCKET:-}" ]; then
 else
   "${AGTERMCTL:-agtermctl}" session status "$state" \
     --target "$AGTERM_SESSION_ID" "${pane_args[@]+"${pane_args[@]}"}" "$@" >/dev/null 2>&1 || true
-fi
-
-if [ "$state" = blocked ]; then
-  notify_args=("notify" "Pi agent is waiting for input" --target "$AGTERM_SESSION_ID")
-  [ -n "${AGTERM_SOCKET:-}" ] && notify_args+=(--socket "$AGTERM_SOCKET")
-  "${AGTERMCTL:-agtermctl}" "${notify_args[@]}" >/dev/null 2>&1 || true
 fi
 exit 0
