@@ -3,11 +3,11 @@
 DIALOG_RESULT=$(echo -e 'Lock\nQuit Qtile\nSuspend Lock\nHibernate\nReboot\nPoweroff\nExit' | rofi -dmenu -i -p "SYSTEM" -hide-scrollbar -tokenize -lines 7 -eh 1 -width 25 -location 0 -xoffset 0 -yoffset 0 -padding 20 -disable-history)
 
 if [ "$DIALOG_RESULT" = "Lock" ]; then
-    exec betterlockscreen -l dim
+    exec lockscreen
 elif [ "$DIALOG_RESULT" = "Quit Qtile" ]; then
     exec qtile cmd-obj -o cmd -f shutdown
 elif [ "$DIALOG_RESULT" = "Suspend Lock" ]; then
-    betterlockscreen -l dim &
+    lockscreen &
     exec systemctl suspend
 elif [ "$DIALOG_RESULT" = "Hibernate" ]; then
     exec systemctl hibernate
