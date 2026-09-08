@@ -71,6 +71,15 @@ Enable trim: `_ systemctl enable fstrim.timer`.
 
 - Restore the GRUB theme and SDDM theme.
 
+### Power management
+
+- Removed `xfce4-power-manager`, `upower` and `xss-lock`.
+- Keep `TLP` as sole low-level power manager.
+- Use `systemd-logind` for suspend/resume and hardware keys; ignore lid events and idle actions.
+- Disable X11 blanking and DPMS with `xset s off -dpms` from Qtile `autostart.sh`.
+- Use manual lock through `/usr/local/bin/xflock4` and `~/.bin/lockscreen`.
+- Read battery status from `/sys/class/power_supply/BAT0`; keep `brightnessctl` as brightness fallback.
+
 ### Lockscreen
 
 - `lockscreen` runs `/usr/bin/i3lock` with `~/.cache/lockscreen/dimblur.png`.

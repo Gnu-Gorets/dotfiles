@@ -253,16 +253,16 @@ def brightness_level():
 def battery_status():
     try:
         with open("/sys/class/power_supply/BAT0/capacity") as f:
-            percent = f.read().strip()
+            percent = int(f.read().strip())
         with open("/sys/class/power_supply/BAT0/status") as f:
             status = f.read().strip()
 
-        if status in {"Charging", "Full"}:
-            return f'<span foreground="{WHITE}"> {percent}%</span>'
-        else:
-            return f" {percent}%"
+        icons = ("󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰂃")
+        icon = "󰂎" if status == "Charging" else icons[min(percent // 10, 9)]
+        text = f"{icon} {percent}%"
+        return f'<span foreground="{WHITE}">{text}</span>' if status in {"Charging", "Full"} else text
     except Exception:
-        return " ?%"
+        return "  ?%"
 
 
 def cpu_temp():

@@ -100,8 +100,9 @@ bar_widgets = [
     ),
     widget.GenPollText(
         func=battery_status,
-        update_interval=0.5,
+        update_interval=5,
         foreground=BAR_FG,
+        font="DroidSansM Nerd Font",
         markup=True,
     ),
     widget.Clock(

@@ -38,7 +38,6 @@ gnome-keyring-daemon --start --components=pkcs11 &
 
 # Tray applets
 run nm-applet
-run xfce4-power-manager
 run udiskie -t
 run parcellite
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' &

@@ -196,6 +196,7 @@ hyphen
 i3lock
 iana-etc
 icu
+imagemagick
 imath
 imlib2
 intel-gmmlib
@@ -309,7 +310,6 @@ libgoa
 libgomp
 libgpg-error
 libgphoto2
-libgtop
 libgudev
 libheif
 libhwasan
@@ -329,6 +329,7 @@ liblc3
 libldac
 libldap
 libliftoff
+liblqr
 liblsan
 libluv
 libmakepkg-dropins
@@ -447,7 +448,6 @@ libxcvt
 libxdamage
 libxdmcp
 libxext
-libxfce4ui
 libxfce4util
 libxfixes
 libxfont2
@@ -734,7 +734,6 @@ ueberzug
 unibilium
 unrar
 unzip
-upower
 usb_modeswitch
 usbmuxd
 usbutils
@@ -784,9 +783,6 @@ xdg-user-dirs-gtk
 xdg-utils
 xdotool
 xf86-input-libinput
-xfce4-notifyd
-xfce4-power-manager
-xfconf
 xkeyboard-config
 xorg-fonts-encodings
 xorgproto
@@ -794,9 +790,11 @@ xorg-server
 xorg-server-common
 xorg-setxkbmap
 xorg-xauth
+xorg-xdpyinfo
 xorg-xkbcomp
 xorg-xmodmap
 xorg-xprop
+xorg-xset
 xorg-xsetroot
 xpdf
 xpipe
