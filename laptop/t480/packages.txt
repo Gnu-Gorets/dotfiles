@@ -56,7 +56,6 @@ c-ares
 cfitsio
 cheat
 chromium
-chrpath
 cifs-utils
 containerd
 coreutils
@@ -600,6 +599,7 @@ pipewire-session-manager
 pixman
 pkcs11-helper
 pkgconf
+pnpm
 polkit
 polkit-gnome
 popt
@@ -657,7 +657,6 @@ qtile
 rav1e
 readline
 reflector
-revdiff
 ripgrep
 rofi
 rtkit
@@ -793,7 +792,6 @@ xf86-input-libinput
 xfce4-notifyd
 xfce4-power-manager
 xfconf
-xkb-switch
 xkeyboard-config
 xorg-fonts-encodings
 xorgproto
