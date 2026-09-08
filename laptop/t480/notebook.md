@@ -86,11 +86,24 @@ Configured services: `ssh-agent.service` and `syncthing.service`.
 ## Other Setup
 
 - List explicitly installed packages: `yay -Qeq | sort > packages.txt`.
-- Install `opio` for a specific AUR version:
 
-  ```zsh
-  cargo install --git https://github.com/imf4ll/opio.git
-  ```
+### CLI tools
+
+#### Go
+
+Export installed Go tools to manifest:
+
+```zsh
+gup export --file="gup.json"
+```
+
+#### Rust
+
+Install `opio` for a specific version:
+
+```zsh
+cargo install --git https://github.com/imf4ll/opio.git
+```
 
 - Translation workflow: `translate-shell`, `zenity`, `xclip` and `translate.sh`; RU translation: `Ctrl+Super+T`.
 - Set TTL and reboot:

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "packages": [
+    {
+      "name": "gup",
+      "import_path": "github.com/nao1215/gup",
+      "version": "v1.9.1",
+      "channel": "latest"
+    },
+    {
+      "name": "revdiff",
+      "import_path": "github.com/umputun/revdiff/app",
+      "version": "v1.13.0",
+      "channel": "latest"
+    }
+  ]
+}
