@@ -17,7 +17,8 @@ Arch Linux laptop setup, recovery and dotfiles notes.
 
 ## Desktop / Apps
 
-- **Qtile:** modular config, autostart, status, power, Bluetooth and Rofi scripts.
+- **Qtile:** modular config, autostart, status, power, Bluetooth and Rofi scripts; power menu uses `lockscreen`.
+- **i3lock:** official X11 locker with ImageMagick-generated dimmed and blurred wallpaper.
 - **Rofi, Picom, Dunst, Tint2:** launcher, compositor, notifications and tray.
 - **GTK/Kvantum/fontconfig:** Qogir theme, Qt theme and fonts.
 - **Satty/Viewnior:** screenshots and image viewing.
@@ -27,11 +28,10 @@ Arch Linux laptop setup, recovery and dotfiles notes.
 ## Install / Restore
 
 1. Install Arch Linux.
-2. Install `mesa` for UHD 630, VirtualBox, betterlockscreen and Bluetooth.
+2. Install `mesa` for UHD 630, VirtualBox, `i3lock`, ImageMagick and Bluetooth.
 3. Review all packages in [`packages.txt`](packages.txt).
 4. For VirtualBox: `_ usermod -a -G vboxusers $USER`.
-5. Enable betterlockscreen: `systemctl enable betterlockscreen@$USER`.
-6. Restore the `etc` directory and the SDDM theme to `/usr/share/sddm/themes`.
+5. Restore the `etc` directory and the SDDM theme to `/usr/share/sddm/themes`.
 
 ## System Configuration
 
@@ -71,7 +71,14 @@ Enable trim: `_ systemctl enable fstrim.timer`.
 
 - Restore the GRUB theme and SDDM theme.
 
-### User Services
+### Lockscreen
+
+- `lockscreen` runs `/usr/bin/i3lock` with `~/.cache/lockscreen/dimblur.png`.
+- `lockscreen-update` generates wallpaper from `/usr/share/wall/pixel_sakura.png` at 40% dim and blur level 1.
+- Scripts: `bin/.bin/lockscreen` and `bin/.bin/lockscreen-update`; link both into `~/.bin`.
+- PAM uses `/etc/pam.d/i3lock` and system `pam_faillock` settings.
+
+## User Services
 
 ```zsh
 stow systemd
