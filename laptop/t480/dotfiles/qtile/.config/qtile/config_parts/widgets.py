@@ -115,7 +115,8 @@ bar_widgets = [
         name="kbdlayout",
     ),
     widget.TextBox(
-        text="",
+        text="<span rise='1000'></span>",
+        markup=True,
         foreground=ACCENT,
         mouse_callbacks={
             "Button1": lambda: subprocess.Popen(

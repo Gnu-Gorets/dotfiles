@@ -1,4 +1,5 @@
 import contextlib
+import ctypes
 import os
 import re
 import subprocess
@@ -29,6 +30,47 @@ def run_cmd(cmd):
         ).strip()
     except Exception:
         return None
+
+
+_x11 = ctypes.CDLL("libX11.so.6")
+_x11.XOpenDisplay.argtypes = [ctypes.c_char_p]
+_x11.XOpenDisplay.restype = ctypes.c_void_p
+_x11.XCloseDisplay.argtypes = [ctypes.c_void_p]
+_x11.XCloseDisplay.restype = ctypes.c_int
+_x11.XkbGetState.argtypes = [ctypes.c_void_p, ctypes.c_uint, ctypes.c_void_p]
+_x11.XkbGetState.restype = ctypes.c_int
+
+
+class _XkbState(ctypes.Structure):
+    _fields_ = [
+        ("group", ctypes.c_ubyte),
+        ("locked_group", ctypes.c_ubyte),
+        ("base_group", ctypes.c_ushort),
+        ("latched_group", ctypes.c_ushort),
+        ("mods", ctypes.c_ubyte),
+        ("base_mods", ctypes.c_ubyte),
+        ("latched_mods", ctypes.c_ubyte),
+        ("locked_mods", ctypes.c_ubyte),
+        ("compat_state", ctypes.c_ubyte),
+        ("grab_mods", ctypes.c_ubyte),
+        ("compat_grab_mods", ctypes.c_ubyte),
+        ("lookup_mods", ctypes.c_ubyte),
+        ("compat_lookup_mods", ctypes.c_ubyte),
+        ("ptr_buttons", ctypes.c_ushort),
+    ]
+
+
+def keyboard_layout():
+    display = _x11.XOpenDisplay(None)
+    if not display:
+        return "  ?"
+    try:
+        state = _XkbState()
+        if _x11.XkbGetState(display, 0x0100, ctypes.byref(state)) == 0:
+            return f"   {('us', 'ru')[state.group % 2]}"
+    finally:
+        _x11.XCloseDisplay(display)
+    return "  ?"
 
 
 def forget_window_state(wid):
@@ -221,11 +263,6 @@ def battery_status():
             return f" {percent}%"
     except Exception:
         return " ?%"
-
-
-def keyboard_layout():
-    output = run_cmd(["xkb-switch"])
-    return f"   {output}" if output else "  ?"
 
 
 def cpu_temp():

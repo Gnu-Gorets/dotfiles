@@ -13,7 +13,6 @@
     "npm:@juanibiapina/pi-extension-settings",
     "npm:pi-ask-user",
     "npm:pi-web-access",
-    "npm:@devkade/pi-plan",
     "npm:pi-simplify",
     "npm:pi-add-dir",
     "npm:pi-interactive-shell",
