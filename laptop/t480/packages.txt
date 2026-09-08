@@ -54,7 +54,6 @@ cairo
 capitaine-cursors
 c-ares
 cfitsio
-cheat
 chromium
 cifs-utils
 containerd

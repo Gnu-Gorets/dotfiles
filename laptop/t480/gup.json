@@ -2,6 +2,12 @@
   "schema_version": 1,
   "packages": [
     {
+      "name": "cheat",
+      "import_path": "github.com/cheat/cheat/cmd/cheat",
+      "version": "v0.0.0-20260216134545-b8098dc1b9de",
+      "channel": "latest"
+    },
+    {
       "name": "gup",
       "import_path": "github.com/nao1215/gup",
       "version": "v1.9.1",
