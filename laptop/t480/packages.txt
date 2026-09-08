@@ -29,8 +29,6 @@ base
 base-devel
 bash
 bat
-bc
-betterlockscreen
 bind
 binutils
 bison
@@ -195,10 +193,9 @@ highway
 hwdata
 hwloc
 hyphen
-i3lock-color
+i3lock
 iana-etc
 icu
-imagemagick
 imath
 imlib2
 intel-gmmlib
@@ -332,7 +329,6 @@ liblc3
 libldac
 libldap
 libliftoff
-liblqr
 liblsan
 libluv
 libmakepkg-dropins
@@ -798,13 +794,9 @@ xorg-server
 xorg-server-common
 xorg-setxkbmap
 xorg-xauth
-xorg-xdpyinfo
 xorg-xkbcomp
 xorg-xmodmap
 xorg-xprop
-xorg-xrandr
-xorg-xrdb
-xorg-xset
 xorg-xsetroot
 xpdf
 xpipe
