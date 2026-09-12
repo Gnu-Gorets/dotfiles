@@ -3,6 +3,7 @@
 ### FW
 
 [Momentum](https://github.com/Next-Flip/Momentum-Firmware)
+[Apps](https://github.com/xMasterX/all-the-plugins)
 
 ### Asset pack
 
@@ -18,4 +19,3 @@
 2. [NFC/RFID](https://github.com/Gioman101/FlipperAmiibo)
 3. [intercom-keys/scripts](https://github.com/wetox-team/flipperzero-goodies)
 4. [BadUSB](https://github.com/FalsePhilosopher/badusb)
-
