@@ -7,6 +7,9 @@
 
 ## Plans
 
-- Plan is mandatory for web, source, vendor research, work across multiple files, features, architecture, migrations, risky configuration, and complex debugging. Before other tools, create short Russian Markdown plan; skip only for simple edits, checks, value changes, or single commands.
-- Store one plan per task at `docs/plans/backlog/YYYY-MM-DD-short-task-name.md`; resolve root with `git rev-parse --show-toplevel`, inspect `backlog`/`completed`, and never overwrite/combine plans. Keep it as task record with `goal`, `steps`, `acceptance checks`, findings, analysis, implementation details, sources, risks, rollback, conclusions, commands, paths, constraints, test results, and verification details as relevant.
-- Before work, show path, critique, additions/removals, and ask one focused approval via `ask_user`; research changes no code/config unless requested. After approval, continue in same task, update plan when scope changes, record results/checks, stop on unclear/cancelled answer, and move to `completed` only after explicit confirmation.
+- Plan before research, multi-file changes, features, architecture, migrations, risky configuration, or complex debugging. Skip for simple edits, checks, value changes, or single commands. Risky changes always require plan.
+- First find repository root with `git rev-parse --show-toplevel` and inspect `docs/plans/backlog` and `docs/plans/completed`. If no repository exists, use current project directory. Create missing plan directories there, but never create new project tree.
+- Create one short Russian Markdown plan per task at `docs/plans/backlog/YYYY-MM-DD-short-task-name.md`. Never reuse plan from another task. Update current task's plan as work progresses.
+- Keep each task's plan, analysis, results, and checks in its single Markdown plan file. For research and analysis, this file is also the deliverable: include findings and recommendations there. Do not create separate reports or other files unless explicitly requested.
+- After writing plan, show its path, critique, proposed additions and removals via `ask_user`; do not show plan contents unless requested. Allow free-form feedback. Research may proceed before approval, but make no task changes beyond plan until approved. If changes are requested, update plan and ask again. Stop if answer is unclear or approval is denied.
+- Research alone does not authorize code or configuration changes. Move plan to `completed` when task is finished; no separate confirmation required.

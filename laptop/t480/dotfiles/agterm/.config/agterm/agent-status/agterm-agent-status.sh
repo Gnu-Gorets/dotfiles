@@ -34,30 +34,6 @@ set -u
 state=$1
 shift
 
-if [ "$state" = notify ]; then
-  body=${1:-Pi finished}
-  tree=''
-  if [ -n "${AGTERM_SOCKET:-}" ]; then
-    tree=$("${AGTERMCTL:-agtermctl}" tree --json --socket "$AGTERM_SOCKET" 2>/dev/null || true)
-  else
-    tree=$("${AGTERMCTL:-agtermctl}" tree --json 2>/dev/null || true)
-  fi
-  title=$(printf '%s' "$tree" | jq -r --arg sid "$AGTERM_SESSION_ID" '
-    .result.tree.workspaces[] as $workspace |
-    $workspace.sessions[] | select(.id == $sid) |
-    "\($workspace.name) / \(.name)"
-  ' 2>/dev/null | head -n 1)
-  [ -n "$title" ] || title=agterm
-  if [ -n "${AGTERM_SOCKET:-}" ]; then
-    "${AGTERMCTL:-agtermctl}" notify "$body" --title "$title" \
-      --target "$AGTERM_SESSION_ID" --socket "$AGTERM_SOCKET" >/dev/null 2>&1 || true
-  else
-    "${AGTERMCTL:-agtermctl}" notify "$body" --title "$title" \
-      --target "$AGTERM_SESSION_ID" >/dev/null 2>&1 || true
-  fi
-  exit 0
-fi
-
 # forward the pane discriminators when the app injected them: each session surface
 # (main/split/scratch) sets its own AGTERM_PANE (the role) plus AGTERM_PANE_ID (a stable
 # per-surface token). the role can go stale — a split survivor promoted into the main pane
