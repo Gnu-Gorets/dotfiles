@@ -16,10 +16,19 @@ export default function (pi: ExtensionAPI) {
     if (!session) return;
     const socket = process.env.AGTERM_SOCKET;
     try {
-      await Promise.all([
+      const socketArgs = socket ? ["--socket", socket] : [];
+      const [, treeResult] = await Promise.all([
         pi.exec(wrapper, [state, ...args], { timeout: 1_000 }),
-        pi.exec("agtermctl", ["notify", message, "--title", `Pi: ${state}`, "--target", session, ...(socket ? ["--socket", socket] : [])], { timeout: 1_000 }),
+        pi.exec("agtermctl", ["tree", "--json", ...socketArgs], { timeout: 1_000 }).catch(() => ({ stdout: "" })),
       ]);
+      let workspaces: Array<{ id: string; name: string; sessions: Array<{ id: string; name: string }> }> | undefined;
+      try {
+        workspaces = JSON.parse(treeResult.stdout || "{}").result?.tree?.workspaces;
+      } catch {}
+      const workspace = workspaces?.find((item) => item.id === process.env.AGTERM_WORKSPACE_ID);
+      const sessionName = workspace?.sessions.find((item) => item.id === session)?.name ?? session;
+      const title = `${workspace?.name ?? process.env.AGTERM_WORKSPACE_ID ?? "Workspace"} / ${sessionName}`;
+      await pi.exec("agtermctl", ["notify", message, "--title", title, "--target", session, ...socketArgs], { timeout: 1_000 });
     } catch {
       // Status reporting is advisory and must never interrupt Pi's agent loop.
     }
