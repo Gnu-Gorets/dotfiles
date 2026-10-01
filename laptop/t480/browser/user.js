@@ -179,6 +179,8 @@ user_pref("storage.vacuum.last.index", 2);
 user_pref("svg.context-properties.content.enabled", true);
 
 /** UI ***/
+user_pref("sidebar.revamp", false);
+user_pref("sidebar.verticalTabs", false);
 user_pref("browser.tabs.inTitlebar", 0);
 user_pref("browser.uidensity", 1);
 user_pref("browser.tabs.tabmanager.enabled", false);
