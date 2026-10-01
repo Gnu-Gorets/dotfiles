@@ -11,38 +11,24 @@ import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 export default function (pi: ExtensionAPI) {
   const wrapper = join(homedir(), ".config", "agterm", "agent-status", "agterm-agent-status.sh");
 
-  async function report(args: string[], message?: string): Promise<void> {
+  async function report(state: string, message: string, ...args: string[]): Promise<void> {
     const session = process.env.AGTERM_SESSION_ID;
     if (!session) return;
+    const socket = process.env.AGTERM_SOCKET;
     try {
-      await pi.exec(wrapper, args, { timeout: 1_000 });
+      await Promise.all([
+        pi.exec(wrapper, [state, ...args], { timeout: 1_000 }),
+        pi.exec("agtermctl", ["notify", message, "--title", `Pi: ${state}`, "--target", session, ...(socket ? ["--socket", socket] : [])], { timeout: 1_000 }),
+      ]);
     } catch {
       // Status reporting is advisory and must never interrupt Pi's agent loop.
     }
-    if (!message) return;
-    const notifyArgs = ["notify", message, "--title", "Pi", "--target", session];
-    if (process.env.AGTERM_SOCKET) notifyArgs.push("--socket", process.env.AGTERM_SOCKET);
-    try {
-      await pi.exec("agtermctl", notifyArgs, { timeout: 1_000 });
-    } catch {
-      // Notification delivery is advisory and must never interrupt Pi's agent loop.
-    }
   }
 
-  pi.on("agent_start", async () => {
-    await report(["active", "--blink"], "Pi started work.");
-  });
-
-  pi.on("ui_prompt_start", async () => {
-    await report(["blocked", "--blink"], "Pi is waiting for your input.");
-  });
-
-  pi.on("ui_prompt_end", async () => {
-    await report(["active", "--blink"]);
-  });
+  pi.on("agent_start", async () => report("active", "Agent started", "--blink"));
+  pi.on("ui_prompt_start", async () => report("blocked", "Waiting for your input"));
+  pi.on("ui_prompt_end", async () => report("active", "Input received", "--blink"));
 
   // `agent_settled` waits for automatic retries, compaction retries, and queued continuations.
-  pi.on("agent_settled", async () => {
-    await report(["completed", "--auto-reset"], "Pi finished.");
-  });
+  pi.on("agent_settled", async () => report("completed", "Agent completed", "--auto-reset"));
 }
