@@ -25,7 +25,7 @@ esac
 select_args=--no-select
 [ "$mode" = workspace ] && select_args=
 [ -n "${AGT_SESSION_ID:-}" ] || select_args=
-id=$("$ctl" session new $workspace_args --window "$window" --cwd "$cwd" --command "zsh -lc 'pi; exec zsh'" --name pi $select_args --socket "$socket")
+id=$("$ctl" session new $workspace_args --window "$window" --cwd "$cwd" --command "zsh -lc 'pi; exec zsh'" --name "${AGT_SESSION_NAME:-pi}" $select_args --socket "$socket")
 "$ctl" session split on --target "$id" --window "$window" --socket "$socket"
 "$ctl" session focus left --target "$id" --window "$window" --socket "$socket"
 # Keep a shell in the pane after Pi exits, so the project directory remains usable.
