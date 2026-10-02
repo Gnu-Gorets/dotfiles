@@ -17,7 +17,8 @@ Arch Linux laptop setup, recovery and dotfiles notes.
 
 ## Desktop / Apps
 
-- **Qtile:** modular config, autostart, status, power, Bluetooth and Rofi scripts.
+- **Qtile:** modular config, autostart, status, power, Bluetooth and Rofi scripts; power menu uses `lockscreen`.
+- **i3lock:** official X11 locker with ImageMagick-generated dimmed and blurred wallpaper.
 - **Rofi, Picom, Dunst, Tint2:** launcher, compositor, notifications and tray.
 - **GTK/Kvantum/fontconfig:** Qogir theme, Qt theme and fonts.
 - **Satty/Viewnior:** screenshots and image viewing.
@@ -27,11 +28,10 @@ Arch Linux laptop setup, recovery and dotfiles notes.
 ## Install / Restore
 
 1. Install Arch Linux.
-2. Install `mesa` for UHD 630, VirtualBox, betterlockscreen and Bluetooth.
+2. Install `mesa` for UHD 630, VirtualBox, `i3lock`, ImageMagick and Bluetooth.
 3. Review all packages in [`packages.txt`](packages.txt).
 4. For VirtualBox: `_ usermod -a -G vboxusers $USER`.
-5. Enable betterlockscreen: `systemctl enable betterlockscreen@$USER`.
-6. Restore the `etc` directory and the SDDM theme to `/usr/share/sddm/themes`.
+5. Restore the `etc` directory and the SDDM theme to `/usr/share/sddm/themes`.
 
 ## System Configuration
 
@@ -71,7 +71,23 @@ Enable trim: `_ systemctl enable fstrim.timer`.
 
 - Restore the GRUB theme and SDDM theme.
 
-### User Services
+### Power management
+
+- Removed `xfce4-power-manager`, `upower` and `xss-lock`.
+- Keep `TLP` as sole low-level power manager.
+- Use `systemd-logind` for suspend/resume and hardware keys; ignore lid events and idle actions.
+- Disable X11 blanking and DPMS with `xset s off -dpms` from Qtile `autostart.sh`.
+- Use manual lock through `/usr/local/bin/xflock4` and `~/.bin/lockscreen`.
+- Read battery status from `/sys/class/power_supply/BAT0`; keep `brightnessctl` as brightness fallback.
+
+### Lockscreen
+
+- `lockscreen` runs `/usr/bin/i3lock` with `~/.cache/lockscreen/dimblur.png`.
+- `lockscreen-update` generates wallpaper from `/usr/share/wall/pixel_sakura.png` at 40% dim and blur level 1.
+- Scripts: `bin/.bin/lockscreen` and `bin/.bin/lockscreen-update`; link both into `~/.bin`.
+- PAM uses `/etc/pam.d/i3lock` and system `pam_faillock` settings.
+
+## User Services
 
 ```zsh
 stow systemd
@@ -86,11 +102,24 @@ Configured services: `ssh-agent.service` and `syncthing.service`.
 ## Other Setup
 
 - List explicitly installed packages: `yay -Qeq | sort > packages.txt`.
-- Install `opio` for a specific AUR version:
 
-  ```zsh
-  cargo install --git https://github.com/imf4ll/opio.git
-  ```
+### CLI tools
+
+#### Go
+
+Export installed Go tools to manifest:
+
+```zsh
+gup export --file="gup.json"
+```
+
+#### Rust
+
+Install `opio` for a specific version:
+
+```zsh
+cargo install --git https://github.com/imf4ll/opio.git
+```
 
 - Translation workflow: `translate-shell`, `zenity`, `xclip` and `translate.sh`; RU translation: `Ctrl+Super+T`.
 - Set TTL and reboot:

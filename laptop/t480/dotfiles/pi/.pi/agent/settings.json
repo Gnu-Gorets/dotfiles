@@ -1,8 +1,8 @@
 {
-  "lastChangelogVersion": "0.84.4",
+  "lastChangelogVersion": "1.0.0",
   "theme": "hackerman",
   "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.6-luna",
+  "defaultModel": "gpt-6-luna",
   "defaultThinkingLevel": "medium",
   "collapseChangelog": true,
   "quietStartup": true,
@@ -13,7 +13,6 @@
     "npm:@juanibiapina/pi-extension-settings",
     "npm:pi-ask-user",
     "npm:pi-web-access",
-    "npm:@devkade/pi-plan",
     "npm:pi-simplify",
     "npm:pi-add-dir",
     "npm:pi-interactive-shell",

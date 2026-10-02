@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+image=${1:-${XDG_CACHE_HOME:-$HOME/.cache}/lockscreen/dimblur.png}
+[[ -f $image ]] || image=$(lockscreen-update)
+
+exec i3lock -n -i "$image" --color 000000

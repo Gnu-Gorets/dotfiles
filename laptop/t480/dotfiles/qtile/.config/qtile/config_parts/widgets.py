@@ -100,8 +100,9 @@ bar_widgets = [
     ),
     widget.GenPollText(
         func=battery_status,
-        update_interval=0.5,
+        update_interval=5,
         foreground=BAR_FG,
+        font="DroidSansM Nerd Font",
         markup=True,
     ),
     widget.Clock(
@@ -115,7 +116,8 @@ bar_widgets = [
         name="kbdlayout",
     ),
     widget.TextBox(
-        text="",
+        text="<span rise='1000'></span>",
+        markup=True,
         foreground=ACCENT,
         mouse_callbacks={
             "Button1": lambda: subprocess.Popen(

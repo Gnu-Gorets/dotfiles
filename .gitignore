@@ -1,6 +1,7 @@
-*.pyc
-sponsorblock.txt
-*.bak
-node_modules/
-.ponytail-active
 **/pohuy/sessions/
+*.bak
+*.pyc
+.ponytail-active
+docs/plans/
+node_modules/
+sponsorblock.txt

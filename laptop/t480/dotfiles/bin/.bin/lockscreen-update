@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+wallpaper=${1:-/usr/share/wall/pixel_sakura.png}
+out=${XDG_CACHE_HOME:-$HOME/.cache}/lockscreen/dimblur.png
+size=$(xdpyinfo | awk '/dimensions:/{print $2}')
+
+[[ -f $wallpaper ]] || { printf 'Wallpaper not found: %s\n' "$wallpaper" >&2; exit 1; }
+[[ -n $size ]] || { printf 'Cannot detect display size\n' >&2; exit 1; }
+
+mkdir -p "${out%/*}"
+magick "$wallpaper" \
+  -resize "${size}^" -gravity center -extent "$size" \
+  -fill black -colorize 40% \
+  -filter Gaussian -resize 20% -define filter:sigma=0.6 \
+  -resize "${size}^" -gravity center -extent "$size" \
+  "$out"
+
+printf '%s\n' "$out"

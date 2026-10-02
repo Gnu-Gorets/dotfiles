@@ -1,7 +1,7 @@
 alias la="ls -alFh --color=auto"
 alias duh="du -d 1 -h | sort -h"
 
-alias srm="sudo rm -rfv"
+alias srm="_ rm -rfv"
 alias rm="rm -rfv"
 alias mk="mkdir"
 alias free='free -h'
@@ -10,7 +10,7 @@ alias df='df -h -x tmpfs -x devtmpfs -x efivarfs'
 alias sz="source $HOME/.zshrc"
 alias saz="source $HOME/.zsh_aliases.zsh"
 alias vga="lspci -k | grep -A 2 -E '(VGA|3D)'"
-alias upgrub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
+alias upgrub="_ grub-mkconfig -o /boot/grub/grub.cfg"
 
 alias iip="curl --max-time 10 -w '\n' http://ident.me"
 alias tb="nc termbin.com 9999"
@@ -29,7 +29,6 @@ alias ..="cd .."
 alias ...="cd ../.."
 
 alias ea="$EDITOR $HOME/.zsh_aliases.zsh"
-
 ex() {
   if [ -f "$1" ]; then
     case "$1" in

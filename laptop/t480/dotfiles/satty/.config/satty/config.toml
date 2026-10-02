@@ -12,7 +12,7 @@ default-hide-toolbars = false
 default-fill-shapes = false
 primary-highlighter = "block"
 # Clipboard helper for X11
-copy-command = "xclip -selection clipboard -t image/png -i"
+copy-command = "copyq copy image/png -"
 # File name pattern (strftime)
 output-filename = "~/Documents/screenshots/screenshot_%Y-%m-%d_%H-%M-%S.png"
 

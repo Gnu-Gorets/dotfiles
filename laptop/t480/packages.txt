@@ -29,8 +29,6 @@ base
 base-devel
 bash
 bat
-bc
-betterlockscreen
 bind
 binutils
 bison
@@ -54,10 +52,10 @@ cairo
 capitaine-cursors
 c-ares
 cfitsio
-cheat
 chromium
 cifs-utils
 containerd
+copyq
 coreutils
 cpio
 cronie
@@ -107,6 +105,7 @@ file
 filesystem
 findutils
 flac
+flameshot
 flex
 fmt
 fontconfig
@@ -196,7 +195,7 @@ highway
 hwdata
 hwloc
 hyphen
-i3lock-color
+i3lock
 iana-etc
 icu
 imagemagick
@@ -230,6 +229,7 @@ ki18n
 kmod
 knotifications
 krb5
+kstatusnotifieritem
 kustomize
 kvantum
 kvantum-qt5
@@ -313,7 +313,6 @@ libgoa
 libgomp
 libgpg-error
 libgphoto2
-libgtop
 libgudev
 libheif
 libhwasan
@@ -452,7 +451,6 @@ libxcvt
 libxdamage
 libxdmcp
 libxext
-libxfce4ui
 libxfce4util
 libxfixes
 libxfont2
@@ -483,6 +481,7 @@ licenses
 lilv
 linux-api-headers
 linux-firmware
+linux-firmware-amd
 linux-firmware-amdgpu
 linux-firmware-atheros
 linux-firmware-broadcom
@@ -493,6 +492,7 @@ linux-firmware-nvidia
 linux-firmware-other
 linux-firmware-radeon
 linux-firmware-realtek
+linux-firmware-ti
 linux-firmware-whence
 linux-zen
 linux-zen-headers
@@ -518,6 +518,7 @@ md4c
 mdadm
 memtest86+
 mesa
+miniaudio
 minizip
 mkinitcpio
 mkinitcpio-busybox
@@ -550,6 +551,7 @@ npth
 nspr
 nss
 ntfs-3g
+numactl
 numlockx
 ocl-icd
 onetbb
@@ -566,6 +568,7 @@ openssh
 openssl
 openvpn
 opus
+opusfile
 orc
 os-prober
 otf-droid-nerd
@@ -577,7 +580,6 @@ pam
 pambase
 pango
 papirus-icon-theme
-parcellite
 parted
 patch
 pavucontrol-qt
@@ -599,6 +601,7 @@ pipewire-session-manager
 pixman
 pkcs11-helper
 pkgconf
+pnpm
 polkit
 polkit-gnome
 popt
@@ -653,10 +656,10 @@ qt6-shadertools
 qt6-svg
 qt6-translations
 qtile
+qtkeychain-qt6
 rav1e
 readline
 reflector
-revdiff
 ripgrep
 rofi
 rtkit
@@ -739,7 +742,6 @@ ueberzug
 unibilium
 unrar
 unzip
-upower
 usb_modeswitch
 usbmuxd
 usbutils
@@ -759,11 +761,13 @@ vulkan-intel
 vulkan-mesa-implicit-layers
 vulkan-tools
 wayland
+wayland-protocols
 webkit2gtk-4.1
+webkitgtk-6.0
 webrtc-audio-processing-1
 which
 wireplumber
-wlroots0.19
+wlroots0.20
 wmctrl
 wmname
 woff2
@@ -789,10 +793,6 @@ xdg-user-dirs-gtk
 xdg-utils
 xdotool
 xf86-input-libinput
-xfce4-notifyd
-xfce4-power-manager
-xfconf
-xkb-switch
 xkeyboard-config
 xorg-fonts-encodings
 xorgproto
@@ -804,8 +804,6 @@ xorg-xdpyinfo
 xorg-xkbcomp
 xorg-xmodmap
 xorg-xprop
-xorg-xrandr
-xorg-xrdb
 xorg-xset
 xorg-xsetroot
 xpdf

@@ -22,7 +22,9 @@
 #   2. the absolute bundled-binary path the installer bakes in: the installer
 #      rewrites the AGTERMCTL default below to agterm.app's Contents/MacOS/agtermctl,
 #      so the hook fires even when the CLI was never symlinked into PATH.
-#   3. `agtermctl` on PATH — the fallback when nothing above resolved.
+#   3. `agtermctl` on PATH — the fallback when no override was set and the baked
+#      path no longer exists, which is what a bundle moved since the install leaves
+#      behind (installing from the mounted DMG bakes a /Volumes path, dead on eject).
 set -u
 
 [ -n "${AGTERM_SESSION_ID:-}" ] || exit 0   # not inside agterm: nothing to do
@@ -50,11 +52,5 @@ if [ -n "${AGTERM_SOCKET:-}" ]; then
 else
   "${AGTERMCTL:-agtermctl}" session status "$state" \
     --target "$AGTERM_SESSION_ID" "${pane_args[@]+"${pane_args[@]}"}" "$@" >/dev/null 2>&1 || true
-fi
-
-if [ "$state" = blocked ]; then
-  notify_args=("notify" "Pi agent is waiting for input" --target "$AGTERM_SESSION_ID")
-  [ -n "${AGTERM_SOCKET:-}" ] && notify_args+=(--socket "$AGTERM_SOCKET")
-  "${AGTERMCTL:-agtermctl}" "${notify_args[@]}" >/dev/null 2>&1 || true
 fi
 exit 0

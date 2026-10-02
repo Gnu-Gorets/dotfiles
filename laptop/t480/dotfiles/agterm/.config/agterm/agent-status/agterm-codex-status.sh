@@ -6,7 +6,7 @@
 # Codex fires PermissionRequest before Auto Review decides whether a person must approve. Treating
 # that raw event as blocked therefore false-flags automatically reviewed tools. This hook keeps the
 # agent-specific workaround inside the installed hook package: one watcher per agterm pane reads the
-# live visible footer for dialogs, while Stop checks the final assistant message for a question mark.
+# live visible footer for dialogs, while Stop checks the final assistant message for a question.
 set -u
 
 [ -n "${AGTERM_SESSION_ID:-}" ] || exit 0
@@ -19,7 +19,8 @@ script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" 2>/dev/null && pwd)
 status_wrapper=${AGTERM_STATUS_WRAPPER:-"$script_dir/agterm-agent-status.sh"}
 
 pane_args=()
-[ -n "${AGTERM_PANE:-}" ] && pane_args=(--pane "$AGTERM_PANE")
+[ -n "${AGTERM_PANE_ID:-}" ] && pane_args+=(--pane-id "$AGTERM_PANE_ID")
+[ -n "${AGTERM_PANE:-}" ] && pane_args+=(--pane "$AGTERM_PANE")
 socket_args=()
 [ -n "${AGTERM_SOCKET:-}" ] && socket_args=(--socket "$AGTERM_SOCKET")
 
@@ -28,7 +29,7 @@ report_status() {
 }
 
 assistant_message_contains_question() {
-  local message
+  local message prose question
   if [ -x /usr/bin/plutil ]; then
     message=$(/usr/bin/plutil -extract last_assistant_message raw -o - - 2>/dev/null) || return 1
   elif command -v python3 >/dev/null 2>&1; then
@@ -46,7 +47,13 @@ sys.stdout.write(value)
   else
     return 1
   fi
-  [[ "$message" == *"?"* ]]
+  # a span becomes a word rather than nothing so "run `make test`?" keeps its ? attached
+  prose=$(printf '%s\n' "$message" \
+    | /usr/bin/awk '/^[[:space:]]*```/ { fenced = !fenced; next } !fenced' \
+    | /usr/bin/sed 's/`[^`]*`/code/g')
+  # bash 3.2 cannot parse this bracket set inline in [[ ]]
+  question=$'[^[:space:]]\\?[]"\')*_!’”]*([[:space:]]|$)'
+  [[ "$prose" =~ $question ]]
 }
 
 read_visible_screen() {
@@ -61,8 +68,9 @@ watch_file_path() {
     printf '%s' "$AGTERM_CODEX_WATCH_FILE"
     return
   fi
-  local key
-  key=$(printf '%s-%s' "$AGTERM_SESSION_ID" "${AGTERM_PANE:-left}" | /usr/bin/tr -c 'A-Za-z0-9._-' '_')
+  local key pane_key
+  pane_key=${AGTERM_PANE_ID:-${AGTERM_PANE:-left}}
+  key=$(printf '%s-%s' "$AGTERM_SESSION_ID" "$pane_key" | /usr/bin/tr -c 'A-Za-z0-9._-' '_')
   printf '%s/agterm-codex-watch-%s-%s' "${TMPDIR:-/tmp}" "${UID:-0}" "$key"
 }
 
