@@ -55,6 +55,7 @@ cfitsio
 chromium
 cifs-utils
 containerd
+copyq
 coreutils
 cpio
 cronie
@@ -104,6 +105,7 @@ file
 filesystem
 findutils
 flac
+flameshot
 flex
 fmt
 fontconfig
@@ -227,6 +229,7 @@ ki18n
 kmod
 knotifications
 krb5
+kstatusnotifieritem
 kustomize
 kvantum
 kvantum-qt5
@@ -515,6 +518,7 @@ md4c
 mdadm
 memtest86+
 mesa
+miniaudio
 minizip
 mkinitcpio
 mkinitcpio-busybox
@@ -564,6 +568,7 @@ openssh
 openssl
 openvpn
 opus
+opusfile
 orc
 os-prober
 otf-droid-nerd
@@ -575,7 +580,6 @@ pam
 pambase
 pango
 papirus-icon-theme
-parcellite
 parted
 patch
 pavucontrol-qt
@@ -652,6 +656,7 @@ qt6-shadertools
 qt6-svg
 qt6-translations
 qtile
+qtkeychain-qt6
 rav1e
 readline
 reflector
@@ -756,11 +761,13 @@ vulkan-intel
 vulkan-mesa-implicit-layers
 vulkan-tools
 wayland
+wayland-protocols
 webkit2gtk-4.1
+webkitgtk-6.0
 webrtc-audio-processing-1
 which
 wireplumber
-wlroots0.19
+wlroots0.20
 wmctrl
 wmname
 woff2
