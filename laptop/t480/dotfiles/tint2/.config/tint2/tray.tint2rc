@@ -170,7 +170,7 @@ systray_sort = right2left
 systray_icon_size = 16
 systray_icon_asb = 40 0 0
 systray_monitor = primary
-systray_name_filter = nm-applet:parcellite
+systray_name_filter = nm-applet:copyq
 
 #-------------------------------------
 # Launcher

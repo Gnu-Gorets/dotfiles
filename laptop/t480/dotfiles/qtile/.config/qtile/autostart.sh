@@ -39,7 +39,7 @@ gnome-keyring-daemon --start --components=pkcs11 &
 # Tray applets
 run nm-applet
 run udiskie -t
-run parcellite
+run copyq
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' &
 
 
