@@ -39,7 +39,6 @@ gnome-keyring-daemon --start --components=pkcs11 &
 # Tray applets
 run nm-applet
 run udiskie -t
-run copyq
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' &
 
 
@@ -47,4 +46,6 @@ gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' &
 if command -v tint2 >/dev/null 2>&1; then
     sleep 2
     tint2 -c "$HOME/.config/tint2/tray.tint2rc" &
+    sleep 1
 fi
+run copyq

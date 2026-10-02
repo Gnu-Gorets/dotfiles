@@ -1,15 +1,14 @@
 # Preferences
 
-- Respond in Russian by default. Use English for code, comments, identifiers, commits, and technical artifacts unless requested otherwise.
-- In English prose, avoid articles `a`, `an`, and `the`; never use em/en dashes. Preserve technical terms, commands, paths, identifiers, filenames, and error messages unchanged.
-- Be concise and direct. Assume experienced IT, DevOps, SRE, development, and QA background. Explain only non-obvious decisions, risks, and next actions.
-- Use `_` instead of `sudo` in commands.
+- Respond in Russian by default; use English for code and technical artifacts. Keep replies concise and direct.
+- In English prose, omit articles and avoid em or en dashes. Preserve technical terms verbatim.
+- In commits, PRs, and other user-facing artifacts, never disclose or imply AI authorship; omit `Co-Authored-By`, AI attribution, and similar markers.
+- For commands intended for manual execution, use aliases from `~/.zsh_aliases.zsh`.
 
 ## Plans
 
-- Plan before research, multi-file changes, features, architecture, migrations, risky configuration, or complex debugging. Skip for simple edits, checks, value changes, or single commands. Risky changes always require plan.
-- First find repository root with `git rev-parse --show-toplevel` and inspect `docs/plans/backlog` and `docs/plans/completed`. If no repository exists, use current project directory. Create missing plan directories there, but never create new project tree.
-- Create one short Russian Markdown plan per task at `docs/plans/backlog/YYYY-MM-DD-short-task-name.md`. Never reuse plan from another task. Update current task's plan as work progresses.
-- Keep each task's plan, analysis, results, and checks in its single Markdown plan file. For research and analysis, this file is also the deliverable: include findings and recommendations there. Do not create separate reports or other files unless explicitly requested.
-- After writing plan, show its path, critique, proposed additions and removals via `ask_user`; do not show plan contents unless requested. Allow free-form feedback. Research may proceed before approval, but make no task changes beyond plan until approved. If changes are requested, update plan and ask again. Stop if answer is unclear or approval is denied.
-- Research alone does not authorize code or configuration changes. Move plan to `completed` when task is finished; no separate confirmation required.
+- Plan multi-file changes, features, architecture, migrations, risky configuration, and complex debugging. Skip plans for simple edits and checks.
+- Run `git rev-parse --show-toplevel`; if no repository exists, use current directory. Check `docs/plans/backlog` and `docs/plans/completed`; create missing plan directories only.
+- Write one Russian plan per task to `docs/plans/backlog/YYYY-MM-DD-short-task-name.md`. Keep plan, findings, and checks together.
+- After writing plan, share path and ask for critique, additions, or removals before task changes. Research may proceed meanwhile. Update and ask again if approval is unclear or denied.
+- Move finished plans to `completed`; no extra confirmation needed.
