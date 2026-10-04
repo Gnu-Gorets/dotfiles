@@ -1,0 +1,19 @@
+{
+  "attentionButtonEnabled" : true,
+  "autoHideSidebarInactiveWindows" : true,
+  "darkTheme" : "GitHub Dark",
+  "followSystemAppearance" : true,
+  "fontFamily" : "DroidSansM Nerd Font Mono",
+  "fontSize" : 10,
+  "hiddenInterfaceElements" : [
+    "customCommands"
+  ],
+  "inactivePaneMuteStrength" : 4,
+  "interfaceFontSize" : 9,
+  "quickTerminalSizePercent" : 80,
+  "restoreMode" : "live",
+  "sidebarBackgroundShift" : 4,
+  "sidebarFontSize" : 9,
+  "theme" : "agterm",
+  "toolbarMode" : "hidden"
+}
