@@ -7,8 +7,8 @@
 
 ## Plans
 
+- Treat feature TODOs/proposals as plans. Save in `docs/plans/backlog/YYYY-MM-DD-short-name.md`; check backlog/completed and share for critique before code changes. Never move plans to `completed` yourself.
 - Plan multi-file changes, features, architecture, migrations, risky configuration, and complex debugging. Skip plans for simple edits and checks.
 - Run `git rev-parse --show-toplevel`; if no repository exists, use current directory. Check `docs/plans/backlog` and `docs/plans/completed`; create missing plan directories only.
 - Write one Russian plan per task to `docs/plans/backlog/YYYY-MM-DD-short-task-name.md`. Keep plan, findings, and checks together.
 - After writing plan, share path and ask for critique, additions, or removals before task changes. Research may proceed meanwhile. Update and ask again if approval is unclear or denied.
-- Move finished plans to `completed`; no extra confirmation needed.
