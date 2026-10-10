@@ -7,27 +7,32 @@
 
 ## Workflow
 
-1. Read repository instructions relevant to task. They refine these global preferences.
-2. Before changing behavior, inspect relevant implementation, callers, tests, and docs. If they conflict, surface conflict instead of guessing.
-3. For bugs, trace failing path and shared callers. Fix narrowest layer that corrects cause without changing unrelated behavior.
-4. Keep changes focused. Reuse existing interfaces and avoid unrelated refactoring.
+1. Read applicable repository instructions; they refine these global preferences.
+2. Before changing behavior, inspect implementation, callers, tests, and docs. Surface conflicts instead of guessing.
+3. Check local CLI availability before reporting it unavailable; use it if suitable.
+4. Trace failing paths and shared callers. Fix root cause at narrowest layer, preserving unrelated behavior. Removing required features needs explicit approval.
+5. Keep scope focused, reuse existing interfaces, and avoid unrelated refactoring.
+6. State assumptions affecting results. Ask before work dependent on material scope, behavior, cost, or access choices. Report blockers involving missing access, data, or material risk and ask for direction.
+7. Fallbacks must preserve task goals and constraints; never substitute another task.
 
 ## Safety
 
 1. Do not alter user data, live services, or system settings without explicit approval.
 2. Isolate manual testing from user state.
+3. Preserve existing user changes. Do not revert, overwrite, or reformat unrelated edits; work from current file contents.
+4. Silence, timeout, and preselected options are not approval. Continue only independent, already authorized work while awaiting explicit consent.
 
 ## Completion
 
-1. Run focused checks during development and follow repository instructions for final validation.
-2. Report checks skipped because of environment or unavailable resources.
-3. Update docs only when they describe changed behavior or contract. Avoid duplicating same information.
-4. Keep comments and docs concise. Record non obvious constraints, not code narration.
+1. Run focused development checks and repository-required final validation.
+2. Distinguish verified facts, assumptions, and unverified results. Never invent file contents, command output, citations, or passed checks. Report skipped checks and reasons.
+3. Address every requested item; report incomplete work, blockers, and scope changes explicitly.
+4. Update docs only for changed behavior or contracts. Keep docs and comments concise, without duplication; explain non obvious constraints, not code.
 
 ## Plans
 
-1. Treat feature TODOs and proposals as plans. Plan multi file changes, features, architecture, migrations, risky configuration, and complex debugging. Skip plans for simple edits and checks.
-2. Run `git rev-parse --show-toplevel`; if no repository exists, use current directory. Check `docs/plans/backlog` and `docs/plans/completed`. Create missing plan directories only.
-3. Write one Russian plan per task to `docs/plans/backlog/YYYY-MM-DD-short-task-name.md`. Keep plan, findings, and checks together.
-4. After writing plan, share path and ask for critique, additions, or removals before task changes. Research may proceed meanwhile. Update and ask again if approval is unclear or denied.
+1. Plan features, feature TODOs, proposals, multi file changes, architecture, migrations, risky configuration, and complex debugging; skip simple edits and checks.
+2. Use `git rev-parse --show-toplevel` or current directory if no repository exists. Check `docs/plans/backlog` and `docs/plans/completed`; create only missing plan directories.
+3. Keep one Russian plan per task, with findings and checks, in `docs/plans/backlog/YYYY-MM-DD-short-task-name.md`.
+4. Share plan path and request critique, additions, or removals before task changes. Independent research may continue; if approval is unclear or denied, revise and ask again.
 5. Never move plans to `completed` yourself.
