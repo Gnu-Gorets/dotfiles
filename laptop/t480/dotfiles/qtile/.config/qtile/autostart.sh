@@ -11,8 +11,9 @@ xsetroot -cursor_name left_ptr &
 setxkbmap -option '' -layout us,ru -option "grp:alt_shift_toggle,grp_led:scroll" &
 xmodmap -e "keycode 164 = NoSymbol" &
 
-# Disable screen blanking and power saving
+# Disable screen blanking, power saving, and X11 bell
 xset s off -dpms &
+xset b off &
 
 # Ensure preferred resolution for the currently connected display.
 PRIMARY_OUTPUT="$(xrandr --query | awk '/ connected primary/{print $1; exit}')"

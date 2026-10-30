@@ -106,7 +106,7 @@ SYSTEM_KEYS = [
     (
         [MOD],
         "Print",
-        lazy.spawn('sh -c "import png:- | satty --filename -"'),
+        lazy.spawn('sh -c "import -silent png:- | satty --filename -"'),
         "Screenshot GUI",
     ),
     ([], "XF86AudioRaiseVolume", lazy.function(volume_up_capped), "Volume up"),
