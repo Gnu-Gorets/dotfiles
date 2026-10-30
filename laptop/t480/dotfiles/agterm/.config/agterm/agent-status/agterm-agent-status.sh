@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # >>> agterm agtermctl path (installer-baked) >>>
-[ -n "${AGTERMCTL:-}" ] || AGTERMCTL='/home/gorets/.local/opt/agterm-linux/bin/agtermctl'
+[ -n "${AGTERMCTL:-}" ] || AGTERMCTL="$HOME/.local/opt/agterm-linux/bin/agtermctl"
 # agterm-agent-status — set the current agterm session's agent-status indicator.
 #
 #   agterm-agent-status.sh active            # agent is busy
