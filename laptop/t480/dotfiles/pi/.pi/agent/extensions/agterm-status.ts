@@ -4,12 +4,18 @@
 // It uses the installed agterm wrapper for session, pane, socket, and CLI resolution, so it is
 // a harmless no-op outside agterm.
 
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 export default function (pi: ExtensionAPI) {
-  const wrapper = join(homedir(), ".config", "agterm", "agent-status", "agterm-agent-status.sh");
+  const wrapper = join(
+    homedir(),
+    ".config",
+    "agterm",
+    "agent-status",
+    "agterm-agent-status.sh",
+  );
 
   async function report(args: string[]): Promise<void> {
     if (!process.env.AGTERM_SESSION_ID) return;
@@ -22,16 +28,23 @@ export default function (pi: ExtensionAPI) {
 
   let targetNames: Promise<{ workspace: string; session: string }> | undefined;
 
-  async function getTargetNames(): Promise<{ workspace: string; session: string }> {
+  async function getTargetNames(): Promise<{
+    workspace: string;
+    session: string;
+  }> {
     const target = process.env.AGTERM_SESSION_ID!;
     targetNames ??= (async () => {
       const args = ["tree", "--json"];
-      if (process.env.AGTERM_SOCKET) args.push("--socket", process.env.AGTERM_SOCKET);
+      if (process.env.AGTERM_SOCKET)
+        args.push("--socket", process.env.AGTERM_SOCKET);
       const result = await pi.exec("agtermctl", args, { timeout: 1_000 });
       const tree = JSON.parse(result.stdout).result.tree;
       for (const workspace of tree.workspaces ?? []) {
-        const session = workspace.sessions?.find((item: { id: string }) => item.id === target);
-        if (session) return { workspace: workspace.name, session: session.name };
+        const session = workspace.sessions?.find(
+          (item: { id: string }) => item.id === target,
+        );
+        if (session)
+          return { workspace: workspace.name, session: session.name };
       }
       throw new Error("Current agterm session not found");
     })();
@@ -44,8 +57,16 @@ export default function (pi: ExtensionAPI) {
 
     try {
       const { workspace, session } = await getTargetNames();
-      const args = ["notify", status, "--title", `Pi: ${workspace} / ${session}`, "--target", target];
-      if (process.env.AGTERM_SOCKET) args.push("--socket", process.env.AGTERM_SOCKET);
+      const args = [
+        "notify",
+        status,
+        "--title",
+        `Pi: ${workspace} / ${session}`,
+        "--target",
+        target,
+      ];
+      if (process.env.AGTERM_SOCKET)
+        args.push("--socket", process.env.AGTERM_SOCKET);
       await pi.exec("agtermctl", args, { timeout: 1_000 });
     } catch {
       targetNames = undefined;
@@ -62,11 +83,16 @@ export default function (pi: ExtensionAPI) {
   });
 
   pi.on("ui_prompt_end", async (_event, ctx) => {
-    await report(ctx.isIdle() ? ["completed", "--auto-reset"] : ["active", "--blink"]);
+    await report(
+      ctx.isIdle() ? ["completed", "--auto-reset"] : ["active", "--blink"],
+    );
   });
 
   // `agent_settled` waits for automatic retries, compaction retries, and queued continuations.
   pi.on("agent_settled", async () => {
-    await Promise.all([report(["completed", "--auto-reset"]), notify("готово, заебись")]);
+    await Promise.all([
+      report(["completed", "--auto-reset"]),
+      notify("готово, заебись"),
+    ]);
   });
 }

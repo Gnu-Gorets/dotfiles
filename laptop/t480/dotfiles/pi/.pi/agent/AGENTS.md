@@ -4,9 +4,9 @@
 2. Use English for code and technical artifacts, except Russian plans required below. Preserve technical terms verbatim.
 3. In English prose, omit articles. Avoid em/en dashes and unnecessary hyphens.
 4. Before finishing, separately reread all English prose you wrote or changed. Fix style and wording without altering code, identifiers, quotes, or necessary compounds.
-5. Write all GitHub artifacts in English, including commit messages, PR titles, descriptions, and comments.
+5. Write all GitHub artifacts in English, including commit messages, PR titles, descriptions, and comments. Format commit messages as `<type>[optional scope]: <description>`.
 6. Never disclose or imply AI authorship. Omit `Co-Authored-By` and similar attribution.
-7. For commands intended for manual execution, use suitable existing aliases from `~/.zsh_aliases.zsh`; otherwise use standard commands. Never invent aliases.
+7. For commands intended for manual execution, inspect `~/.zsh_aliases.zsh` for suitable aliases or functions and use them when available (for example, `_` for privilege escalation); otherwise use standard commands. Never invent aliases.
 
 ## Workflow
 
