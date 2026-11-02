@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "typebox";
-import { isProtectedCommand, parseAgtermAskResult, parseMessage } from "./git-publish-confirm/utils.ts";
+import { isProtectedCommand, parseAgtermAskResult, parseMessage, pushAndCreatePullRequest } from "./git-publish-confirm/utils.ts";
 
 const params = Type.Object({
   action: Type.Union([Type.Literal("commit"), Type.Literal("pr")]),
@@ -63,10 +63,9 @@ export default function (pi: ExtensionAPI) {
       if (!message) return errorResult("Title cannot be empty. Nothing was published.");
 
       if (input.action === "pr") {
-        const result = await pi.exec("gh", ["pr", "create", "--title", message.title, "--body", message.description], { cwd: ctx.cwd });
-        const output = [result.stdout, result.stderr].filter(Boolean).join("\n").trim();
-        if (result.code !== 0) return errorResult(output || `gh pr create failed with exit code ${result.code}.`);
-        return { content: [{ type: "text", text: output || "Pull request created." }], details: undefined };
+        const result = await pushAndCreatePullRequest(pi.exec.bind(pi), ctx.cwd, message.title, message.description);
+        if (result.code !== 0) return errorResult(result.output || `${result.command} failed with exit code ${result.code}.`);
+        return { content: [{ type: "text", text: result.output || "Pull request created." }], details: undefined };
       }
 
       const dir = await mkdtemp(join(tmpdir(), "pi-git-commit-"));
