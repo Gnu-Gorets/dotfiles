@@ -7,6 +7,7 @@
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { homedir } from "node:os";
 import { join } from "node:path";
+import { getGitStatus } from "./agterm-status/utils.ts";
 
 export default function (pi: ExtensionAPI) {
   const wrapper = join(
@@ -51,6 +52,39 @@ export default function (pi: ExtensionAPI) {
     return targetNames;
   }
 
+  async function updateSessionInfo(cwd: string): Promise<void> {
+    const target = process.env.AGTERM_SESSION_ID;
+    if (!target) return;
+
+    let status: string | undefined;
+    try {
+      status = await getGitStatus(
+        (command, args, options) => pi.exec(command, args, options),
+        cwd,
+      );
+    } catch {
+      status = undefined;
+    }
+
+    const args = ["session", "info"];
+    if (status) args.push(status);
+    else args.push("--clear");
+    args.push("--target", target);
+    if (process.env.AGTERM_SOCKET)
+      args.push("--socket", process.env.AGTERM_SOCKET);
+    try {
+      await pi.exec("agtermctl", args, { timeout: 1_000 });
+    } catch {
+      // Status reporting is advisory and must never interrupt Pi's agent loop.
+    }
+  }
+
+  let refreshTimer: ReturnType<typeof setTimeout> | undefined;
+  function scheduleSessionInfo(cwd: string): void {
+    clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(() => void updateSessionInfo(cwd), 200);
+  }
+
   async function notify(status: string): Promise<void> {
     const target = process.env.AGTERM_SESSION_ID;
     if (!target) return;
@@ -73,6 +107,22 @@ export default function (pi: ExtensionAPI) {
       // Notifications are advisory and must never interrupt Pi's agent loop.
     }
   }
+
+  pi.on("session_start", async (_event, ctx) => {
+    clearTimeout(refreshTimer);
+    refreshTimer = undefined;
+    await updateSessionInfo(ctx.cwd);
+  });
+
+  pi.on("session_shutdown", () => {
+    clearTimeout(refreshTimer);
+    refreshTimer = undefined;
+  });
+
+  pi.on("tool_execution_end", (event, ctx) => {
+    if (["bash", "write", "edit", "git_publish"].includes(event.toolName))
+      scheduleSessionInfo(ctx.cwd);
+  });
 
   pi.on("agent_start", async () => {
     await Promise.all([report(["active", "--blink"]), notify("ебашит")]);
