@@ -52,9 +52,23 @@ export default function (pi: ExtensionAPI) {
     return targetNames;
   }
 
-  async function updateSessionInfo(cwd: string): Promise<void> {
+  let sessionInfoEnabled = false;
+  let shuttingDown = false;
+  async function sendSessionInfo(args: string[]): Promise<void> {
     const target = process.env.AGTERM_SESSION_ID;
     if (!target) return;
+    args.push("--target", target);
+    if (process.env.AGTERM_SOCKET)
+      args.push("--socket", process.env.AGTERM_SOCKET);
+    try {
+      await pi.exec("agtermctl", ["session", "info", ...args], { timeout: 1_000 });
+    } catch {
+      // Status reporting is advisory and must never interrupt Pi's agent loop.
+    }
+  }
+
+  async function updateSessionInfo(cwd: string): Promise<void> {
+    if (!sessionInfoEnabled || shuttingDown || !process.env.AGTERM_SESSION_ID) return;
 
     let status: string | undefined;
     try {
@@ -65,24 +79,26 @@ export default function (pi: ExtensionAPI) {
     } catch {
       status = undefined;
     }
+    if (shuttingDown) return;
 
-    const args = ["session", "info"];
-    if (status) args.push(status, "--markdown");
-    else args.push("--clear");
-    args.push("--target", target);
-    if (process.env.AGTERM_SOCKET)
-      args.push("--socket", process.env.AGTERM_SOCKET);
-    try {
-      await pi.exec("agtermctl", args, { timeout: 1_000 });
-    } catch {
-      // Status reporting is advisory and must never interrupt Pi's agent loop.
-    }
+    if (status) await sendSessionInfo([status, "--markdown", "--hide-after", "86400"]);
+    else await sendSessionInfo(["--clear"]);
+  }
+
+  let refreshQueue = Promise.resolve();
+  function refreshSessionInfo(cwd: string): Promise<void> {
+    refreshQueue = refreshQueue.then(() => updateSessionInfo(cwd)).catch(() => {});
+    return refreshQueue;
   }
 
   let refreshTimer: ReturnType<typeof setTimeout> | undefined;
   function scheduleSessionInfo(cwd: string): void {
+    if (!sessionInfoEnabled || shuttingDown) return;
     clearTimeout(refreshTimer);
-    refreshTimer = setTimeout(() => void updateSessionInfo(cwd), 200);
+    refreshTimer = setTimeout(() => {
+      refreshTimer = undefined;
+      void refreshSessionInfo(cwd);
+    }, 200);
   }
 
   async function notify(status: string): Promise<void> {
@@ -109,14 +125,20 @@ export default function (pi: ExtensionAPI) {
   }
 
   pi.on("session_start", async (_event, ctx) => {
+    shuttingDown = false;
+    sessionInfoEnabled = ctx.mode === "tui" || ctx.mode === "rpc";
     clearTimeout(refreshTimer);
     refreshTimer = undefined;
-    await updateSessionInfo(ctx.cwd);
+    await refreshSessionInfo(ctx.cwd);
   });
 
-  pi.on("session_shutdown", () => {
+  pi.on("session_shutdown", async () => {
+    shuttingDown = true;
     clearTimeout(refreshTimer);
     refreshTimer = undefined;
+    await refreshQueue;
+    if (sessionInfoEnabled) await sendSessionInfo(["--clear"]);
+    sessionInfoEnabled = false;
   });
 
   pi.on("tool_execution_end", (event, ctx) => {
@@ -141,7 +163,7 @@ export default function (pi: ExtensionAPI) {
   // `agent_settled` waits for automatic retries, compaction retries, and queued continuations.
   pi.on("agent_settled", async (_event, ctx) => {
     await Promise.all([
-      updateSessionInfo(ctx.cwd),
+      refreshSessionInfo(ctx.cwd),
       report(["completed", "--auto-reset"]),
       notify("готово, заебись"),
     ]);
