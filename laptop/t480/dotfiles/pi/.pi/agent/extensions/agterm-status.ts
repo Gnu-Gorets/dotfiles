@@ -139,8 +139,9 @@ export default function (pi: ExtensionAPI) {
   });
 
   // `agent_settled` waits for automatic retries, compaction retries, and queued continuations.
-  pi.on("agent_settled", async () => {
+  pi.on("agent_settled", async (_event, ctx) => {
     await Promise.all([
+      updateSessionInfo(ctx.cwd),
       report(["completed", "--auto-reset"]),
       notify("готово, заебись"),
     ]);

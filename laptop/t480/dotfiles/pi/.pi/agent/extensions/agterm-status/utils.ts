@@ -59,6 +59,7 @@ export async function getGitStatus(exec: Exec, cwd: string): Promise<string | un
     const result = await exec("gh", ["pr", "view", "--json", "number,state,isDraft,reviewDecision"], { cwd, timeout: 2_000 });
     if (result.code === 0) {
       const pr = JSON.parse(result.stdout) as PullRequest;
+      if (pr.state !== "OPEN") return status;
       const review = {
         APPROVED: "approved",
         CHANGES_REQUESTED: "changes requested",

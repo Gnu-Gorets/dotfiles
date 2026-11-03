@@ -55,6 +55,16 @@ test("shows discovered PR and review decision", async () => {
   assert.equal(status, '🌱 feature/auth · ^[✓ clean](color: "green") · PR #42 approved');
 });
 
+test("omits merged and closed pull requests", async () => {
+  for (const state of ["MERGED", "CLOSED"]) {
+    const status = await getGitStatus(gitRepo({
+      branch: "feature/auth",
+      pr: { stdout: JSON.stringify({ number: 42, state, isDraft: false, reviewDecision: null }), stderr: "", code: 0 },
+    }), "/repo");
+    assert.equal(status, '🌱 feature/auth · ^[✓ clean](color: "green")');
+  }
+});
+
 test("keeps Git status when gh is unavailable", async () => {
   const status = await getGitStatus(async (command, args, options) => {
     if (command === "gh") throw new Error("gh unavailable");
