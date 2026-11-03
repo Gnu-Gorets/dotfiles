@@ -67,7 +67,7 @@ export default function (pi: ExtensionAPI) {
     }
 
     const args = ["session", "info"];
-    if (status) args.push(status);
+    if (status) args.push(status, "--markdown");
     else args.push("--clear");
     args.push("--target", target);
     if (process.env.AGTERM_SOCKET)
