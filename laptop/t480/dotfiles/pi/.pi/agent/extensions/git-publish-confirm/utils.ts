@@ -1,7 +1,7 @@
-type Exec = (
+export type Exec = (
   command: string,
   args: string[],
-  options: { cwd: string },
+  options: { cwd: string; signal?: AbortSignal },
 ) => Promise<{ stdout: string; stderr: string; code: number }>;
 
 export async function pushAndCreatePullRequest(exec: Exec, cwd: string, title: string, body: string) {
@@ -26,33 +26,4 @@ export function parseMessage(message: string): { title: string; description: str
   const title = firstLine.trim();
   if (!title) return undefined;
   return { title, description: rest.join("\n").trim() };
-}
-
-export type AgtermAskResult =
-  | { status: "submitted"; text: string }
-  | { status: "cancelled" | "unavailable" | "invalid" };
-
-export function parseAgtermAskResult(stdout: string, code: number): AgtermAskResult {
-  if (code === 2 || code === 3) return { status: "cancelled" };
-  if (code !== 0) return { status: "unavailable" };
-
-  try {
-    const answer: unknown = JSON.parse(stdout);
-    if (
-      typeof answer === "object" &&
-      answer !== null &&
-      "result" in answer &&
-      answer.result === "answered" &&
-      "id" in answer &&
-      answer.id === "submit" &&
-      "text" in answer &&
-      typeof answer.text === "string"
-    ) {
-      return { status: "submitted", text: answer.text };
-    }
-  } catch {
-    return { status: "invalid" };
-  }
-
-  return { status: "invalid" };
 }
