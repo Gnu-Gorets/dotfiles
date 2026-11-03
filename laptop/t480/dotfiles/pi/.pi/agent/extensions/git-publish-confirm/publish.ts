@@ -14,6 +14,25 @@ function result(text: string, isError = false) {
 export async function reviewAndPublish(input: Proposal, cwd: string, signal: AbortSignal | undefined, exec: Exec, review: Review) {
   const kind = input.action === "commit" ? "commit" : "GitHub pull request";
   if (signal?.aborted) return result(`${kind} cancelled.`);
+  const guardedExec: Exec = (command, args, options) => {
+    signal?.throwIfAborted();
+    return exec(command, args, { ...options, signal });
+  };
+  if (input.action === "commit") {
+    let staged;
+    try {
+      staged = await guardedExec("git", ["diff", "--cached", "--quiet"], { cwd });
+    } catch (error) {
+      return result(`Could not check staged changes. Nothing was committed. ${(error as Error).message}`, true);
+    }
+    if (staged.code === 0)
+      return result("No staged changes to commit. Stage the intended files with git add, then retry. git_publish commits staged files only.", true);
+    if (staged.code !== 1) {
+      const output = [staged.stdout, staged.stderr].filter(Boolean).join("\n").trim();
+      return result(`Could not check staged changes. Nothing was committed.${output ? ` ${output}` : ""}`, true);
+    }
+  }
+
   const initial = `${input.title.trim()}${input.description.trim() ? `\n\n${input.description.trim()}` : ""}`;
   let answer: ReviewResult;
   try {
@@ -25,10 +44,6 @@ export async function reviewAndPublish(input: Proposal, cwd: string, signal: Abo
   const message = parseMessage(answer.text);
   if (!message) return result("Title cannot be empty. Nothing was published.", true);
 
-  const guardedExec: Exec = (command, args, options) => {
-    signal?.throwIfAborted();
-    return exec(command, args, { ...options, signal });
-  };
   try {
     if (input.action === "pr") {
       const published = await pushAndCreatePullRequest(guardedExec, cwd, message.title, message.description);

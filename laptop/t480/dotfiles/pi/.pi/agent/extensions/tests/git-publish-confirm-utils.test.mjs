@@ -43,8 +43,12 @@ for (const action of ["commit", "pr"]) {
   ]) {
     test(`${action}: ${name} never publishes`, async () => {
       let calls = 0;
-      await reviewAndPublish({ ...proposal, action }, "/test", undefined, async () => { calls++; return ok; }, review);
-      assert.equal(calls, 0);
+      await reviewAndPublish({ ...proposal, action }, "/test", undefined, async (_command, args) => {
+        calls++;
+        if (action === "commit" && args[0] === "diff") return { ...ok, code: 1 };
+        return ok;
+      }, review);
+      assert.equal(calls, action === "commit" ? 1 : 0);
     });
   }
 }
@@ -57,15 +61,37 @@ test("already aborted operation never opens editor", async () => {
 
 test("abort during review ignores even submitted answer", async () => {
   const controller = new AbortController();
-  await reviewAndPublish(proposal, "/test", controller.signal, async () => assert.fail("exec"), async () => {
+  await reviewAndPublish(proposal, "/test", controller.signal, async (_command, args) => {
+    if (args[0] === "diff") return { ...ok, code: 1 };
+    assert.fail("exec");
+  }, async () => {
     controller.abort();
     return submitted();
   });
 });
 
+test("commit without staged changes stops before review", async () => {
+  let calls = 0;
+  const response = await reviewAndPublish(proposal, "/test", undefined, async () => {
+    calls++;
+    return ok;
+  }, async () => assert.fail("review should not open"));
+  assert.equal(calls, 1);
+  assert.equal(response.isError, true);
+  assert.match(response.content[0].text, /No staged changes to commit/);
+  assert.match(response.content[0].text, /git add/);
+});
+
+test("commit preflight failure stops before review", async () => {
+  const response = await reviewAndPublish(proposal, "/test", undefined, async () => ({ ...ok, code: 2, stderr: "not a repository" }), async () => assert.fail("review should not open"));
+  assert.equal(response.isError, true);
+  assert.match(response.content[0].text, /Could not check staged changes/);
+});
+
 test("commit uses only reviewed content and deletes private message file", async () => {
   let file;
   const response = await reviewAndPublish(proposal, "/test", undefined, async (command, args, options) => {
+    if (args[0] === "diff") return { ...ok, code: 1 };
     assert.equal(command, "git");
     assert.deepEqual(args.slice(0, 2), ["commit", "--file"]);
     assert.equal(options.cwd, "/test");
@@ -81,6 +107,7 @@ test("commit uses only reviewed content and deletes private message file", async
 test("commit process error also removes message file", async () => {
   let file;
   const response = await reviewAndPublish(proposal, "/test", undefined, async (_command, args) => {
+    if (args[0] === "diff") return { ...ok, code: 1 };
     file = args[2];
     throw new Error("exec error");
   }, submitted);
