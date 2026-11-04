@@ -18,7 +18,6 @@ android-tools
 aom
 appstream
 archlinux-keyring
-argon2
 at-spi2-core
 attr
 audit
@@ -74,6 +73,7 @@ desktop-file-utils
 device-mapper
 diffutils
 direnv
+dmidecode
 dnssec-anchors
 docker
 docker-buildx
@@ -98,7 +98,6 @@ fakeroot
 fastfetch
 feh
 ffmpeg
-ffmpeg4.4
 ffmpegthumbnailer
 fftw
 file
@@ -117,6 +116,8 @@ fsarchiver
 fuse2
 fuse3
 fuse-common
+fwupd
+fwupd-efi
 fzf
 gawk
 gc
@@ -170,7 +171,6 @@ gstreamer
 gtest
 gtk3
 gtk4
-gtk-layer-shell
 gtk-update-icon-cache
 guile
 gupnp
@@ -183,7 +183,6 @@ gvfs-mtp
 gvfs-nfs
 gvfs-smb
 gzip
-handy-bin
 harfbuzz
 harfbuzz-icu
 haveged
@@ -230,9 +229,6 @@ kmod
 knotifications
 krb5
 kstatusnotifieritem
-kustomize
-kvantum
-kvantum-qt5
 kwallet
 kwidgetsaddons
 kwindowsystem
@@ -341,7 +337,6 @@ libmatio
 libmaxminddb
 libmbim
 libmd
-libmfx
 libmm-glib
 libmnl
 libmodplug
@@ -519,6 +514,7 @@ mdadm
 memtest86+
 mesa
 miniaudio
+ministream
 minizip
 mkinitcpio
 mkinitcpio-busybox
@@ -557,7 +553,6 @@ ocl-icd
 onetbb
 oniguruma
 openal
-openblas
 openbsd-netcat
 opencore-amr
 openexr
@@ -581,6 +576,7 @@ pambase
 pango
 papirus-icon-theme
 parted
+passim
 patch
 pavucontrol-qt
 pciutils
@@ -622,6 +618,7 @@ python-charset-normalizer
 python-click
 python-distro
 python-docopt
+python-filelock
 python-gobject
 python-idna
 python-packaging
@@ -637,21 +634,12 @@ python-xcffib
 python-yaml
 qbittorrent
 qca-qt6
-qflipper
 qrencode
-qt5-base
-qt5ct
-qt5-declarative
-qt5-graphicaleffects
-qt5-svg
-qt5-translations
-qt5-x11extras
 qt6-5compat
 qt6-base
 qt6ct
 qt6-declarative
 qt6pas
-qt6-serialport
 qt6-shadertools
 qt6-svg
 qt6-translations
@@ -679,6 +667,7 @@ shaderc
 shadow
 shared-mime-info
 simdjson
+simdutf
 slang
 slop
 smartmontools
@@ -762,7 +751,6 @@ vulkan-mesa-implicit-layers
 vulkan-tools
 wayland
 wayland-protocols
-webkit2gtk-4.1
 webkitgtk-6.0
 webrtc-audio-processing-1
 which
