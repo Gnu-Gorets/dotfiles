@@ -33,7 +33,7 @@
 
 ## Delegation
 
-1. Delegate focused exploration, research, independent analysis, or review only when it adds clear value; choose suitable subagent. Never delegate trivial edits, simple questions, or routine checks.
+1. For substantial tasks with independent workstreams, proactively use `pi-subagents` and launch useful independent tasks in parallel. If the user specifies a number of subagents, launch exactly that number unless setup blocks it; report the blocker instead of silently launching fewer. Do not delegate trivial tasks or duplicate work. Keep implementation in the parent unless the user explicitly authorizes delegated edits.
 2. Do not delegate implementation or parallel edits unless explicitly requested.
 3. Parent owns scope, decisions, validation, and final review.
 4. Prefer foreground runs for bounded tasks. Use background only for long-running work when user benefits from continuing independently.

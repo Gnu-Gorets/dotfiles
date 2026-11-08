@@ -151,7 +151,7 @@ export default function (pi: ExtensionAPI) {
   });
 
   pi.on("ui_prompt_start", async () => {
-    await Promise.all([report(["blocked", "--blink"]), notify("ждёт ввода")]);
+    await Promise.all([report(["blocked", "--blink"]), notify("ждёт ответа, блядь")]);
   });
 
   pi.on("ui_prompt_end", async (_event, ctx) => {

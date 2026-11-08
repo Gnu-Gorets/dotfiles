@@ -47,3 +47,8 @@ blinking = "Always"
 key = "Return"
 mods = "Shift"
 chars = "\u001B\r"
+
+[[keyboard.bindings]]
+key = "м"
+mods = "Control|Shift"
+action = "Paste"
