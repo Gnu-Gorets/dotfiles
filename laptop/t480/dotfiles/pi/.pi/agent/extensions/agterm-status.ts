@@ -61,14 +61,17 @@ export default function (pi: ExtensionAPI) {
     if (process.env.AGTERM_SOCKET)
       args.push("--socket", process.env.AGTERM_SOCKET);
     try {
-      await pi.exec("agtermctl", ["session", "info", ...args], { timeout: 1_000 });
+      await pi.exec("agtermctl", ["session", "info", ...args], {
+        timeout: 1_000,
+      });
     } catch {
       // Status reporting is advisory and must never interrupt Pi's agent loop.
     }
   }
 
   async function updateSessionInfo(cwd: string): Promise<void> {
-    if (!sessionInfoEnabled || shuttingDown || !process.env.AGTERM_SESSION_ID) return;
+    if (!sessionInfoEnabled || shuttingDown || !process.env.AGTERM_SESSION_ID)
+      return;
 
     let status: string | undefined;
     try {
@@ -81,13 +84,16 @@ export default function (pi: ExtensionAPI) {
     }
     if (shuttingDown) return;
 
-    if (status) await sendSessionInfo([status, "--markdown", "--hide-after", "86400"]);
+    if (status)
+      await sendSessionInfo([status, "--markdown", "--hide-after", "86400"]);
     else await sendSessionInfo(["--clear"]);
   }
 
   let refreshQueue = Promise.resolve();
   function refreshSessionInfo(cwd: string): Promise<void> {
-    refreshQueue = refreshQueue.then(() => updateSessionInfo(cwd)).catch(() => {});
+    refreshQueue = refreshQueue
+      .then(() => updateSessionInfo(cwd))
+      .catch(() => {});
     return refreshQueue;
   }
 
@@ -151,7 +157,10 @@ export default function (pi: ExtensionAPI) {
   });
 
   pi.on("ui_prompt_start", async () => {
-    await Promise.all([report(["blocked", "--blink"]), notify("ждёт ответа, блядь")]);
+    await Promise.all([
+      report(["blocked", "--blink"]),
+      notify("ждёт ответа, блядь"),
+    ]);
   });
 
   pi.on("ui_prompt_end", async (_event, ctx) => {
