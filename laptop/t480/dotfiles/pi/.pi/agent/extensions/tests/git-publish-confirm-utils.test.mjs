@@ -1,13 +1,18 @@
 import assert from "node:assert/strict";
-import { readFile, stat } from "node:fs/promises";
+import { execFile } from "node:child_process";
+import { mkdtemp, readFile, rm, stat, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { promisify } from "node:util";
 import test from "node:test";
-import { isProtectedCommand, parseMessage } from "../git-publish-confirm/utils.ts";
+import { isProtectedCommand, parseMessage, parseWorktreePaths } from "../git-publish-confirm/utils.ts";
 import { parseReviewResult } from "../git-publish-confirm/gui.ts";
 import { reviewAndPublish } from "../git-publish-confirm/publish.ts";
 
 const proposal = { action: "commit", title: "fix: original", description: "Original body" };
 const submitted = async () => ({ status: "submitted", text: "feat: edited\n\nEdited body ✓" });
 const ok = { code: 0, stdout: "done", stderr: "" };
+const execFileAsync = promisify(execFile);
 
 test("protects commit and GitHub PR commands", () => {
   assert.equal(isProtectedCommand("git commit -m 'title'"), true);
@@ -22,6 +27,15 @@ test("splits reviewed message into title and description", () => {
     title: "feat: add login", description: "Description",
   });
   assert.equal(parseMessage(" \n "), undefined);
+});
+
+test("parses NUL-delimited worktree paths without losing whitespace or rename sources", () => {
+  assert.deepEqual(parseWorktreePaths(" M tracked file\0?? new\nfile\0"), ["tracked file", "new\nfile"]);
+  assert.deepEqual(parseWorktreePaths("R  renamed\0original\0"), ["renamed", "original"]);
+  assert.deepEqual(parseWorktreePaths(""), []);
+  assert.throws(() => parseWorktreePaths("UU conflicted\0"), /Resolve unmerged paths/);
+  assert.throws(() => parseWorktreePaths("bad"), /Unexpected git status/);
+  assert.throws(() => parseWorktreePaths("!! ignored\0"), /Unexpected git status code/);
 });
 
 test("requires successful exit and explicit valid review response", () => {
@@ -45,10 +59,10 @@ for (const action of ["commit", "pr"]) {
       let calls = 0;
       await reviewAndPublish({ ...proposal, action }, "/test", undefined, async (_command, args) => {
         calls++;
-        if (action === "commit" && args[0] === "diff") return { ...ok, code: 1 };
+        if (action === "commit" && args[0] === "diff" && args[2] === "--quiet") return { ...ok, code: 1 };
         return ok;
       }, review);
-      assert.equal(calls, action === "commit" ? 1 : 0);
+      assert.equal(calls, action === "commit" ? 2 : 0);
     });
   }
 }
@@ -62,7 +76,8 @@ test("already aborted operation never opens editor", async () => {
 test("abort during review ignores even submitted answer", async () => {
   const controller = new AbortController();
   await reviewAndPublish(proposal, "/test", controller.signal, async (_command, args) => {
-    if (args[0] === "diff") return { ...ok, code: 1 };
+    if (args[0] === "diff" && args[2] === "--quiet") return { ...ok, code: 1 };
+    if (args[0] === "diff" && args[2] === "--check") return ok;
     assert.fail("exec");
   }, async () => {
     controller.abort();
@@ -70,16 +85,106 @@ test("abort during review ignores even submitted answer", async () => {
   });
 });
 
-test("commit without staged changes stops before review", async () => {
-  let calls = 0;
-  const response = await reviewAndPublish(proposal, "/test", undefined, async () => {
-    calls++;
-    return ok;
+test("clean repository stops before review", async () => {
+  const calls = [];
+  const response = await reviewAndPublish(proposal, "/test", undefined, async (_command, args) => {
+    calls.push(args);
+    return args[0] === "status" ? { ...ok, stdout: "" } : ok;
   }, async () => assert.fail("review should not open"));
-  assert.equal(calls, 1);
+  assert.deepEqual(calls, [["diff", "--cached", "--quiet"], ["status", "--porcelain=v1", "-z", "--untracked-files=all"]]);
   assert.equal(response.isError, true);
-  assert.match(response.content[0].text, /No staged changes to commit/);
-  assert.match(response.content[0].text, /git add/);
+  assert.match(response.content[0].text, /No changes to commit/);
+});
+
+test("cancelling the staging prompt leaves the worktree untouched", async () => {
+  const calls = [];
+  let shownPaths;
+  const response = await reviewAndPublish(proposal, "/test", undefined, async (_command, args) => {
+    calls.push(args);
+    if (args[0] === "status") return { ...ok, stdout: " M tracked file\0?? new file\0" };
+    return ok;
+  }, async () => assert.fail("review should not open"), async (paths) => {
+    shownPaths = paths;
+    return false;
+  });
+  assert.deepEqual(shownPaths, ["tracked file", "new file"]);
+  assert.deepEqual(calls, [["diff", "--cached", "--quiet"], ["status", "--porcelain=v1", "-z", "--untracked-files=all"]]);
+  assert.equal(response.content[0].text, "Commit cancelled.");
+});
+
+test("stages only confirmed paths and checks staged diff before review", async () => {
+  const calls = [];
+  let quietChecks = 0;
+  const response = await reviewAndPublish(proposal, "/test", undefined, async (_command, args) => {
+    calls.push(args);
+    if (args[0] === "diff" && args[2] === "--quiet") return { ...ok, code: quietChecks++ === 0 ? 0 : 1 };
+    if (args[0] === "status") return { ...ok, stdout: " M tracked file\0?? new file\0" };
+    return ok;
+  }, submitted, async (paths) => {
+    assert.deepEqual(paths, ["tracked file", "new file"]);
+    return true;
+  });
+  assert.equal(response.isError, undefined);
+  assert.deepEqual(calls, [
+    ["diff", "--cached", "--quiet"],
+    ["status", "--porcelain=v1", "-z", "--untracked-files=all"],
+    ["--literal-pathspecs", "add", "--all", "--", "tracked file", "new file"],
+    ["diff", "--cached", "--quiet"],
+    ["diff", "--cached", "--check"],
+    ["commit", "--file", calls[5][2]],
+  ]);
+});
+
+test("staging error stops before review", async () => {
+  let reviewed = false;
+  const response = await reviewAndPublish(proposal, "/test", undefined, async (_command, args) => {
+    if (args[0] === "status") return { ...ok, stdout: "?? new file\0" };
+    if (args[0] === "--literal-pathspecs") return { ...ok, code: 1, stderr: "add failed" };
+    return ok;
+  }, async () => { reviewed = true; return submitted(); }, async () => true);
+  assert.equal(reviewed, false);
+  assert.equal(response.isError, true);
+  assert.match(response.content[0].text, /some paths may be staged/);
+});
+
+test("whitespace check failure stops before review", async () => {
+  let reviewed = false;
+  const response = await reviewAndPublish(proposal, "/test", undefined, async (_command, args) => {
+    if (args[2] === "--quiet") return { ...ok, code: 1 };
+    return { ...ok, code: 1, stdout: "file: trailing whitespace." };
+  }, async () => { reviewed = true; return submitted(); });
+  assert.equal(reviewed, false);
+  assert.equal(response.isError, true);
+  assert.match(response.content[0].text, /git diff --cached --check/);
+});
+
+test("stages confirmed untracked paths in an isolated git repository", async () => {
+  const cwd = await mkdtemp(join(tmpdir(), "git-publish-stage-"));
+  const filename = "new\nfile.txt";
+  try {
+    await execFileAsync("git", ["init", "--quiet"], { cwd });
+    await writeFile(join(cwd, filename), "content\n");
+    const exec = async (command, args, options) => {
+      if (args[0] === "commit") {
+        const { stdout } = await execFileAsync("git", ["diff", "--cached", "--name-only", "-z"], { cwd, encoding: "utf8" });
+        assert.deepEqual(stdout.split("\0").filter(Boolean), [filename]);
+        return ok;
+      }
+      try {
+        const result = await execFileAsync(command, args, { cwd: options.cwd, encoding: "utf8" });
+        return { stdout: result.stdout, stderr: result.stderr, code: 0 };
+      } catch (error) {
+        return { stdout: error.stdout ?? "", stderr: error.stderr ?? "", code: error.code ?? 1 };
+      }
+    };
+    const response = await reviewAndPublish(proposal, cwd, undefined, exec, submitted, async (paths) => {
+      assert.deepEqual(paths, [filename]);
+      return true;
+    });
+    assert.equal(response.isError, undefined);
+  } finally {
+    await rm(cwd, { recursive: true, force: true });
+  }
 });
 
 test("commit preflight failure stops before review", async () => {
@@ -91,7 +196,8 @@ test("commit preflight failure stops before review", async () => {
 test("commit uses only reviewed content and deletes private message file", async () => {
   let file;
   const response = await reviewAndPublish(proposal, "/test", undefined, async (command, args, options) => {
-    if (args[0] === "diff") return { ...ok, code: 1 };
+    if (args[0] === "diff" && args[2] === "--quiet") return { ...ok, code: 1 };
+    if (args[0] === "diff" && args[2] === "--check") return ok;
     assert.equal(command, "git");
     assert.deepEqual(args.slice(0, 2), ["commit", "--file"]);
     assert.equal(options.cwd, "/test");
@@ -107,7 +213,8 @@ test("commit uses only reviewed content and deletes private message file", async
 test("commit process error also removes message file", async () => {
   let file;
   const response = await reviewAndPublish(proposal, "/test", undefined, async (_command, args) => {
-    if (args[0] === "diff") return { ...ok, code: 1 };
+    if (args[0] === "diff" && args[2] === "--quiet") return { ...ok, code: 1 };
+    if (args[0] === "diff" && args[2] === "--check") return ok;
     file = args[2];
     throw new Error("exec error");
   }, submitted);

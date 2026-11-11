@@ -47,6 +47,33 @@ export function isProtectedCommand(command: string): boolean {
   return /\bgit\b[^;&|\n]*\bcommit\b/.test(command) || /\bgh\s+pr\s+create\b/.test(command);
 }
 
+const validStatusChars = new Set([" ", "M", "T", "A", "D", "R", "C", "U", "?"]);
+const unmergedStatuses = new Set(["DD", "AU", "UD", "UA", "DU", "AA", "UU"]);
+
+export function parseWorktreePaths(status: string): string[] {
+  const fields = status.split("\0");
+  if (fields.at(-1) === "") fields.pop();
+
+  const paths: string[] = [];
+  for (let i = 0; i < fields.length; i++) {
+    const entry = fields[i];
+    if (entry.length < 4 || entry[2] !== " ") throw new Error("Unexpected git status output.");
+    const state = entry.slice(0, 2);
+    if ([...state].some((character) => !validStatusChars.has(character))) throw new Error("Unexpected git status code.");
+    if (unmergedStatuses.has(state)) throw new Error("Resolve unmerged paths before publishing.");
+    const path = entry.slice(3);
+    if (!path) throw new Error("Unexpected empty path in git status output.");
+    paths.push(path);
+
+    if (state.includes("R") || state.includes("C")) {
+      const source = fields[++i];
+      if (source === undefined || source === "") throw new Error("Missing source path in git rename status.");
+      paths.push(source);
+    }
+  }
+  return [...new Set(paths)];
+}
+
 export function parseMessage(message: string): { title: string; description: string } | undefined {
   const [firstLine = "", ...rest] = message.trim().split(/\r?\n/);
   const title = firstLine.trim();

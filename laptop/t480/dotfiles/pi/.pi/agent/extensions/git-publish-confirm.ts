@@ -18,11 +18,11 @@ export default function (pi: ExtensionAPI) {
   pi.registerTool({
     name: "git_publish",
     label: "Git publish",
-    description: "Create a staged git commit or GitHub pull request after user reviews and confirms title and description.",
+    description: "Create a Git commit or GitHub pull request after review. If no files are staged, ask before staging working-tree changes and run git diff --cached --check.",
     promptSnippet: "Create a commit or GitHub PR through the user-confirmed review flow",
     promptGuidelines: [
       "Use this tool instead of shell commands for git commit and gh pr create.",
-      "Call commit only after user requests one; it commits staged changes only.",
+      "Call commit only after user requests one. If no files are staged, git_publish shows changed paths and asks before staging them.",
       "Call pr only after user requests one; never create it as an implicit follow-up.",
     ],
     parameters: params,
@@ -30,7 +30,12 @@ export default function (pi: ExtensionAPI) {
     async execute(_toolCallId, input, _signal, _onUpdate, ctx) {
       if (!ctx.hasUI) return errorResult("Commit and PR creation require interactive confirmation.");
 
-      return reviewAndPublish(input, ctx.cwd, _signal, pi.exec.bind(pi), openPublishDialog);
+      const confirmStage = (paths: string[], signal?: AbortSignal) => ctx.ui.confirm(
+        "Stage changes for commit?",
+        `No changes are staged. Stage all listed paths?\n\n${paths.map((path) => JSON.stringify(path)).join("\n")}\n\nIf you cancel the message editor, these paths remain staged.`,
+        { signal },
+      );
+      return reviewAndPublish(input, ctx.cwd, _signal, pi.exec.bind(pi), openPublishDialog, confirmStage);
     },
   });
 
@@ -38,7 +43,7 @@ export default function (pi: ExtensionAPI) {
     if (event.toolName !== "bash" || !isProtectedCommand(event.input.command)) return;
     return {
       block: true,
-      reason: "Direct commit and PR commands are blocked. Use git_publish to review and confirm title and description.",
+      reason: "Direct commit and PR commands are blocked. Use git_publish to review changes and confirm publication.",
     };
   });
 
@@ -47,7 +52,7 @@ export default function (pi: ExtensionAPI) {
     return {
       operations: {
         async exec(_command, _cwd, { onData }) {
-          onData(Buffer.from("Blocked: use Pi's git_publish tool to review and confirm this action.\n"));
+          onData(Buffer.from("Blocked: use Pi's git_publish tool to review changes and confirm publication.\n"));
           return { exitCode: 1 };
         },
       },
