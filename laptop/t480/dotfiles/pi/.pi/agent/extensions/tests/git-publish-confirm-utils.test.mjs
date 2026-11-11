@@ -115,35 +115,56 @@ test("commit process error also removes message file", async () => {
   await assert.rejects(stat(file), { code: "ENOENT" });
 });
 
-test("PR pushes then creates PR using reviewed title and body", async () => {
+test("PR pushes and creates from explicitly selected origin branch", async () => {
   const calls = [];
-  await reviewAndPublish({ ...proposal, action: "pr" }, "/test", undefined, async (...args) => { calls.push(args); return ok; }, submitted);
+  await reviewAndPublish({ ...proposal, action: "pr" }, "/test", undefined, async (command, args, options) => {
+    calls.push([command, args, options]);
+    if (args[0] === "symbolic-ref") return { ...ok, stdout: "feature/captions\n" };
+    if (args[0] === "remote") return { ...ok, stdout: "git@github.com:owner/project.git\n" };
+    return ok;
+  }, submitted);
   assert.deepEqual(calls, [
-    ["git", ["push", "--set-upstream", "origin", "HEAD"], { cwd: "/test", signal: undefined }],
-    ["gh", ["pr", "create", "--title", "feat: edited", "--body", "Edited body ✓"], { cwd: "/test", signal: undefined }],
+    ["git", ["symbolic-ref", "--quiet", "--short", "HEAD"], { cwd: "/test", signal: undefined }],
+    ["git", ["remote", "get-url", "origin"], { cwd: "/test", signal: undefined }],
+    ["git", ["push", "--set-upstream", "origin", "refs/heads/feature/captions:refs/heads/feature/captions"], { cwd: "/test", signal: undefined }],
+    ["gh", ["pr", "create", "--head", "owner:feature/captions", "--title", "feat: edited", "--body", "Edited body ✓"], { cwd: "/test", signal: undefined }],
   ]);
 });
 
+test("PR from detached HEAD stops before pushing", async () => {
+  const calls = [];
+  const response = await reviewAndPublish({ ...proposal, action: "pr" }, "/test", undefined, async (command, args, options) => {
+    calls.push([command, args, options]);
+    return { ...ok, code: 128, stderr: "fatal: ref HEAD is not a symbolic ref" };
+  }, submitted);
+  assert.equal(response.isError, true);
+  assert.deepEqual(calls.map(([, args]) => args[0]), ["symbolic-ref"]);
+});
+
 test("failed push prevents PR", async () => {
-  let calls = 0;
-  const response = await reviewAndPublish({ ...proposal, action: "pr" }, "/test", undefined, async () => {
-    calls++;
+  const calls = [];
+  const response = await reviewAndPublish({ ...proposal, action: "pr" }, "/test", undefined, async (_command, args) => {
+    calls.push(args[0]);
+    if (args[0] === "symbolic-ref") return { ...ok, stdout: "feature/captions\n" };
+    if (args[0] === "remote") return { ...ok, stdout: "https://github.com/owner/project.git\n" };
     return { ...ok, code: 1, stderr: "push failed" };
   }, submitted);
-  assert.equal(calls, 1);
+  assert.deepEqual(calls, ["symbolic-ref", "remote", "push"]);
   assert.equal(response.isError, true);
 });
 
 test("abort after push prevents gh and reports potentially applied changes", async () => {
   const controller = new AbortController();
-  let calls = 0;
-  const response = await reviewAndPublish({ ...proposal, action: "pr" }, "/test", controller.signal, async (_command, _args, options) => {
+  const calls = [];
+  const response = await reviewAndPublish({ ...proposal, action: "pr" }, "/test", controller.signal, async (_command, args, options) => {
     assert.equal(options.signal, controller.signal);
-    calls++;
+    calls.push(args[0]);
+    if (args[0] === "symbolic-ref") return { ...ok, stdout: "feature/captions\n" };
+    if (args[0] === "remote") return { ...ok, stdout: "https://github.com/owner/project.git\n" };
     controller.abort();
     return ok;
   }, submitted);
-  assert.equal(calls, 1);
+  assert.deepEqual(calls, ["symbolic-ref", "remote", "push"]);
   assert.equal(response.isError, true);
   assert.match(response.content[0].text, /may have taken effect/);
 });

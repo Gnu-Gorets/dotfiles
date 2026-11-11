@@ -2,7 +2,7 @@
 
 1. Reply in Russian by default; keep replies concise and direct.
 2. Use English for code and technical artifacts, except Russian plans. Preserve technical terms verbatim.
-3. In English prose, omit articles. Avoid em/en dashes and unnecessary hyphens.
+3. Follow ASD-STE100 in English prose. For Russian, apply its clarity principles: simple words, short sentences, and one idea per sentence. Do not claim compliance without verification. Avoid em/en dashes and unnecessary hyphens.
 4. Before finishing, reread English prose you wrote or changed. Fix wording without altering code, identifiers, quotes, or necessary compounds.
 5. Write GitHub artifacts in English. Format commit messages as `<type>[optional scope]: <description>`.
 6. Never disclose or imply AI authorship. Omit `Co-Authored-By` and similar attribution.

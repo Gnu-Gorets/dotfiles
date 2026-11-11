@@ -10,7 +10,7 @@ No agterm process or control socket is used. GUI startup or protocol errors stop
 Helper receives JSON through stdin and returns explicit submitted/cancelled JSON through stdout.
 
 Abort closes editor and prevents subsequent publish steps. Already started git/gh operations cannot be rolled back automatically.
-Commits include staged changes only. The commit flow checks for staged changes before opening the editor and explains how to proceed when staging is empty; it never stages files automatically. PR creation pushes current branch to origin first.
+Commits include staged changes only. The commit flow checks for staged changes before opening the editor and explains how to proceed when staging is empty; it never stages files automatically. PR creation pushes current branch ref to `origin` first, then passes that branch and origin owner explicitly to `gh`. GitHub CLI continues to choose target repository and base using its configured context. Detached HEAD and origins without an owner/repository path are rejected before pushing.
 
 Checks:
 
