@@ -12,22 +12,17 @@ export async function pushAndCreatePullRequest(exec: Exec, cwd: string, title: s
     return { ...branch, code: branch.code || 1, command: "git symbolic-ref", output: output || "Cannot create a pull request from detached HEAD." };
   }
 
-  const remote = await exec("git", ["remote", "get-url", "origin"], { cwd });
-  const remoteUrl = remote.stdout.trim();
-  const scpPath = remoteUrl.match(/^[^@]+@[^:]+:(.+)$/)?.[1];
-  let remotePath = scpPath;
-  if (!remotePath) {
-    try {
-      remotePath = new URL(remoteUrl).pathname;
-    } catch {
-      remotePath = "";
-    }
+  const origin = await exec("git", ["remote", "get-url", "--push", "origin"], { cwd });
+  const originUrl = origin.stdout.trim();
+  if (origin.code !== 0 || !originUrl) {
+    return { ...origin, code: origin.code || 1, command: "git remote get-url", output: "Cannot determine the origin push URL. Nothing was pushed." };
   }
-  const remoteParts = remotePath.replace(/^\/+/, "").replace(/\.git$/, "").split("/");
-  const headOwner = remoteParts.length === 2 && remoteParts.every(Boolean) ? remoteParts[0] : "";
-  if (remote.code !== 0 || !headOwner) {
-    const output = [remote.stdout, remote.stderr].filter(Boolean).join("\n").trim();
-    return { ...remote, code: remote.code || 1, command: "git remote get-url origin", output: output || "Cannot determine GitHub owner for origin." };
+
+  const repository = await exec("gh", ["repo", "view", originUrl, "--json", "url", "--jq", ".url"], { cwd });
+  const repositoryUrl = repository.stdout.trim();
+  if (repository.code !== 0 || !repositoryUrl) {
+    const output = [repository.stdout, repository.stderr].filter(Boolean).join("\n").trim();
+    return { ...repository, code: repository.code || 1, command: "gh repo view", output: `Cannot resolve the origin GitHub repository. Nothing was pushed.${output ? `\n${output}` : ""}` };
   }
 
   const branchRef = `refs/heads/${branchName}`;
@@ -35,7 +30,7 @@ export async function pushAndCreatePullRequest(exec: Exec, cwd: string, title: s
   const pushOutput = [push.stdout, push.stderr].filter(Boolean).join("\n").trim();
   if (push.code !== 0) return { ...push, command: "git push", output: pushOutput };
 
-  const result = await exec("gh", ["pr", "create", "--head", `${headOwner}:${branchName}`, "--title", title, "--body", body], { cwd });
+  const result = await exec("gh", ["pr", "create", "--repo", repositoryUrl, "--head", branchName, "--title", title, "--body", body], { cwd });
   return {
     ...result,
     command: "gh pr create",

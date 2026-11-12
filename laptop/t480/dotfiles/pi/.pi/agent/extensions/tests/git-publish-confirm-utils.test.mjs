@@ -222,21 +222,41 @@ test("commit process error also removes message file", async () => {
   await assert.rejects(stat(file), { code: "ENOENT" });
 });
 
-test("PR pushes and creates from explicitly selected origin branch", async () => {
+test("PR pushes the checked-out branch and targets origin instead of the upstream fork parent", async () => {
   const calls = [];
   await reviewAndPublish({ ...proposal, action: "pr" }, "/test", undefined, async (command, args, options) => {
     calls.push([command, args, options]);
     if (args[0] === "symbolic-ref") return { ...ok, stdout: "feature/captions\n" };
-    if (args[0] === "remote") return { ...ok, stdout: "git@github.com:owner/project.git\n" };
+    if (args[0] === "remote") return { ...ok, stdout: "git@github.com:fork/project.git\n" };
+    if (args[0] === "repo") return { ...ok, stdout: "https://github.com/fork/project\n" };
     return ok;
   }, submitted);
   assert.deepEqual(calls, [
     ["git", ["symbolic-ref", "--quiet", "--short", "HEAD"], { cwd: "/test", signal: undefined }],
-    ["git", ["remote", "get-url", "origin"], { cwd: "/test", signal: undefined }],
+    ["git", ["remote", "get-url", "--push", "origin"], { cwd: "/test", signal: undefined }],
+    ["gh", ["repo", "view", "git@github.com:fork/project.git", "--json", "url", "--jq", ".url"], { cwd: "/test", signal: undefined }],
     ["git", ["push", "--set-upstream", "origin", "refs/heads/feature/captions:refs/heads/feature/captions"], { cwd: "/test", signal: undefined }],
-    ["gh", ["pr", "create", "--head", "owner:feature/captions", "--title", "feat: edited", "--body", "Edited body ✓"], { cwd: "/test", signal: undefined }],
+    ["gh", ["pr", "create", "--repo", "https://github.com/fork/project", "--head", "feature/captions", "--title", "feat: edited", "--body", "Edited body ✓"], { cwd: "/test", signal: undefined }],
   ]);
 });
+
+for (const stage of ["remote", "repo"]) {
+  for (const failure of [{ ...ok, code: 1, stdout: "", stderr: "lookup failed" }, { ...ok, stdout: "" }]) {
+    test(`PR stops before push when ${stage} lookup fails or returns no URL (code ${failure.code})`, async () => {
+      const calls = [];
+      const response = await reviewAndPublish({ ...proposal, action: "pr" }, "/test", undefined, async (_command, args) => {
+        calls.push(args[0]);
+        if (args[0] === "symbolic-ref") return { ...ok, stdout: "feature/captions\n" };
+        if (args[0] === stage) return failure;
+        if (args[0] === "remote") return { ...ok, stdout: "git@github.com:fork/project.git\n" };
+        assert.fail("must not push or create a PR");
+      }, submitted);
+      assert.equal(response.isError, true);
+      assert.match(response.content[0].text, /Nothing was pushed/);
+      assert.deepEqual(calls, stage === "remote" ? ["symbolic-ref", "remote"] : ["symbolic-ref", "remote", "repo"]);
+    });
+  }
+}
 
 test("PR from detached HEAD stops before pushing", async () => {
   const calls = [];
@@ -253,10 +273,11 @@ test("failed push prevents PR", async () => {
   const response = await reviewAndPublish({ ...proposal, action: "pr" }, "/test", undefined, async (_command, args) => {
     calls.push(args[0]);
     if (args[0] === "symbolic-ref") return { ...ok, stdout: "feature/captions\n" };
-    if (args[0] === "remote") return { ...ok, stdout: "https://github.com/owner/project.git\n" };
+    if (args[0] === "remote") return { ...ok, stdout: "https://github.com/fork/project.git\n" };
+    if (args[0] === "repo") return { ...ok, stdout: "https://github.com/fork/project\n" };
     return { ...ok, code: 1, stderr: "push failed" };
   }, submitted);
-  assert.deepEqual(calls, ["symbolic-ref", "remote", "push"]);
+  assert.deepEqual(calls, ["symbolic-ref", "remote", "repo", "push"]);
   assert.equal(response.isError, true);
 });
 
@@ -267,11 +288,12 @@ test("abort after push prevents gh and reports potentially applied changes", asy
     assert.equal(options.signal, controller.signal);
     calls.push(args[0]);
     if (args[0] === "symbolic-ref") return { ...ok, stdout: "feature/captions\n" };
-    if (args[0] === "remote") return { ...ok, stdout: "https://github.com/owner/project.git\n" };
+    if (args[0] === "remote") return { ...ok, stdout: "git@github.com:fork/project.git\n" };
+    if (args[0] === "repo") return { ...ok, stdout: "https://github.com/fork/project\n" };
     controller.abort();
     return ok;
   }, submitted);
-  assert.deepEqual(calls, ["symbolic-ref", "remote", "push"]);
+  assert.deepEqual(calls, ["symbolic-ref", "remote", "repo", "push"]);
   assert.equal(response.isError, true);
   assert.match(response.content[0].text, /may have taken effect/);
 });
