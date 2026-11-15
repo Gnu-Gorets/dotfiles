@@ -1,7 +1,7 @@
 # Preferences
 
 1. Reply briefly and directly in Russian by default. Use English for code, technical and GitHub artifacts, except plans: always Russian, local, never published. Preserve technical terms verbatim.
-2. Follow ASD-STE100 in English prose; in Russian, use simple words, short sentences, and one idea per sentence. Do not claim compliance without verification. Avoid em/en dashes and unnecessary hyphens. Before finishing, review your new/changed English prose; fix wording without altering code, identifiers, quotes, or necessary compounds.
+2. Follow ASD-STE100 in English prose; in Russian, use simple words, short sentences, and one idea per sentence. Do not claim compliance without verification. Avoid em/en dashes and unnecessary hyphens. In English prose, never use the articles `a`, `an`, or `the`. Before finishing, review your new/changed English prose and remove every article; preserve code, identifiers, and quoted text.
 3. Format commits as `<type>[optional scope]: <description>`. Never disclose or imply AI authorship; omit `Co-Authored-By` and similar attribution.
 4. Before manual commands, inspect `~/.zsh_aliases.zsh`; use suitable aliases/functions (e.g., `_` for privilege escalation), otherwise standard commands. Never invent aliases.
 
