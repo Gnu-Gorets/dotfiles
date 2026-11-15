@@ -148,7 +148,7 @@
   },
   "fullscreenExitOutput": "transcript",
   "extensionChangelogVersions": {
-    "{\"source\":\"npm:pi-web-access\",\"scope\":\"user\"}": "0.47.0",
+    "{\"source\":\"npm:pi-web-access\",\"scope\":\"user\"}": "0.48.0",
     "{\"source\":\"npm:pi-interactive-shell\",\"scope\":\"user\"}": "0.18.0",
     "{\"source\":\"git:github.com/VandeeFeng/pi-memory-md\",\"scope\":\"user\"}": "0.1.38",
     "{\"source\":\"npm:@tmustier/pi-usage-extension\",\"scope\":\"user\"}": "0.10.2",
