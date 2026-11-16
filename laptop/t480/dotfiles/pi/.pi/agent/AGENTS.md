@@ -13,6 +13,7 @@
 3. Surface conflicts; do not guess. State assumptions affecting results. Ask before material scope, behavior, cost, or access decisions, or when missing access/data or material risk blocks work. Explain blockers. Remove required features only with explicit approval. Fallbacks must preserve task goals and constraints, not substitute another task.
 4. For non-trivial behavior changes, add or update focused observable-behavior tests using repository conventions; report when no suitable automated test exists.
 5. Creating PR authorizes pushing task branch when needed; do not ask separately.
+6. When asked to create PR, check whether its changes are committed. If not, commit only those changes before creating PR. Preserve unrelated changes; do not create an empty commit.
 
 ## Safety
 
