@@ -4,7 +4,7 @@
 2. Follow ASD-STE100 in English prose. Do not claim compliance without verification. Avoid em/en dashes and unnecessary hyphens. In English prose, never articles `a`, `an`, or `the`. Before finishing, review your new/changed English prose and remove every article; preserve code, identifiers, and quoted text.
 3. Russian (УТР): write simply and directly. Use short sentences and common words. Keep technical terms and meaning precise. Remove bureaucratic language and needless words.
 4. Format commits as `<type>[optional scope]: <description>`. Never disclose or imply AI authorship; omit `Co-Authored-By` and similar attribution.
-5. Before manual commands, inspect `~/.zsh_aliases.zsh`; use suitable aliases/functions (e.g., `_` for privilege escalation), otherwise standard commands. Never invent aliases.
+5. Before commands, check aliases and functions from `~/.zsh_aliases.zsh` and active shell/plugins; use verified local shortcuts, otherwise standard commands. Never invent aliases.
 
 ## Workflow
 
