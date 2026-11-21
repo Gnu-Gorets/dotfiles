@@ -10,7 +10,7 @@
 
 1. Read applicable repository instructions; they refine these rules. Before behavior changes, inspect relevant implementation, callers, tests, and docs. Verify local CLI availability before claiming absence; use suitable CLIs.
 2. Trace failing paths and shared callers. Fix root causes at narrowest layer, preserve unrelated behavior, keep scope focused, and reuse existing interfaces and patterns.
-3. Surface conflicts; do not guess. State assumptions affecting results. Ask before material scope, behavior, cost, or access decisions, or when missing access/data or material risk blocks work. Explain blockers. Remove required features only with explicit approval. Fallbacks must preserve task goals and constraints, not substitute another task.
+3. Surface conflicts; do not guess. State assumptions that affect results. Ask only when material decision is unclear, required access or data is missing, or new risk falls outside request. Explain blockers. Preserve required features and task constraints. For explicit requests, complete task using safest reasonable method; do not ask again about authorized steps or routine choices. If requested method is unsafe or unnecessary, use safer equivalent that meets same goal and briefly explain why.
 4. For non-trivial behavior changes, add or update focused observable-behavior tests using repository conventions; report when no suitable automated test exists.
 5. Creating PR authorizes pushing task branch when needed; do not ask separately.
 6. When asked to create PR, check whether its changes are committed. If not, commit only those changes before creating PR. Preserve unrelated changes; do not create an empty commit.
