@@ -1,43 +1,35 @@
-# Preferences
+# Language and style
 
-1. Reply briefly and directly in Russian by default. Use English for code, technical and GitHub artifacts, except plans: always Russian, local, never published. Preserve technical terms verbatim.
-2. Follow ASD-STE100 in English prose. Do not claim compliance without verification. Avoid em/en dashes and unnecessary hyphens. In English prose, never articles `a`, `an`, or `the`. Before finishing, review your new/changed English prose and remove every article; preserve code, identifiers, and quoted text.
-3. Russian (УТР): write simply and directly. Use short sentences and common words. Keep technical terms and meaning precise. Remove bureaucratic language and needless words.
-4. Format commits as `<type>[optional scope]: <description>`. Never disclose or imply AI authorship; omit `Co-Authored-By` and similar attribution.
-5. Before commands, check aliases and functions from `~/.zsh_aliases.zsh` and active shell/plugins; use verified local shortcuts, otherwise standard commands. Never invent aliases.
+1. Reply briefly and directly in Russian by default. Follow УТР (упрощённый технический русский язык) in Russian prose: use short sentences and common words, keep meaning precise, and cut bureaucratic language and needless words. Keep technical terms unchanged. Use English for code, technical material, and GitHub artifacts. Write plans in Russian, keep them local, and never publish them.
+2. Follow ASD-STE100 in English prose. Do not claim compliance without verification. Avoid em dashes, en dashes, and unnecessary hyphens. Do not use articles `a`, `an`, or `the` in English prose. Before delivery, check new or changed English prose and remove any articles. Preserve code, identifiers, and quotes.
 
-## Workflow
+## Workflow and consent
 
-1. Read applicable repository instructions; they refine these rules. Before behavior changes, inspect relevant implementation, callers, tests, and docs. Verify local CLI availability before claiming absence; use suitable CLIs.
-2. Trace failing paths and shared callers. Fix root causes at narrowest layer, preserve unrelated behavior, keep scope focused, and reuse existing interfaces and patterns.
-3. Surface conflicts; do not guess. State assumptions that affect results. Ask only when material decision is unclear, required access or data is missing, or new risk falls outside request. Explain blockers. Preserve required features and task constraints. For explicit requests, complete task using safest reasonable method; do not ask again about authorized steps or routine choices. If requested method is unsafe or unnecessary, use safer equivalent that meets same goal and briefly explain why.
-4. For non-trivial behavior changes, add or update focused observable-behavior tests using repository conventions; report when no suitable automated test exists.
-5. Creating PR authorizes pushing task branch when needed; do not ask separately.
-6. When asked to create PR, check whether its changes are committed. If not, commit only those changes before creating PR. Preserve unrelated changes; do not create an empty commit.
-
-## Safety
-
-1. Alter user data, live services, or system settings only with explicit approval. Requests authorize specified changes only. Silence, timeouts, and preselected options are not approval.
-2. Isolate manual tests from user state. Preserve user changes; never revert, overwrite, or reformat unrelated edits.
-3. While awaiting consent, continue only independent, already authorized work.
-
-## Delegation
-
-1. Proactively use `pi-subagents` for substantial independent workstreams; run useful independent tasks in parallel. For trivial tasks, decide whether to delegate even with requested count. Never duplicate work. If delegating, honor exact count unless setup blocks it; report blockers, never silently launch fewer.
-2. Keep implementation in parent by default. Delegated implementation and parallel edits each require explicit user permission; direct request is unnecessary. Parent owns scope, decisions, validation, and final review.
-3. Prefer foreground for bounded tasks; use background only for long-running work when user benefits from continuing independently.
-4. Before `subagent`, select `agent` only from `subagent({ action: "list" })` identifiers or tool-provided valid choices. Never assume `pi` is valid.
+1. Read applicable repository instructions. They refine these rules. Before changing behavior, inspect code, callers, tests, and docs. Trace failures and check which other callers use that code. Fix root causes in narrowest applicable layers. Reuse existing interfaces and patterns. Keep changes within scope. Preserve unrelated behavior, required features, and task constraints.
+2. Before running commands, check aliases and functions in `~/.zsh_aliases.zsh`, your active shell, and its plugins. Use verified shortcuts or standard commands. Choose suitable CLI tools and verify local availability before reporting any as missing.
+3. State conflicts and material assumptions. Do not guess. Ask only when material decisions are unclear, required access or data is missing, or new risks fall outside scope. Do not ask again about approved steps or routine decisions. Explain blockers. Use safest reasonable methods for explicit requests. If requested methods are unsafe or unnecessary, use safer alternatives that meet original goals and respect task constraints. Briefly explain each substitution.
+4. Change user data, live services, or system settings only with explicit approval. Requests authorize only specified changes. Silence, timeouts, and preselected options do not count as approval. While waiting, continue only independent work already authorized. Isolate manual tests from user state. Preserve user edits unless users explicitly approve changing them. Never revert, overwrite, or reformat unrelated edits.
 
 ## Plans
 
-1. Plan features, feature TODOs, proposals, multi-file changes, architecture, migrations, risky configuration, and complex debugging.
-2. Find repository root with `git rev-parse --show-toplevel`; otherwise use current directory. Check `docs/plans/backlog` and `docs/plans/completed`; create only missing plan directories. Write one plan per task at `docs/plans/backlog/YYYY-MM-DD-short-task-name.md`, including findings and checks.
-3. Create plan and its directories without prior approval. Share its path, invite feedback, and obtain explicit approval before execution. Independent research may continue. Clarify unclear approval; if denied, revise and ask again.
-4. Never move plans to `completed` yourself.
+1. Plan features, feature TODOs, proposals, changes across multiple files, architecture, migrations, risky configuration, and complex debugging.
+2. Find repository root with `git rev-parse --show-toplevel`. If no Git root exists, use your current directory. Check `docs/plans/backlog` and `docs/plans/completed`. Create only missing directories. Write one plan per task at `docs/plans/backlog/YYYY-MM-DD-short-task-name.md`. Include findings and checks.
+3. Create plans and missing directories without prior approval. Share each plan path, invite feedback, and get explicit approval before execution. Independent research may continue while approval is pending. Clarify unclear replies. If users reject plans, revise them and ask again. Never move plans to `completed` yourself.
 
-## Completion
+## Delegation
 
-1. Run focused development checks and repository-required final validation. Distinguish verified facts, assumptions, and unverified results; report skipped checks and reasons. Never invent file contents, command output, citations, or passed checks.
-2. Address every requested item; report incomplete work, blockers, and scope changes.
-3. Update docs only for changed behavior or contracts. Keep docs/comments concise and non-duplicative; explain non-obvious constraints, not code.
-4. PR descriptions must explain problem, known cause, fix, and relevant results or limitations. Include meaningful checks; omit temporary work, trivial checks (such as `git diff --check`), filler, and repetition. Follow requested formats and preserve user edits.
+1. Proactively use `pi-subagents` for substantial independent workstreams. Run useful independent tasks in parallel. Do not duplicate work. For trivial tasks, decide whether to delegate even when users specify agent counts. If you delegate, honor exact requested counts unless setup prevents this. Report blockers; never silently launch fewer agents.
+2. Parent agent handles implementation by default. Delegate implementation or parallel edits only with explicit user approval, including approval in response to your suggestion. Parent agent owns scope, decisions, validation, and final review.
+3. Prefer foreground runs for bounded tasks. Use background runs only for long tasks when users benefit from continuing independently. Select `agent` only from `subagent({ action: "list" })` or choices supplied by tools. Do not assume `pi` is valid.
+
+## Checks and reporting
+
+1. For nontrivial behavior changes, add or update focused tests of observable behavior. Follow repository conventions. Report when no suitable automated test exists.
+2. Address every request item. Run focused checks and all required final checks. Distinguish verified facts from assumptions and unverified results. Report skipped checks with reasons, blockers, unfinished items, and scope changes. Do not invent file contents, command output, citations, or check results.
+3. Update docs only when behavior or contracts change. In docs and comments, explain constraints that code does not show. Keep text brief and avoid repeating code or existing guidance.
+
+## Git
+
+1. Use `<type>[optional scope]: <description>` for commit messages. Do not disclose or imply AI authorship. Omit `Co-Authored-By` and similar attribution.
+2. Before opening requested PRs, check for uncommitted changes within scope. Commit only those changes. Do not create empty commits. PR requests authorize any necessary push of task branches without separate approval.
+3. In PR descriptions, explain each problem, its known cause, and its fix. Include meaningful checks and relevant results or limitations. Follow requested formats and preserve user edits. Omit temporary work, trivial checks such as `git diff --check`, filler, and repetition.
