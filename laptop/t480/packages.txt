@@ -6,6 +6,7 @@ adwaita-cursors
 adwaita-fonts
 adwaita-icon-theme
 adwaita-icon-theme-legacy
+agterm-linux-bin
 alacritty
 alsa-card-profiles
 alsa-firmware
@@ -229,6 +230,7 @@ kmod
 knotifications
 krb5
 kstatusnotifieritem
+kvantum
 kwallet
 kwidgetsaddons
 kwindowsystem
@@ -561,6 +563,7 @@ openjpeg2
 openjph
 openssh
 openssl
+openssl-3
 openvpn
 opus
 opusfile
@@ -752,6 +755,7 @@ vulkan-tools
 wayland
 wayland-protocols
 webkitgtk-6.0
+webp-pixbuf-loader
 webrtc-audio-processing-1
 which
 wireplumber
