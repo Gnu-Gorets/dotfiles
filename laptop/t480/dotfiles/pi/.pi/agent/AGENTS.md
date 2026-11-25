@@ -30,6 +30,6 @@
 
 ## Git
 
-1. Use `<type>[optional scope]: <description>` for commit messages. Do not disclose or imply AI authorship. Omit `Co-Authored-By` and similar attribution.
+1. Use `<type>[optional scope]: <description>` for commit messages and PR/MR titles. Do not disclose or imply AI authorship. Omit `Co-Authored-By` and similar attribution.
 2. Before opening requested PRs, check for uncommitted changes within scope. Commit only those changes. Do not create empty commits. PR requests authorize any necessary push of task branches without separate approval.
 3. In PR descriptions, explain each problem, its known cause, and its fix. Include meaningful checks and relevant results or limitations. Follow requested formats and preserve user edits. Omit temporary work, trivial checks such as `git diff --check`, filler, and repetition.
