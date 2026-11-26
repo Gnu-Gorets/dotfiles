@@ -27,9 +27,9 @@ select_args=--no-select
 [ -n "${AGT_SESSION_ID:-}" ] || select_args=
 after_args=
 [ "$mode" = current ] && [ -n "${AGT_SESSION_ID:-}" ] && after_args="--after $AGT_SESSION_ID"
-id=$("$ctl" session new $workspace_args $after_args --window "$window" --cwd "$cwd" --command "zsh -lc 'pi; exec zsh'" --name "${AGT_SESSION_NAME:-pi}" $select_args --socket "$socket")
+id=$("$ctl" session new $workspace_args $after_args --window "$window" --cwd "$cwd" --command "zsh -lc 'PI_OFFLINE=1 pi; exec zsh'" --name "${AGT_SESSION_NAME:-pi}" $select_args --socket "$socket")
 "$ctl" session split on --target "$id" --window "$window" --socket "$socket"
 "$ctl" session focus left --target "$id" --window "$window" --socket "$socket"
 # Keep a shell in the pane after Pi exits, so the project directory remains usable.
-"$ctl" session restore "clear; exec zsh -lc 'pi; exec zsh'" --pane left --target "$id" --window "$window" --socket "$socket"
+"$ctl" session restore "clear; exec zsh -lc 'PI_OFFLINE=1 pi; exec zsh'" --pane left --target "$id" --window "$window" --socket "$socket"
 "$ctl" session select --target "$id" --window "$window" --socket "$socket"
